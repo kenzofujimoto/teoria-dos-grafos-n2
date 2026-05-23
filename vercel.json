@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/teoria_grafos_n_2_guia_interativo.html"
+    }
+  ]
+}
