@@ -362,6 +362,15 @@
               </ol>
             </div>
           </div>
+
+          <div class="interactive">
+            <h3>Animação — cobertura de vértices</h3>
+            <div class="legend"><span><span class="dot" style="background:var(--green)"></span>vértice em K</span><span><span class="sw" style="background:var(--green)"></span>aresta coberta</span><span><span class="sw" style="background:var(--orange)"></span>aresta avaliada</span><span><span class="sw" style="background:var(--red)"></span>ainda descoberta</span><span><span class="sw" style="background:var(--purple)"></span>emparelhamento de prova</span></div>
+            <div id="coverSvg" class="svgbox"></div>
+            <div id="coverDesc" class="desc"></div>
+            <div id="coverState" class="state"></div>
+            <div class="steps"><button class="btn" onclick="stepCover(-1)">← Anterior</button><span id="coverCount"></span><button class="btn" onclick="stepCover(1)">Próximo →</button></div>
+          </div>
         </section>
 
         <section id="fluxo" class="section">
@@ -558,6 +567,20 @@ const maSteps=[
 function drawMatch(){const svg=svgStart('matchSvg');const st=maSteps[maI];maE.forEach(([u,v])=>{const inM=hasEdge(st.M,u,v),inP=hasEdge(st.path,u,v);drawLine(svg,maN[u],maN[v],{stroke:inP?'#EF9F27':inM?'#1D9E75':'#4b5563',sw:inP?5:inM?4:2.2,dash:inP&&!inM?'7 5':'none'});});Object.entries(maN).forEach(([id,p])=>{const free=st.free.map(String).includes(String(id));drawNode(svg,id,p.x,p.y,{fill:free?'#E24B4A':'#243145'})});setHtml('matchDesc',st.d);setHtml('matchCount',`Passo ${maI} de ${maSteps.length-1}`)}
 function stepMatch(d){maI=Math.max(0,Math.min(maSteps.length-1,maI+d));drawMatch()}
 
+// 8. Vertex cover
+const covN={A:{x:120,y:105},B:{x:305,y:85},C:{x:120,y:285},D:{x:305,y:305},E:{x:525,y:105},F:{x:525,y:285}};
+const covE=[['A','B'],['A','C'],['B','D'],['C','D'],['B','E'],['D','F'],['E','F']];
+const covSteps=[
+{K:[],cur:null,match:[],d:'Estado inicial: nenhuma esquina foi escolhida. A meta é escolher vértices de modo que toda aresta tenha pelo menos uma extremidade em K.'},
+{K:[],cur:['B','D'],pick:'D',match:[],showUncovered:true,d:'Começamos olhando para a região central. Escolher D cobre de uma vez as arestas (B,D), (C,D) e (D,F).'},
+{K:['D'],cur:['A','B'],pick:'A',match:[],showUncovered:true,d:'Com D escolhido, ainda sobram arestas descobertas do lado esquerdo. Escolher A cobre (A,B) e (A,C).'},
+{K:['D','A'],cur:['E','F'],pick:'E',match:[],showUncovered:true,d:'Agora resta cobrir o lado direito. Escolher E cobre (B,E) e (E,F), fechando todas as arestas.'},
+{K:['D','A','E'],cur:null,match:[],showUncovered:true,d:'Temos K={A,D,E}. Toda aresta está coberta porque cada linha toca pelo menos um vértice verde.'},
+{K:['D','A','E'],cur:null,match:[['A','C'],['B','D'],['E','F']],showUncovered:true,d:'Para justificar que a cobertura é mínima, destacamos um emparelhamento com 3 arestas disjuntas: (A,C), (B,D) e (E,F). Como |M|=3 e |K|=3, não existe cobertura menor neste grafo.'}
+];let covI=0;
+function drawCover(){const svg=svgStart('coverSvg');const st=covSteps[covI];const selected=st.K.map(String);covE.forEach(([u,v])=>{const covered=selected.includes(String(u))||selected.includes(String(v));const current=st.cur&&hasEdge([st.cur],u,v);const proof=st.match&&hasEdge(st.match,u,v);let stroke='#4b5563',sw=2.2,dash='none';if(st.showUncovered&&!covered){stroke='#E24B4A';dash='7 5';sw=3}else if(covered){stroke='#1D9E75';sw=4}if(proof){stroke='#9B5DE5';sw=5;dash='4 4'}if(current){stroke='#EF9F27';sw=5;dash='none'}drawLine(svg,covN[u],covN[v],{stroke,sw,dash})});Object.entries(covN).forEach(([id,p])=>{const chosen=selected.includes(String(id));const picking=st.pick===id&&!chosen;drawNode(svg,id,p.x,p.y,{fill:chosen?'#1D9E75':picking?'#B45309':'#243145',stroke:chosen?'#a7f3d0':picking?'#fed7aa':'rgba(255,255,255,.18)',sw:chosen||picking?3:1.5})});const covered=covE.filter(([u,v])=>selected.includes(String(u))||selected.includes(String(v)));const uncovered=covE.filter(([u,v])=>!selected.includes(String(u))&&!selected.includes(String(v)));const kText=selected.length?selected.join(', '):'∅';const uncoveredText=uncovered.length?uncovered.map(e=>'('+e.join(',')+')').join(', '):'nenhuma';setHtml('coverDesc',st.d);setHtml('coverState',`<b>K:</b> {${kText}} | <b>arestas cobertas:</b> ${covered.length}/${covE.length} | <b>descobertas:</b> ${uncoveredText}`);setHtml('coverCount',`Passo ${covI} de ${covSteps.length-1}`)}
+function stepCover(d){covI=Math.max(0,Math.min(covSteps.length-1,covI+d));drawCover()}
+
 // 9. Fluxo máximo com caminho reverso residual
 const flN={S:{x:70,y:210},A:{x:210,y:105},B:{x:210,y:315},C:{x:395,y:105},D:{x:395,y:315},E:{x:540,y:245},T:{x:650,y:180}};
 const flE=[['S','A',6],['S','B',6],['A','B',2],['A','C',4],['B','D',4],['B','E',2],['C','T',4],['D','T',4],['E','T',4],['C','D',2],['D','E',2]];
@@ -587,7 +610,7 @@ function drawCost(){const svg=svgStart('costSvg');ensureArrow(svg);const st=coSt
 function stepCost(d){coI=Math.max(0,Math.min(coSteps.length-1,coI+d));drawCost()}
 
 // init
-window.addEventListener('load',()=>{drawConn();drawTrail();drawMST();drawVColor();drawEColor();drawMatch();drawFlow();drawCost();});
+window.addEventListener('load',()=>{drawConn();drawTrail();drawMST();drawVColor();drawEColor();drawMatch();drawCover();drawFlow();drawCost();});
 </script>
 </body>
 </html>
