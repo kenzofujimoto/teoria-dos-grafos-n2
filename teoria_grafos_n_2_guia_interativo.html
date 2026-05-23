@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teoria dos Grafos — Guia Interativo Completo</title>
+  <style>
+    :root{
+      --bg:#0f1117;--panel:#161a24;--panel2:#1d2330;--text:#edf2ff;--muted:#aeb8cc;--line:#3b4458;
+      --green:#1D9E75;--blue:#3B82F6;--orange:#EF9F27;--red:#E24B4A;--purple:#9B5DE5;--yellow:#F5C542;
+      --cyan:#06B6D4;--pink:#EC4899;--good:#22C55E;--bad:#EF4444;
+      --shadow:0 16px 40px rgba(0,0,0,.22);--radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#0f1117 0%,#101522 45%,#0f1117 100%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.55}
+    a{color:#93c5fd;text-decoration:none} a:hover{text-decoration:underline}
+    .wrap{max-width:1180px;margin:0 auto;padding:24px}
+    header{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:radial-gradient(circle at 15% 0%,rgba(59,130,246,.24),transparent 35%),radial-gradient(circle at 85% 20%,rgba(29,158,117,.18),transparent 32%),var(--panel);border-radius:28px;padding:34px;box-shadow:var(--shadow)}
+    h1{font-size:clamp(2rem,4vw,4rem);line-height:1.05;margin:0 0 12px;letter-spacing:-.04em}
+    h2{font-size:clamp(1.45rem,2.6vw,2.2rem);margin:42px 0 14px;letter-spacing:-.03em}
+    h3{font-size:1.25rem;margin:24px 0 10px} h4{font-size:1.05rem;margin:18px 0 8px;color:#dbeafe}
+    p{margin:8px 0;color:#d5dced}.lead{font-size:1.1rem;color:#cbd5e1;max-width:900px}.muted{color:var(--muted)}
+    .pillbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.pill{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#dbeafe;padding:7px 12px;border-radius:999px;font-size:.88rem}
+    .layout{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start;margin-top:24px}
+    nav{position:sticky;top:16px;border:1px solid rgba(255,255,255,.08);background:rgba(22,26,36,.88);backdrop-filter:blur(14px);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);max-height:calc(100vh - 32px);overflow:auto}
+    nav strong{display:block;margin:6px 8px 10px;color:#fff} nav a{display:block;color:#cbd5e1;border-radius:12px;padding:8px 10px;font-size:.92rem;text-decoration:none} nav a:hover{background:rgba(255,255,255,.06);text-decoration:none;color:#fff}
+    main{min-width:0}.section{border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.015)),var(--panel);border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:var(--shadow)}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .card{border:1px solid rgba(255,255,255,.08);background:var(--panel2);border-radius:16px;padding:16px}.card.good{border-color:rgba(34,197,94,.35)}.card.warn{border-color:rgba(239,159,39,.35)}.card.bad{border-color:rgba(226,75,74,.35)}
+    .formula{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#0b1020;border:1px solid rgba(255,255,255,.08);padding:10px 12px;border-radius:12px;color:#e0f2fe;overflow:auto}.formula b{color:#fff}
+    ul,ol{padding-left:22px;color:#d5dced} li{margin:6px 0}.tag{display:inline-block;border-radius:8px;padding:2px 7px;margin:1px;background:rgba(59,130,246,.16);color:#bfdbfe;font-size:.86em}.tag.green{background:rgba(29,158,117,.16);color:#a7f3d0}.tag.orange{background:rgba(239,159,39,.16);color:#fed7aa}.tag.red{background:rgba(226,75,74,.16);color:#fecaca}.tag.purple{background:rgba(155,93,229,.18);color:#ddd6fe}
+    table{border-collapse:collapse;width:100%;margin:12px 0;border-radius:12px;overflow:hidden}th,td{border:1px solid rgba(255,255,255,.08);padding:9px 10px;text-align:left;vertical-align:top}th{background:rgba(255,255,255,.06);color:#fff}td{color:#d5dced}
+    details{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);border-radius:14px;padding:12px 14px;margin:10px 0} summary{cursor:pointer;color:#fff;font-weight:700}
+    .interactive{border:1px solid rgba(255,255,255,.09);background:#101622;border-radius:18px;padding:14px;margin:16px 0}.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0 10px}.btn{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-size:.9rem}.btn:hover{background:rgba(255,255,255,.08)}.btn.active{background:var(--green);border-color:var(--green)}.btn.blue.active{background:var(--blue);border-color:var(--blue)}
+    .svgbox{width:100%;min-height:280px;border-radius:14px;background:linear-gradient(180deg,#111827,#0d1320);border:1px solid rgba(255,255,255,.06);overflow:hidden}.desc{background:rgba(255,255,255,.045);border-radius:12px;padding:12px;margin-top:10px;color:#e5e7eb}.state{font-size:.92rem;color:#cbd5e1;margin-top:8px}.legend{display:flex;gap:12px;flex-wrap:wrap;color:#cbd5e1;font-size:.86rem;margin:6px 0}.sw{display:inline-block;width:18px;height:4px;border-radius:999px;margin-right:5px;vertical-align:middle}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:middle}
+    .steps{display:flex;gap:8px;align-items:center;margin-top:10px}.steps span{flex:1;text-align:center;color:#cbd5e1;font-size:.9rem}
+    .mini{font-size:.92rem}.kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);padding:1px 6px;border-radius:6px}.checklist li{list-style:'✓  ';padding-left:4px}.trap li{list-style:'⚠  ';padding-left:4px}
+    @media (max-width:900px){.layout{grid-template-columns:1fr}nav{position:relative;top:0;max-height:none}.grid2,.grid3{grid-template-columns:1fr}.wrap{padding:14px}header{padding:24px}}
+    @media print{body{background:#fff;color:#111}.wrap{max-width:none}.layout{display:block}nav,.controls,.steps{display:none}.section,header,.card,.interactive{box-shadow:none;background:#fff;color:#111;border-color:#ddd}.svgbox{background:#fff}.desc,.formula{background:#f3f4f6;color:#111}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Teoria dos Grafos — Guia Interativo Completo</h1>
+      <p class="lead">Material organizado para estudar do jeito que cai em exercício: primeiro a teoria mínima, depois o procedimento prático, pegadinhas e animações apenas onde a visualização realmente ajuda.</p>
+      <div class="pillbar">
+        <span class="pill">Conectividade</span><span class="pill">Planares e k-partidos</span><span class="pill">Euler/Hamilton</span><span class="pill">Kruskal/Prim</span><span class="pill">Coloração</span><span class="pill">Emparelhamentos</span><span class="pill">Coberturas</span><span class="pill">Fluxos</span><span class="pill">Fluxo com custo</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <nav>
+        <strong>Ordem de estudo</strong>
+        <a href="#como-usar">0. Como usar este guia</a>
+        <a href="#conceitos">1. Conceitos básicos e conectividade</a>
+        <a href="#planares">2. Grafos planares e k-partidos</a>
+        <a href="#percursos">3. Eulerianos e Hamiltonianos</a>
+        <a href="#mst">4. Árvore geradora mínima</a>
+        <a href="#coloracao-v">5. Coloração de vértices</a>
+        <a href="#coloracao-a">6. Coloração de arestas</a>
+        <a href="#matching">7. Emparelhamentos</a>
+        <a href="#cobertura">8. Coberturas</a>
+        <a href="#fluxo">9. Fluxo máximo</a>
+        <a href="#custo">10. Fluxo com custo mínimo</a>
+        <a href="#resumo">11. Checklist final</a>
+      </nav>
+
+      <main>
+        <section id="como-usar" class="section">
+          <h2>0. Como usar este guia</h2>
+          <div class="grid2">
+            <div class="card good">
+              <h3>Estratégia</h3>
+              <p>Não tente decorar todos os conceitos de uma vez. Em grafos, o que mais resolve exercício é reconhecer o tipo de pergunta e aplicar o procedimento correto.</p>
+              <ol>
+                <li>Identifique o tema: coloração, árvore, fluxo, emparelhamento etc.</li>
+                <li>Conte o que importa: vértices, arestas, graus, capacidades ou custos.</li>
+                <li>Aplique o algoritmo ou critério.</li>
+                <li>Justifique a resposta com uma regra objetiva.</li>
+              </ol>
+            </div>
+            <div class="card warn">
+              <h3>Quando há animação</h3>
+              <p>As animações aparecem nos pontos em que o estado muda passo a passo: remoção de vértices, percursos, Kruskal/Prim, coloração, caminho aumentante e fluxo residual.</p>
+              <p>Use os botões <span class="kbd">Anterior</span> e <span class="kbd">Próximo</span> para estudar como se estivesse resolvendo no papel.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="conceitos" class="section">
+          <h2>1. Conceitos básicos, conectividade e grafos h-conexos</h2>
+          <p>Este bloco é a base para praticamente todo o restante. A ideia central é entender como o grafo se comporta quando removemos vértices, arestas ou quando analisamos sua estrutura.</p>
+
+          <div class="grid2">
+            <div class="card">
+              <h3>Dual direcional</h3>
+              <p>Em um grafo orientado, o <b>dual direcional</b> inverte o sentido de todos os arcos. Se havia <span class="kbd">(x,y)</span>, no dual aparece <span class="kbd">(y,x)</span>.</p>
+              <p><b>Prática:</b> para construir, mantenha os mesmos vértices e vire todas as setas.</p>
+            </div>
+            <div class="card">
+              <h3>Grafo complementar</h3>
+              <p>O complementar mantém os mesmos vértices, mas troca presença por ausência de arestas. Se dois vértices eram adjacentes em <span class="kbd">G</span>, não serão em <span class="kbd">Ḡ</span>; se não eram, passam a ser.</p>
+              <p><b>Prática:</b> liste todos os pares possíveis e retire os pares que já existem em <span class="kbd">G</span>.</p>
+            </div>
+            <div class="card">
+              <h3>Grafo regular</h3>
+              <p>Um grafo não orientado é <b>k-regular</b> quando todo vértice tem grau <span class="kbd">k</span>. Se <span class="kbd">k = 3</span>, é um grafo cúbico.</p>
+              <p><b>Prática:</b> calcule o grau de cada vértice; se todos forem iguais, é regular.</p>
+            </div>
+            <div class="card">
+              <h3>Conectividade</h3>
+              <p>A conectividade <span class="kbd">k(G)</span> é o menor número de vértices cuja remoção desconecta o grafo ou o reduz a um único vértice.</p>
+              <p><b>Prática:</b> teste remover 1 vértice; se não der, teste pares; depois trios.</p>
+            </div>
+          </div>
+
+          <h3>Subconjunto de articulação e h-conexidade</h3>
+          <div class="formula">S é subconjunto de articulação se remover S torna G desconexo.<br>G é h-conexo se k(G) ≥ h.<br>Também: G é h-conexo ⇔ entre todo par de vértices existem pelo menos h caminhos internamente disjuntos.</div>
+          <p><b>Caminhos internamente disjuntos</b> podem ter os mesmos extremos, mas não compartilham vértices internos. Isso aparece quando o exercício pede robustez do grafo.</p>
+
+          <div class="interactive">
+            <h3>Animação — remoção de vértices e conectividade</h3>
+            <div class="legend"><span><span class="dot" style="background:var(--blue)"></span>componente principal</span><span><span class="dot" style="background:var(--orange)"></span>vértice removido</span><span><span class="dot" style="background:var(--red)"></span>componente separada</span></div>
+            <div id="connSvg" class="svgbox"></div>
+            <div id="connDesc" class="desc"></div>
+            <div class="steps"><button class="btn" onclick="stepConn(-1)">← Anterior</button><span id="connCount"></span><button class="btn" onclick="stepConn(1)">Próximo →</button></div>
+          </div>
+
+          <details open>
+            <summary>Roteiro de prova para conectividade</summary>
+            <ol>
+              <li>Veja se o grafo original é conexo. Se já não for, a conectividade usual não é tratada como nos exercícios de grafos conexos.</li>
+              <li>Procure vértice de articulação: remova mentalmente um vértice e veja se separa o grafo.</li>
+              <li>Se existir um vértice que desconecta, então <span class="kbd">k(G)=1</span>.</li>
+              <li>Se nenhum vértice sozinho desconecta, teste pares.</li>
+              <li>O menor tamanho de conjunto que desconecta é o valor de <span class="kbd">k(G)</span>.</li>
+              <li>O grafo é <span class="kbd">h</span>-conexo para todo <span class="kbd">h ≤ k(G)</span>.</li>
+            </ol>
+          </details>
+        </section>
+
+        <section id="planares" class="section">
+          <h2>2. Grafos planares e k-partidos</h2>
+          <p>Um grafo é <b>planar</b> se pode ser desenhado no plano sem cruzamento de arestas. Cuidado: um desenho com cruzamentos não prova que o grafo não é planar; talvez exista outro desenho sem cruzamentos.</p>
+
+          <div class="grid2">
+            <div class="card good">
+              <h3>Fórmula de Euler</h3>
+              <div class="formula">n - m + r = 2</div>
+              <p>Vale para grafo simples, conexo e planar. Aqui:</p>
+              <ul>
+                <li><span class="kbd">n</span>: número de vértices;</li>
+                <li><span class="kbd">m</span>: número de arestas;</li>
+                <li><span class="kbd">r</span>: número de regiões, incluindo a região externa.</li>
+              </ul>
+            </div>
+            <div class="card warn">
+              <h3>Como resolver exercício</h3>
+              <ol>
+                <li>Conte vértices e arestas.</li>
+                <li>Tente redesenhar sem cruzamentos.</li>
+                <li>Conte as regiões fechadas e a região externa.</li>
+                <li>Substitua em <span class="kbd">n - m + r = 2</span>.</li>
+                <li>Se a conta não fechar para um desenho supostamente planar, revise a contagem de regiões.</li>
+              </ol>
+            </div>
+          </div>
+
+          <h3>Grafos k-partidos</h3>
+          <p>Um grafo é <b>k-partido</b> quando os vértices podem ser divididos em <span class="kbd">k</span> conjuntos independentes. Dentro de um mesmo conjunto não pode haver aresta. Arestas só podem aparecer entre conjuntos diferentes.</p>
+          <div class="formula">P = {V₁, V₂, ..., Vₖ}, com Vᵢ ∩ Vⱼ = ∅ e sem adjacência dentro de Vᵢ.</div>
+          <p><b>Bipartido</b> é o caso especial com 2 partes. Na prática, é parecido com tentar colorir os vértices usando apenas duas cores.</p>
+          <details>
+            <summary>Roteiro de prova para k-partido</summary>
+            <ol>
+              <li>Escolha um vértice e coloque no conjunto A.</li>
+              <li>Todos os vizinhos dele devem ir para B.</li>
+              <li>Todos os vizinhos dos vértices de B devem voltar para A.</li>
+              <li>Se aparecer uma aresta dentro do mesmo conjunto, não é bipartido.</li>
+              <li>Se não der com 2 partes, tente 3 ou mais, dependendo da pergunta.</li>
+            </ol>
+          </details>
+        </section>
+
+        <section id="percursos" class="section">
+          <h2>3. Percursos abrangentes — Eulerianos e Hamiltonianos</h2>
+          <p>Percurso abrangente é um percurso que usa todos os vértices ou todas as arestas. Os dois tipos mais importantes são:</p>
+          <table>
+            <thead><tr><th>Tipo</th><th>O que precisa usar?</th><th>Regra prática</th></tr></thead>
+            <tbody>
+              <tr><td>Euleriano</td><td>Todas as arestas uma única vez</td><td>Olhe os graus dos vértices.</td></tr>
+              <tr><td>Hamiltoniano</td><td>Todos os vértices uma única vez</td><td>Tente montar um ciclo/caminho passando por todos.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="grid2">
+            <div class="card good">
+              <h3>Euleriano — regra dos graus</h3>
+              <ul>
+                <li>Todos os vértices pares → circuito euleriano.</li>
+                <li>Exatamente 2 vértices ímpares → caminho euleriano aberto.</li>
+                <li>Mais de 2 vértices ímpares → não existe percurso euleriano usando todas as arestas uma vez.</li>
+              </ul>
+            </div>
+            <div class="card warn">
+              <h3>Hamiltoniano — cuidado</h3>
+              <p>O exercício geralmente pede encontrar ou verificar um ciclo. Teoremas como Dirac/Ore são condições suficientes, mas não necessárias.</p>
+              <p>Se o grafo não satisfaz o teorema, isso não prova sozinho que ele não é hamiltoniano.</p>
+            </div>
+          </div>
+
+          <div class="interactive">
+            <h3>Animação — Euleriano x Hamiltoniano</h3>
+            <div class="controls"><button id="trailEuler" class="btn active" onclick="setTrail('euler')">Percurso Euleriano</button><button id="trailHam" class="btn blue" onclick="setTrail('ham')">Ciclo Hamiltoniano</button></div>
+            <div class="legend"><span><span class="sw" style="background:var(--orange)"></span>passo atual</span><span><span class="sw" style="background:var(--green)"></span>já usado</span></div>
+            <div id="trailSvg" class="svgbox"></div>
+            <div id="trailDesc" class="desc"></div>
+            <div class="steps"><button class="btn" onclick="stepTrail(-1)">← Anterior</button><span id="trailCount"></span><button class="btn" onclick="stepTrail(1)">Próximo →</button></div>
+          </div>
+        </section>
+
+        <section id="mst" class="section">
+          <h2>4. Árvore geradora de custo mínimo — Kruskal e Prim</h2>
+          <p>Uma árvore é conexa e não possui ciclos. Se o grafo tem <span class="kbd">n</span> vértices, uma árvore geradora usa todos os vértices e tem exatamente <span class="kbd">n - 1</span> arestas.</p>
+          <p>A árvore geradora de custo mínimo, também chamada APCM, escolhe as arestas de menor custo total possível mantendo todos os vértices conectados e sem formar ciclo.</p>
+
+          <div class="grid2">
+            <div class="card good">
+              <h3>Kruskal</h3>
+              <p>Ordena todas as arestas por peso crescente. Vai escolhendo a menor aresta disponível, desde que ela não forme ciclo. Para quando tiver <span class="kbd">n - 1</span> arestas.</p>
+              <div class="formula">Kruskal = menor aresta global + teste de ciclo</div>
+            </div>
+            <div class="card good">
+              <h3>Prim</h3>
+              <p>Começa em um vértice. Mantém um conjunto <span class="kbd">T</span> de vértices já alcançados. A cada passo, escolhe a menor aresta entre <span class="kbd">T</span> e <span class="kbd">V - T</span>.</p>
+              <div class="formula">Prim = menor aresta que sai da árvore atual</div>
+            </div>
+          </div>
+
+          <div class="interactive">
+            <h3>Animação — Kruskal e Prim no mesmo grafo</h3>
+            <div class="controls"><button id="mstK" class="btn active" onclick="setMST('k')">Kruskal</button><button id="mstP" class="btn blue" onclick="setMST('p')">Prim</button></div>
+            <div class="legend" id="mstLegend"></div>
+            <div id="mstSvg" class="svgbox"></div>
+            <div id="mstDesc" class="desc"></div>
+            <div id="mstState" class="state"></div>
+            <div class="steps"><button class="btn" onclick="stepMST(-1)">← Anterior</button><span id="mstCount"></span><button class="btn" onclick="stepMST(1)">Próximo →</button></div>
+          </div>
+
+          <details open>
+            <summary>Como responder no papel</summary>
+            <ol>
+              <li>Mostre a lista de arestas com pesos.</li>
+              <li>Em Kruskal, ordene por peso crescente.</li>
+              <li>Marque arestas aceitas e rejeitadas por ciclo.</li>
+              <li>Em Prim, mantenha a tabela com <span class="kbd">T</span>, <span class="kbd">V-T</span>, aresta escolhida e custo acumulado.</li>
+              <li>Finalize quando houver <span class="kbd">n-1</span> arestas ou quando todos os vértices estiverem em <span class="kbd">T</span>.</li>
+            </ol>
+          </details>
+        </section>
+
+        <section id="coloracao-v" class="section">
+          <h2>5. Coloração de vértices</h2>
+          <p>Colorir vértices significa atribuir cores aos vértices de modo que dois vértices adjacentes não tenham a mesma cor. Uma <b>k-coloração</b> usa <span class="kbd">k</span> cores. O menor <span class="kbd">k</span> possível é o número cromático <span class="kbd">χ(G)</span>.</p>
+          <div class="formula">χ(G) = menor número de cores para colorir os vértices sem conflito.</div>
+          <p>A aplicação clássica é agendamento de provas: cada prova é um vértice; se algum aluno faz duas provas, elas recebem uma aresta e não podem ocorrer no mesmo dia. O número cromático vira o número mínimo de dias.</p>
+          <p>Também aparece o Teorema das 4 cores: todo grafo planar pode ser colorido com no máximo 4 cores. Em mapas, regiões vizinhas não podem ter a mesma cor.</p>
+
+          <div class="interactive">
+            <h3>Animação — coloração gulosa de vértices</h3>
+            <div class="legend"><span><span class="dot" style="background:var(--blue)"></span>cor 1</span><span><span class="dot" style="background:var(--green)"></span>cor 2</span><span><span class="dot" style="background:var(--orange)"></span>cor 3</span><span><span class="dot" style="background:var(--purple)"></span>cor 4</span></div>
+            <div id="vcolorSvg" class="svgbox"></div>
+            <div id="vcolorDesc" class="desc"></div>
+            <div class="steps"><button class="btn" onclick="stepVColor(-1)">← Anterior</button><span id="vcolorCount"></span><button class="btn" onclick="stepVColor(1)">Próximo →</button></div>
+          </div>
+
+          <details>
+            <summary>Roteiro prático para coloração de vértices</summary>
+            <ol>
+              <li>Procure cliques: um triângulo exige pelo menos 3 cores; um <span class="kbd">K₄</span> exige 4.</li>
+              <li>Colora os vértices mais restritivos primeiro, geralmente os de maior grau.</li>
+              <li>Para cada vértice, use a menor cor que não aparece em seus vizinhos já coloridos.</li>
+              <li>No fim, verifique aresta por aresta se há conflito.</li>
+              <li>Para provar que o número é mínimo, aponte uma clique ou explique a impossibilidade com menos cores.</li>
+            </ol>
+          </details>
+        </section>
+
+        <section id="coloracao-a" class="section">
+          <h2>6. Coloração de arestas</h2>
+          <p>Agora as cores vão nas arestas. A coloração é própria quando arestas incidentes no mesmo vértice têm cores diferentes. O menor número de cores é o índice cromático <span class="kbd">χ'(G)</span>.</p>
+          <div class="grid2">
+            <div class="card good">
+              <h3>Limites importantes</h3>
+              <div class="formula">Δ(G) ≤ χ'(G) ≤ |E|</div>
+              <p>Como um vértice de grau máximo <span class="kbd">Δ(G)</span> possui várias arestas incidentes, todas essas arestas precisam ter cores diferentes.</p>
+            </div>
+            <div class="card good">
+              <h3>Teorema de Vizing</h3>
+              <div class="formula">χ'(G) = Δ(G) ou χ'(G) = Δ(G) + 1</div>
+              <p>Na prática, tente primeiro com <span class="kbd">Δ(G)</span> cores. Se não conseguir, use <span class="kbd">Δ(G)+1</span>.</p>
+            </div>
+          </div>
+          <p>Cada cor forma um emparelhamento, pois duas arestas da mesma cor não podem compartilhar vértice.</p>
+
+          <div class="interactive">
+            <h3>Animação — coloração de arestas</h3>
+            <div class="legend"><span><span class="sw" style="background:var(--blue)"></span>cor A</span><span><span class="sw" style="background:var(--green)"></span>cor B</span><span><span class="sw" style="background:var(--orange)"></span>cor C</span></div>
+            <div id="ecolorSvg" class="svgbox"></div>
+            <div id="ecolorDesc" class="desc"></div>
+            <div class="steps"><button class="btn" onclick="stepEColor(-1)">← Anterior</button><span id="ecolorCount"></span><button class="btn" onclick="stepEColor(1)">Próximo →</button></div>
+          </div>
+        </section>
+
+        <section id="matching" class="section">
+          <h2>7. Emparelhamentos</h2>
+          <p>Um emparelhamento é um conjunto de arestas sem vértices em comum. Nenhuma aresta escolhida pode encostar em outra aresta escolhida.</p>
+          <table>
+            <thead><tr><th>Conceito</th><th>Significado prático</th></tr></thead>
+            <tbody>
+              <tr><td>Emparelhamento</td><td>Arestas escolhidas sem repetir vértices.</td></tr>
+              <tr><td>Maximal</td><td>Não dá para adicionar mais aresta sem quebrar a regra.</td></tr>
+              <tr><td>Máximo</td><td>Tem o maior número possível de arestas.</td></tr>
+              <tr><td>Perfeito</td><td>Satura todos os vértices.</td></tr>
+            </tbody>
+          </table>
+          <p><b>Pegadinha:</b> maximal não é a mesma coisa que máximo. Maximal só significa que você ficou travado; máximo significa que não existe solução maior.</p>
+
+          <h3>Caminho alternante e aumentante</h3>
+          <div class="formula">Alternante: alterna arestas fora/dentro de M.<br>Aumentante: alternante e começa/termina em vértices livres.<br>Se existe caminho aumentante, M ainda não é máximo.</div>
+          <p>O truque é inverter o caminho: as arestas que estavam fora entram, e as que estavam dentro saem. O emparelhamento aumenta em uma unidade.</p>
+
+          <div class="interactive">
+            <h3>Animação — caminho aumentante</h3>
+            <div class="legend"><span><span class="sw" style="background:var(--green)"></span>em M</span><span><span class="sw" style="background:var(--orange)"></span>caminho aumentante</span><span><span class="dot" style="background:var(--red)"></span>vértice livre</span></div>
+            <div id="matchSvg" class="svgbox"></div>
+            <div id="matchDesc" class="desc"></div>
+            <div class="steps"><button class="btn" onclick="stepMatch(-1)">← Anterior</button><span id="matchCount"></span><button class="btn" onclick="stepMatch(1)">Próximo →</button></div>
+          </div>
+        </section>
+
+        <section id="cobertura" class="section">
+          <h2>8. Coberturas</h2>
+          <p>Uma cobertura de vértices é um conjunto <span class="kbd">K</span> de vértices tal que toda aresta do grafo tem pelo menos uma extremidade em <span class="kbd">K</span>.</p>
+          <div class="formula">Toda aresta precisa ser “tocada” por pelo menos um vértice escolhido.</div>
+          <p>Exemplo mental: instalar câmeras em esquinas para vigiar todas as ruas. As ruas são arestas; as esquinas são vértices. Queremos o menor conjunto de esquinas que cobre todas as ruas.</p>
+          <div class="grid2">
+            <div class="card good">
+              <h3>Relação com emparelhamento</h3>
+              <div class="formula">|M| ≤ |K|</div>
+              <p>Como as arestas de um emparelhamento não compartilham vértices, cada uma delas exige pelo menos um vértice diferente na cobertura.</p>
+            </div>
+            <div class="card warn">
+              <h3>Como achar cobertura mínima</h3>
+              <ol>
+                <li>Liste todas as arestas.</li>
+                <li>Escolha vértices que cobrem muitas arestas.</li>
+                <li>Verifique se toda aresta foi coberta.</li>
+                <li>Tente remover vértices escolhidos.</li>
+                <li>Compare com um emparelhamento: se <span class="kbd">|M| = |K|</span>, você tem uma forte evidência de mínimo.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section id="fluxo" class="section">
+          <h2>9. Fluxos em grafos — Ford-Fulkerson</h2>
+          <p>Fluxo em grafos representa quanto de um recurso passa pelos arcos de uma rede direcionada. Existe uma fonte <span class="kbd">s</span>, um sumidouro <span class="kbd">t</span>, capacidades nos arcos e fluxos respeitando essas capacidades.</p>
+          <div class="grid2">
+            <div class="card good">
+              <h3>Ideia principal</h3>
+              <p>O fluxo máximo é a maior quantidade possível que sai de <span class="kbd">s</span> e chega em <span class="kbd">t</span>.</p>
+              <div class="formula">Fluxo máximo = capacidade do corte mínimo</div>
+            </div>
+            <div class="card warn">
+              <h3>Grafo residual / folgas</h3>
+              <p>Para cada arco com capacidade <span class="kbd">c</span> e fluxo <span class="kbd">f</span>:</p>
+              <ul>
+                <li>se <span class="kbd">f &lt; c</span>, existe folga direta <span class="kbd">c - f</span>;</li>
+                <li>se <span class="kbd">f &gt; 0</span>, existe arco reverso com folga <span class="kbd">f</span>.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="interactive">
+            <h3>Animação — aumento de fluxo e residual</h3>
+            <div class="legend"><span><span class="sw" style="background:var(--orange)"></span>caminho de aumento atual</span><span><span class="sw" style="background:var(--green)"></span>arcos com fluxo</span><span><span class="sw" style="background:var(--line)"></span>arcos disponíveis</span></div>
+            <div id="flowSvg" class="svgbox"></div>
+            <div id="flowDesc" class="desc"></div>
+            <div id="flowState" class="state"></div>
+            <div class="steps"><button class="btn" onclick="stepFlow(-1)">← Anterior</button><span id="flowCount"></span><button class="btn" onclick="stepFlow(1)">Próximo →</button></div>
+          </div>
+
+          <details open>
+            <summary>Roteiro Ford-Fulkerson para prova</summary>
+            <ol>
+              <li>Comece com fluxo zero.</li>
+              <li>Construa o grafo residual.</li>
+              <li>Encontre um caminho de <span class="kbd">s</span> até <span class="kbd">t</span>.</li>
+              <li>A folga do caminho é a menor folga entre seus arcos.</li>
+              <li>Some essa folga no caminho.</li>
+              <li>Atualize os arcos reversos.</li>
+              <li>Repita até não existir caminho de <span class="kbd">s</span> até <span class="kbd">t</span>.</li>
+              <li>O fluxo encontrado é máximo; o corte mínimo confirma.</li>
+            </ol>
+          </details>
+        </section>
+
+        <section id="custo" class="section">
+          <h2>10. Fluxo com custo mínimo</h2>
+          <p>Fluxo com custo adiciona um custo a cada arco. A pergunta típica é: qual quantidade máxima pode ser enviada e qual o custo total mínimo?</p>
+          <p>No grafo residual, quando um arco já tem fluxo, o arco reverso aparece com custo negativo. Se o custo original é <span class="kbd">y</span>, o reverso tem custo <span class="kbd">-y</span>. Isso permite desfazer uma escolha anterior se aparecer uma opção melhor.</p>
+          <div class="formula">custo total = Σ (fluxo enviado no caminho × custo unitário do caminho)</div>
+          <p>Por poder haver custos negativos no residual, não basta usar qualquer algoritmo ingênuo. Em muitos exercícios da disciplina, a lógica prática é: a cada iteração, escolher o caminho aumentante de menor custo, calcular a folga, enviar fluxo e atualizar o residual.</p>
+
+          <div class="interactive">
+            <h3>Animação — fluxo máximo com custo mínimo</h3>
+            <div class="legend"><span><span class="sw" style="background:var(--orange)"></span>caminho de menor custo escolhido</span><span><span class="sw" style="background:var(--green)"></span>fluxo acumulado</span></div>
+            <div id="costSvg" class="svgbox"></div>
+            <div id="costDesc" class="desc"></div>
+            <div id="costState" class="state"></div>
+            <div class="steps"><button class="btn" onclick="stepCost(-1)">← Anterior</button><span id="costCount"></span><button class="btn" onclick="stepCost(1)">Próximo →</button></div>
+          </div>
+        </section>
+
+        <section id="resumo" class="section">
+          <h2>11. Checklist final para resolver exercícios</h2>
+          <div class="grid2">
+            <div class="card good">
+              <h3>Quando aparecer...</h3>
+              <ul class="checklist">
+                <li><b>“sem cruzar arestas”</b>: planaridade e fórmula de Euler.</li>
+                <li><b>“menor número de cores nos vértices”</b>: número cromático.</li>
+                <li><b>“menor número de cores nas arestas”</b>: índice cromático e grau máximo.</li>
+                <li><b>“conectar todos com menor custo”</b>: árvore geradora mínima.</li>
+                <li><b>“maior quantidade que sai de s e chega em t”</b>: fluxo máximo.</li>
+                <li><b>“maior fluxo com menor custo”</b>: fluxo com custo mínimo.</li>
+                <li><b>“pares sem repetir vértice”</b>: emparelhamento.</li>
+                <li><b>“vértices que cobrem todas as arestas”</b>: cobertura.</li>
+              </ul>
+            </div>
+            <div class="card bad">
+              <h3>Pegadinhas frequentes</h3>
+              <ul class="trap">
+                <li>Desenho com cruzamento não significa automaticamente não planar.</li>
+                <li>Maximal não é máximo em emparelhamento.</li>
+                <li>Kruskal não pode formar ciclo, mesmo que a aresta seja barata.</li>
+                <li>Prim escolhe menor aresta saindo de T, não a menor global do grafo.</li>
+                <li>No residual, arco reverso existe quando já existe fluxo positivo.</li>
+                <li>Em fluxo com custo, arco reverso tem custo negativo.</li>
+                <li>Teoremas de Hamilton são suficientes, não necessários.</li>
+                <li>Em coloração de arestas, arestas incidentes não podem repetir cor.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+<script>
+const SVG='http://www.w3.org/2000/svg';
+function mk(t,a){const e=document.createElementNS(SVG,t);for(const[k,v]of Object.entries(a))e.setAttribute(k,v);return e}
+function setHtml(id,html){document.getElementById(id).innerHTML=html}
+function hasEdge(list,u,v){return list.some(e=>(String(e[0])===String(u)&&String(e[1])===String(v))||(String(e[0])===String(v)&&String(e[1])===String(u)))}
+function hasDirected(list,u,v){return list.some(e=>String(e[0])===String(u)&&String(e[1])===String(v))}
+function key(u,v){return u<v?u+'-'+v:v+'-'+u}
+function svgStart(id,view='0 0 700 380'){const box=document.getElementById(id);box.innerHTML='';const s=mk('svg',{viewBox:view,width:'100%',height:'100%',style:'display:block;min-height:280px'});box.appendChild(s);return s}
+function drawNode(svg,n,x,y,opt={}){const fill=opt.fill||'#1f2937',stroke=opt.stroke||'rgba(255,255,255,.18)',r=opt.r||20;svg.appendChild(mk('circle',{cx:x,cy:y,r,fill,stroke,'stroke-width':opt.sw||1.5}));const t=mk('text',{x,y:y+1,'text-anchor':'middle','dominant-baseline':'middle',fill:opt.text||'#fff','font-size':opt.fs||14,'font-weight':700,'font-family':'Inter,Arial'});t.textContent=n;svg.appendChild(t)}
+function drawLine(svg,p1,p2,opt={}){svg.appendChild(mk('line',{x1:p1.x,y1:p1.y,x2:p2.x,y2:p2.y,stroke:opt.stroke||'#3b4458','stroke-width':opt.sw||2,'stroke-linecap':'round','stroke-dasharray':opt.dash||'none',opacity:opt.opacity||1}))}
+function drawEdgeLabel(svg,p1,p2,text,opt={}){const x=(p1.x+p2.x)/2+(opt.dx||0),y=(p1.y+p2.y)/2+(opt.dy||0);const w=Math.max(36,String(text).length*7+14);const bg=mk('rect',{x:x-w/2,y:y-12,width:w,height:22,rx:8,fill:'#0f172a',opacity:.9});svg.appendChild(bg);const t=mk('text',{x,y:y+1,'text-anchor':'middle','dominant-baseline':'middle',fill:opt.fill||'#dbeafe','font-size':12,'font-weight':700,'font-family':'Inter,Arial'});t.textContent=text;svg.appendChild(t)}
+function ensureArrow(svg){let defs=svg.querySelector('defs');if(!defs){defs=mk('defs',{});svg.appendChild(defs)} if(!svg.querySelector('#arrow')){const m=mk('marker',{id:'arrow',viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:6,markerHeight:6,orient:'auto-start-reverse'});const p=mk('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'#93a4bd'});m.appendChild(p);defs.appendChild(m)} if(!svg.querySelector('#arrowOrange')){const m=mk('marker',{id:'arrowOrange',viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:6,markerHeight:6,orient:'auto-start-reverse'});const p=mk('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'#EF9F27'});m.appendChild(p);defs.appendChild(m)} if(!svg.querySelector('#arrowRed')){const m=mk('marker',{id:'arrowRed',viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:6,markerHeight:6,orient:'auto-start-reverse'});const p=mk('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'#E24B4A'});m.appendChild(p);defs.appendChild(m)}}
+function drawArrow(svg,p1,p2,opt={}){ensureArrow(svg);const dx=p2.x-p1.x,dy=p2.y-p1.y,len=Math.max(1,Math.hypot(dx,dy)),r1=opt.r1||23,r2=opt.r2||24;const x1=p1.x+dx/len*r1,y1=p1.y+dy/len*r1,x2=p2.x-dx/len*r2,y2=p2.y-dy/len*r2;const marker=opt.marker||'url(#arrow)';svg.appendChild(mk('line',{x1,y1,x2,y2,stroke:opt.stroke||'#3b4458','stroke-width':opt.sw||2,'stroke-linecap':'round','marker-end':marker,'stroke-dasharray':opt.dash||'none',opacity:opt.opacity||1}))}
+function fKey(u,v){return u+'-'+v}
+
+// 1. Conectividade
+const connN={1:{x:95,y:185},2:{x:190,y:95},3:{x:190,y:275},4:{x:315,y:185},5:{x:455,y:95},6:{x:455,y:275},7:{x:595,y:185}};
+const connE=[[1,2],[1,3],[2,3],[2,4],[3,4],[4,5],[4,6],[5,6],[5,7],[6,7]];
+const connSteps=[
+  {neutral:true,rem:[],d:'Estado inicial: o grafo aparece sem ação aplicada. Clique em Próximo para começar o teste de conectividade.',c:'Nenhum vértice foi removido ainda.'},
+  {rem:[],d:'Primeiro verificamos o grafo original: todos os vértices estão conectados. Ainda existe caminho entre qualquer par de vértices.',c:'Teste inicial: G é conexo.'},
+  {rem:[4],d:'Removendo o vértice 4, o grafo se separa em duas componentes: {1,2,3} e {5,6,7}.',c:'Como um único vértice desconecta o grafo, 4 é vértice de articulação e k(G)=1.'},
+  {rem:[2],d:'Removendo apenas o vértice 2, o grafo continua conectado: 1 ainda chega ao restante por 3 e 4.',c:'Nem todo vértice é articulação. O valor k(G) considera o menor conjunto que desconecta.'},
+  {rem:[5,6],d:'Removendo {5,6}, o vértice 7 fica isolado do restante.',c:'{5,6} também é um subconjunto de articulação, mas não é mínimo porque já encontramos {4}.'}
+];let connI=0;
+function drawConn(){const st=connSteps[connI],svg=svgStart('connSvg');connE.forEach(([u,v])=>{const removed=st.rem.includes(u)||st.rem.includes(v);let stroke='#4b5563',dash='none',opacity=1;if(removed){stroke='#374151';dash='6 5';opacity=.35}else if(!st.neutral&&connI===2&&u>=5&&v>=5)stroke='#E24B4A';drawLine(svg,connN[u],connN[v],{stroke,sw:2.5,dash,opacity})});Object.entries(connN).forEach(([id,p])=>{id=+id;let fill='#243145';if(!st.neutral){fill='#3B82F6';if(st.rem.includes(id))fill='#EF9F27';else if(connI===2&&id>=5)fill='#E24B4A'}drawNode(svg,id,p.x,p.y,{fill})});setHtml('connDesc',st.d+'<br><b>'+st.c+'</b>');setHtml('connCount',`Passo ${connI} de ${connSteps.length-1}`)}
+function stepConn(d){connI=Math.max(0,Math.min(connSteps.length-1,connI+d));drawConn()}
+
+// 3. Euler/Hamilton
+const trailN={a:{x:130,y:185},b:{x:255,y:80},c:{x:430,y:80},d:{x:555,y:185},e:{x:430,y:295},f:{x:255,y:295}};
+const trailE=[['a','b'],['b','c'],['c','d'],['d','e'],['e','f'],['f','a'],['b','f'],['c','e']];
+const paths={euler:[['a','b'],['b','c'],['c','d'],['d','e'],['e','c'],['e','f'],['f','b'],['f','a']],ham:[['a','b'],['b','c'],['c','d'],['d','e'],['e','f'],['f','a']]};
+let trailMode='euler',trailI=0;
+function setTrail(m){trailMode=m;trailI=0;document.getElementById('trailEuler').classList.toggle('active',m==='euler');document.getElementById('trailHam').classList.toggle('active',m==='ham');drawTrail()}
+function drawTrail(){const svg=svgStart('trailSvg');const seq=paths[trailMode];trailE.forEach(([u,v])=>{let used=false,cur=false;for(let i=0;i<trailI&&i<seq.length;i++){if(hasEdge([seq[i]],u,v)){used=true;if(i===trailI-1)cur=true}}drawLine(svg,trailN[u],trailN[v],{stroke:cur?'#EF9F27':used?'#1D9E75':'#4b5563',sw:cur?5:used?4:2.2})});Object.entries(trailN).forEach(([id,p])=>drawNode(svg,id,p.x,p.y,{fill:'#243145'}));const label=trailMode==='euler'?'Euleriano: a ideia é usar todas as arestas uma única vez.':'Hamiltoniano: a ideia é usar todos os vértices uma única vez e voltar ao início.';const pathText=trailI===0?'nenhum trecho usado ainda':seq.slice(0,trailI).map(e=>e.join('→')).join(' | ');setHtml('trailDesc',trailI===0?'Estado inicial: grafo sem percurso destacado. Clique em Próximo para iniciar.<br><b>Modo:</b> '+label:label+'<br><b>Trecho destacado:</b> '+pathText);setHtml('trailCount',`Passo ${trailI} de ${seq.length}`)}
+function stepTrail(d){const max=paths[trailMode].length;trailI=Math.max(0,Math.min(max,trailI+d));drawTrail()}
+
+// 4. MST Kruskal / Prim
+const mstN={1:{x:90,y:190},2:{x:210,y:70},3:{x:385,y:60},4:{x:560,y:105},5:{x:540,y:235},6:{x:155,y:305},7:{x:430,y:180},8:{x:610,y:330},9:{x:300,y:335}};
+const mstE=[[1,2,4],[1,6,5],[2,3,7],[2,6,3],[3,4,5],[3,7,6],[4,5,3],[5,7,2],[5,8,4],[6,7,7],[6,9,5],[7,8,6],[8,9,8]];
+const mstK=[
+{k:0,t:0,e:null,a:'init',cost:0,v:[0,1,2,3,4,5,6,7,8,9],tr:[],d:'Estado inicial: grafo sem aresta escolhida. Primeiro, no Kruskal, ordenamos as arestas por peso crescente.'},
+{k:1,t:1,e:[5,7],a:'add',cost:2,v:[0,1,2,3,4,5,6,5,8,9],tr:[[5,7]],d:'(5,7)=2. Componentes diferentes, então entra na árvore. Custo=2.'},
+{k:2,t:2,e:[2,6],a:'add',cost:5,v:[0,1,2,3,4,5,2,5,8,9],tr:[[5,7],[2,6]],d:'(2,6)=3. Não forma ciclo. Entra. Custo=5.'},
+{k:3,t:3,e:[4,5],a:'add',cost:8,v:[0,1,2,3,4,4,2,4,8,9],tr:[[5,7],[2,6],[4,5]],d:'(4,5)=3. Une a componente de 4 à de 5/7. Custo=8.'},
+{k:4,t:4,e:[1,2],a:'add',cost:12,v:[0,1,1,3,4,4,1,4,8,9],tr:[[5,7],[2,6],[4,5],[1,2]],d:'(1,2)=4. Une 1 à componente de 2/6. Custo=12.'},
+{k:5,t:5,e:[5,8],a:'add',cost:16,v:[0,1,1,3,4,4,1,4,4,9],tr:[[5,7],[2,6],[4,5],[1,2],[5,8]],d:'(5,8)=4. Entra, pois 8 ainda estava fora da componente. Custo=16.'},
+{k:6,t:5,e:[1,6],a:'reject',cost:16,v:[0,1,1,3,4,4,1,4,4,9],tr:[[5,7],[2,6],[4,5],[1,2],[5,8]],d:'(1,6)=5. Rejeita: 1 e 6 já estão na mesma componente, logo formaria ciclo.'},
+{k:7,t:6,e:[3,4],a:'add',cost:21,v:[0,1,1,3,3,3,1,3,3,9],tr:[[5,7],[2,6],[4,5],[1,2],[5,8],[3,4]],d:'(3,4)=5. Une 3 à componente de 4/5/7/8. Custo=21.'},
+{k:8,t:7,e:[6,9],a:'add',cost:26,v:[0,1,1,3,3,3,1,3,3,1],tr:[[5,7],[2,6],[4,5],[1,2],[5,8],[3,4],[6,9]],d:'(6,9)=5. Une 9 à componente de 1/2/6. Custo=26.'},
+{k:9,t:7,e:[3,7],a:'reject',cost:26,v:[0,1,1,3,3,3,1,3,3,1],tr:[[5,7],[2,6],[4,5],[1,2],[5,8],[3,4],[6,9]],d:'(3,7)=6. Rejeita: 3 e 7 já pertencem à mesma componente.'},
+{k:10,t:7,e:[7,8],a:'reject',cost:26,v:[0,1,1,3,3,3,1,3,3,1],tr:[[5,7],[2,6],[4,5],[1,2],[5,8],[3,4],[6,9]],d:'(7,8)=6. Rejeita por ciclo.'},
+{k:11,t:8,e:[2,3],a:'add',cost:33,v:[0,1,1,1,1,1,1,1,1,1],tr:[[5,7],[2,6],[4,5],[1,2],[5,8],[3,4],[6,9],[2,3]],d:'(2,3)=7. Une as duas grandes componentes. Como t=8=n−1, a APCM está completa. Custo final=33.'}
+];
+const mstP=[
+{s:0,T:[],nE:null,E:[],cost:0,d:'Estado inicial: grafo sem ação. No próximo passo escolhemos o vértice inicial do Prim.'},
+{s:1,T:[1],nE:null,E:[],cost:0,d:'Inicialização: T={1}. A árvore começa no vértice 1, mas ainda sem arestas.'},
+{s:2,T:[1,2],nE:[1,2],E:[[1,2]],cost:4,d:'Menor aresta saindo de T={1}: (1,2)=4. Entra 2. Custo=4.'},
+{s:3,T:[1,2,6],nE:[2,6],E:[[1,2],[2,6]],cost:7,d:'Agora T={1,2}. A menor aresta para fora é (2,6)=3. Custo=7.'},
+{s:4,T:[1,2,6,9],nE:[6,9],E:[[1,2],[2,6],[6,9]],cost:12,d:'Entre as arestas que saem de T, a melhor é (6,9)=5. Custo=12.'},
+{s:5,T:[1,2,3,6,9],nE:[2,3],E:[[1,2],[2,6],[6,9],[2,3]],cost:19,d:'A menor opção que liga T a V−T é (2,3)=7. Custo=19.'},
+{s:6,T:[1,2,3,4,6,9],nE:[3,4],E:[[1,2],[2,6],[6,9],[2,3],[3,4]],cost:24,d:'A menor saída agora é (3,4)=5. Custo=24.'},
+{s:7,T:[1,2,3,4,5,6,9],nE:[4,5],E:[[1,2],[2,6],[6,9],[2,3],[3,4],[4,5]],cost:27,d:'A menor aresta entre T e V−T é (4,5)=3. Custo=27.'},
+{s:8,T:[1,2,3,4,5,6,7,9],nE:[5,7],E:[[1,2],[2,6],[6,9],[2,3],[3,4],[4,5],[5,7]],cost:29,d:'A menor saída é (5,7)=2. Custo=29.'},
+{s:9,T:[1,2,3,4,5,6,7,8,9],nE:[5,8],E:[[1,2],[2,6],[6,9],[2,3],[3,4],[4,5],[5,7],[5,8]],cost:33,d:'Por fim, entra 8 pela aresta (5,8)=4. Todos os vértices foram alcançados. Custo final=33.'}
+];
+let mstMode='k',mstI=0;
+function setMST(m){mstMode=m;mstI=0;document.getElementById('mstK').classList.toggle('active',m==='k');document.getElementById('mstP').classList.toggle('active',m==='p');drawMST()}
+function drawMST(){const svg=svgStart('mstSvg','0 0 700 390');const st=mstMode==='k'?mstK[mstI]:mstP[mstI];const tree=mstMode==='k'?st.tr:st.E;const cur=mstMode==='k'?st.e:st.nE;const rej=mstMode==='k'&&st.a==='reject';mstE.forEach(([u,v,w])=>{const isCur=cur&&hasEdge([cur],u,v),isTree=!isCur&&hasEdge(tree,u,v);let stroke='#4b5563',sw=2,dash='none';if(isCur&&rej){stroke='#E24B4A';sw=4;dash='7 5'}else if(isCur){stroke='#EF9F27';sw=5}else if(isTree){stroke='#1D9E75';sw=4}drawLine(svg,mstN[u],mstN[v],{stroke,sw,dash});drawEdgeLabel(svg,mstN[u],mstN[v],w,{fill:isCur?'#fff':'#cbd5e1'})});for(const [id,p] of Object.entries(mstN)){let fill='#243145';if(mstMode==='p'&&st.T.includes(+id))fill='#1D4ED8';if(cur&&(cur[0]==id||cur[1]==id))fill=rej?'#991B1B':'#B45309';drawNode(svg,id,p.x,p.y,{fill})}setHtml('mstDesc',st.d);if(mstMode==='k'){let table='<div style="display:flex;gap:4px;flex-wrap:wrap">';for(let i=1;i<=9;i++)table+=`<span class="tag ${cur&&(cur[0]===i||cur[1]===i)?'orange':''}">v[${i}]=${st.v[i]}</span>`;table+='</div>';setHtml('mstState',`${table}<b>t:</b> ${st.t} arestas | <b>k:</b> ${st.k} | <b>custo:</b> ${st.cost}`);setHtml('mstLegend','<span><span class="sw" style="background:var(--green)"></span>na árvore</span><span><span class="sw" style="background:var(--orange)"></span>avaliada/agora</span><span><span class="sw" style="background:var(--red)"></span>rejeitada por ciclo</span>') }else{const vt=[1,2,3,4,5,6,7,8,9].filter(x=>!st.T.includes(x));setHtml('mstState',`<b>T:</b> {${st.T.join(', ')||'∅'}} | <b>V−T:</b> {${vt.join(', ')||'∅'}} | <b>E’:</b> {${st.E.map(e=>'('+e.join(',')+')').join(', ')||'∅'}} | <b>custo:</b> ${st.cost}`);setHtml('mstLegend','<span><span class="dot" style="background:#1D4ED8"></span>vértices em T</span><span><span class="sw" style="background:var(--orange)"></span>aresta escolhida agora</span><span><span class="sw" style="background:var(--green)"></span>arestas da árvore</span>')}const len=mstMode==='k'?mstK.length:mstP.length;setHtml('mstCount',`Passo ${mstI} de ${len-1}`)}
+function stepMST(d){const len=mstMode==='k'?mstK.length:mstP.length;mstI=Math.max(0,Math.min(len-1,mstI+d));drawMST()}
+
+// 5. Vertex coloring
+const vcN={A:{x:150,y:100},B:{x:330,y:70},C:{x:520,y:120},D:{x:455,y:290},E:{x:240,y:300},F:{x:90,y:230}};
+const vcE=[['A','B'],['B','C'],['C','D'],['D','E'],['E','F'],['F','A'],['A','E'],['B','E'],['B','D'],['C','E']];
+const vcOrder=['B','E','A','C','D','F'];const vcColors={B:'#3B82F6',E:'#1D9E75',A:'#EF9F27',C:'#1D9E75',D:'#EF9F27',F:'#3B82F6'};let vcI=0;
+function drawVColor(){const svg=svgStart('vcolorSvg');vcE.forEach(([u,v])=>drawLine(svg,vcN[u],vcN[v],{stroke:'#4b5563',sw:2.2}));Object.entries(vcN).forEach(([id,p])=>{const idx=vcOrder.indexOf(id);const done=vcI>0&&idx<vcI;drawNode(svg,id,p.x,p.y,{fill:done?vcColors[id]:'#243145',stroke:vcI>0&&idx===vcI-1?'#fff':'rgba(255,255,255,.18)',sw:vcI>0&&idx===vcI-1?3:1.5})});if(vcI===0){setHtml('vcolorDesc','Estado inicial: grafo sem vértices coloridos. Clique em Próximo para aplicar a coloração gulosa.');setHtml('vcolorCount',`Passo 0 de ${vcOrder.length}`);return}const v=vcOrder[vcI-1];const used=vcE.filter(e=>e.includes(v)).map(e=>e[0]===v?e[1]:e[0]).filter(n=>vcOrder.indexOf(n)<vcI-1).map(n=>n+': já colorido').join(', ')||'nenhum vizinho colorido ainda';setHtml('vcolorDesc',`Colorindo o vértice <b>${v}</b>. Vizinhos já considerados: ${used}. Escolhemos a menor cor que não conflita com os vizinhos.`);setHtml('vcolorCount',`Passo ${vcI} de ${vcOrder.length}`)}
+function stepVColor(d){vcI=Math.max(0,Math.min(vcOrder.length,vcI+d));drawVColor()}
+
+// 6. Edge coloring
+const ecN={1:{x:150,y:100},2:{x:360,y:100},3:{x:560,y:210},4:{x:360,y:315},5:{x:150,y:315}};
+const ecE=[[1,2],[2,3],[3,4],[4,5],[5,1],[2,4],[2,5]];
+const ecSteps=[[],[[1,2,'#3B82F6']],[[1,2,'#3B82F6'],[2,3,'#1D9E75']],[[1,2,'#3B82F6'],[2,3,'#1D9E75'],[2,4,'#EF9F27']],[[1,2,'#3B82F6'],[2,3,'#1D9E75'],[2,4,'#EF9F27'],[3,4,'#3B82F6']],[[1,2,'#3B82F6'],[2,3,'#1D9E75'],[2,4,'#EF9F27'],[3,4,'#3B82F6'],[4,5,'#1D9E75']],[[1,2,'#3B82F6'],[2,3,'#1D9E75'],[2,4,'#EF9F27'],[3,4,'#3B82F6'],[4,5,'#1D9E75'],[5,1,'#EF9F27']],[[1,2,'#3B82F6'],[2,3,'#1D9E75'],[2,4,'#EF9F27'],[3,4,'#3B82F6'],[4,5,'#1D9E75'],[5,1,'#EF9F27'],[2,5,'#9B5DE5']]];let ecI=0;
+function drawEColor(){const svg=svgStart('ecolorSvg');const colored=ecSteps[ecI];ecE.forEach(([u,v])=>{const c=colored.find(e=>hasEdge([e],u,v));drawLine(svg,ecN[u],ecN[v],{stroke:c?c[2]:'#4b5563',sw:c?5:2.4});});Object.entries(ecN).forEach(([id,p])=>drawNode(svg,id,p.x,p.y,{fill:'#243145'}));let msg=ecI===0?'Estado inicial: nenhuma aresta colorida. Primeiro calculamos Δ(G); o vértice 2 tem maior grau, então precisamos de pelo menos Δ cores.':'Arestas incidentes no mesmo vértice não podem repetir cor. Se uma nova aresta encosta em cores já usadas, escolhemos uma cor livre.';if(ecI===ecSteps.length-1)msg+=' Aqui foi necessária uma quarta cor para evitar conflito na aresta (2,5), mostrando a lógica de tentar Δ e, se não der, Δ+1.';setHtml('ecolorDesc',msg);setHtml('ecolorCount',`Passo ${ecI} de ${ecSteps.length-1}`)}
+function stepEColor(d){ecI=Math.max(0,Math.min(ecSteps.length-1,ecI+d));drawEColor()}
+
+// 7. Matching maior com caminho aumentante longo
+const maN={1:{x:110,y:65},2:{x:110,y:145},3:{x:110,y:225},4:{x:110,y:305},a:{x:590,y:65},b:{x:590,y:145},c:{x:590,y:225},d:{x:590,y:305}};
+const maE=[[1,'a'],[1,'b'],[2,'a'],[2,'c'],[3,'b'],[3,'c'],[3,'d'],[4,'c'],[4,'d']];
+const maSteps=[
+{M:[],path:[],free:[],d:'Estado inicial: grafo bipartido sem emparelhamento destacado. Clique em Próximo para ver uma escolha inicial de M.'},
+{M:[[1,'a'],[3,'b'],[4,'c']],path:[],free:[2,'d'],d:'Escolha inicial: M={(1,a),(3,b),(4,c)}. Os vértices 2 e d estão livres, então ainda pode existir caminho aumentante.'},
+{M:[[1,'a'],[3,'b'],[4,'c']],path:[[2,'a'],[1,'a']],free:[2,'d'],d:'Começamos no vértice livre 2. A aresta (2,a) está fora de M; para alternar, seguimos pela aresta de M ligada a a: (1,a).'},
+{M:[[1,'a'],[3,'b'],[4,'c']],path:[[2,'a'],[1,'a'],[1,'b'],[3,'b']],free:[2,'d'],d:'Continuamos alternando: (1,b) está fora de M e (3,b) está dentro de M. O caminho ainda alterna fora/dentro/fora/dentro.'},
+{M:[[1,'a'],[3,'b'],[4,'c']],path:[[2,'a'],[1,'a'],[1,'b'],[3,'b'],[3,'d']],free:[2,'d'],d:'Chegamos em d por (3,d), que está fora de M. Como 2 e d são livres, temos um caminho M-aumentante: 2–a–1–b–3–d.'},
+{M:[[2,'a'],[1,'b'],[3,'d'],[4,'c']],path:[],free:[],d:'Invertemos o caminho: saem (1,a) e (3,b); entram (2,a), (1,b) e (3,d). O emparelhamento aumenta de 3 para 4 e fica perfeito.'}
+];let maI=0;
+function drawMatch(){const svg=svgStart('matchSvg');const st=maSteps[maI];maE.forEach(([u,v])=>{const inM=hasEdge(st.M,u,v),inP=hasEdge(st.path,u,v);drawLine(svg,maN[u],maN[v],{stroke:inP?'#EF9F27':inM?'#1D9E75':'#4b5563',sw:inP?5:inM?4:2.2,dash:inP&&!inM?'7 5':'none'});});Object.entries(maN).forEach(([id,p])=>{const free=st.free.map(String).includes(String(id));drawNode(svg,id,p.x,p.y,{fill:free?'#E24B4A':'#243145'})});setHtml('matchDesc',st.d);setHtml('matchCount',`Passo ${maI} de ${maSteps.length-1}`)}
+function stepMatch(d){maI=Math.max(0,Math.min(maSteps.length-1,maI+d));drawMatch()}
+
+// 9. Fluxo máximo com caminho reverso residual
+const flN={S:{x:70,y:210},A:{x:210,y:105},B:{x:210,y:315},C:{x:395,y:105},D:{x:395,y:315},E:{x:540,y:245},T:{x:650,y:180}};
+const flE=[['S','A',6],['S','B',6],['A','B',2],['A','C',4],['B','D',4],['B','E',2],['C','T',4],['D','T',4],['E','T',4],['C','D',2],['D','E',2]];
+const flSteps=[
+{f:{},path:[],total:0,d:'Estado inicial: fluxo zero em todos os arcos. O grafo está neutro; clique em Próximo para escolher o primeiro caminho aumentante.'},
+{f:{'S-A':2,'A-B':2,'B-D':2,'D-T':2},path:[['S','A'],['A','B'],['B','D'],['D','T']],total:2,d:'1ª iteração: S→A→B→D→T. Folga mínima = min(6,2,4,4)=2. Enviamos 2. Observe que A→B fica saturado.'},
+{f:{'S-A':2,'A-B':0,'B-D':2,'D-T':2,'S-B':2,'A-C':2,'C-T':2},path:[['S','B'],['B','A','rev'],['A','C'],['C','T']],rev:[['B','A']],total:4,d:'2ª iteração: S→B→A→C→T usa o arco reverso B→A no residual. Isso cancela os 2 que estavam em A→B e reaproveita essa capacidade para mandar fluxo por A→C. É o caso clássico em que o caminho “inverte”.'},
+{f:{'S-A':4,'A-B':0,'B-D':2,'D-T':2,'S-B':2,'A-C':4,'C-T':4},path:[['S','A'],['A','C'],['C','T']],total:6,d:'3ª iteração: S→A→C→T. Ainda havia folga 2 em S→A, A→C e C→T. Enviamos mais 2. Agora C→T está saturado.'},
+{f:{'S-A':4,'A-B':0,'B-D':4,'D-T':4,'S-B':4,'A-C':4,'C-T':4},path:[['S','B'],['B','D'],['D','T']],total:8,d:'4ª iteração: S→B→D→T. Folga mínima = 2, pois B→D e D→T ainda tinham 2 disponíveis. Fluxo total=8.'},
+{f:{'S-A':4,'A-B':0,'B-D':4,'D-T':4,'S-B':6,'A-C':4,'C-T':4,'B-E':2,'E-T':2},path:[['S','B'],['B','E'],['E','T']],total:10,d:'5ª iteração: S→B→E→T. Folga mínima = 2. Agora S→B fica saturado e o fluxo total chega a 10.'},
+{f:{'S-A':4,'A-B':0,'B-D':4,'D-T':4,'S-B':6,'A-C':4,'C-T':4,'B-E':2,'E-T':2},path:[],total:10,d:'Não existe mais caminho aumentante útil de S até T no residual. O fluxo máximo encontrado é 10. O ponto didático principal foi a 2ª iteração: o arco reverso B→A permitiu desfazer uma decisão anterior.'}
+];let flI=0;
+function drawFlow(){const svg=svgStart('flowSvg','0 0 720 420');ensureArrow(svg);const st=flSteps[flI];flE.forEach(([u,v,c])=>{const f=st.f[fKey(u,v)]||0;const inPath=hasDirected(st.path,u,v);drawArrow(svg,flN[u],flN[v],{stroke:inPath?'#EF9F27':f>0?'#1D9E75':'#4b5563',sw:inPath?5:f>0?4:2.2,marker:inPath?'url(#arrowOrange)':'url(#arrow)'});drawEdgeLabel(svg,flN[u],flN[v],`${f}/${c}`,{fill:inPath?'#fff':'#dbeafe'})});(st.rev||[]).forEach(([u,v])=>drawArrow(svg,flN[u],flN[v],{stroke:'#E24B4A',sw:5,dash:'7 5',marker:'url(#arrowRed)',r1:28,r2:28}));Object.entries(flN).forEach(([id,p])=>{let fill='#243145';if(flI>0){if(id==='S')fill='#1D9E75';if(id==='T')fill='#E24B4A'}drawNode(svg,id,p.x,p.y,{fill})});setHtml('flowDesc',st.d);setHtml('flowState',`<b>Fluxo acumulado:</b> ${st.total}. Notação nas arestas: fluxo/capacidade. <span class="tag red">tracejado vermelho</span> = arco reverso usado no residual.`);setHtml('flowCount',`Passo ${flI} de ${flSteps.length-1}`)}
+function stepFlow(d){flI=Math.max(0,Math.min(flSteps.length-1,flI+d));drawFlow()}
+
+// 10. Min cost flow
+const coN={1:{x:90,y:190},2:{x:285,y:95},3:{x:285,y:285},4:{x:555,y:190}};
+const coE=[[1,2,4,1],[1,3,5,2],[2,3,2,0],[2,4,4,2],[3,4,5,1]];
+const coSteps=[
+{f:{},path:[],flow:0,cost:0,d:'Estado inicial: fluxo zero e nenhum caminho escolhido. Clique em Próximo para escolher o caminho aumentante de menor custo.'},
+{f:{'1-2':2,'2-3':2,'3-4':2},path:[[1,2],[2,3],[3,4]],flow:2,cost:4,d:'Caminho 1→2→3→4 tem custo unitário 1+0+1=2 e capacidade 2. Enviamos 2. Custo parcial=2×2=4.'},
+{f:{'1-2':4,'2-3':2,'3-4':2,'2-4':2},path:[[1,2],[2,4]],flow:4,cost:10,d:'Depois de saturar 2→3, escolhemos 1→2→4, custo unitário 1+2=3. Enviamos 2. Custo novo=2×3=6; total=10.'},
+{f:{'1-2':4,'2-3':2,'3-4':5,'2-4':2,'1-3':3},path:[[1,3],[3,4]],flow:7,cost:19,d:'Agora escolhemos 1→3→4, custo unitário 2+1=3. Enviamos 3. Custo novo=3×3=9; total=19.'},
+{f:{'1-2':4,'2-3':2,'3-4':5,'2-4':2,'1-3':3},path:[],flow:7,cost:19,d:'Não há mais caminho com capacidade até o destino. Fluxo máximo enviado=7 e custo total mínimo neste processo=19.'}
+];let coI=0;
+function drawCost(){const svg=svgStart('costSvg');ensureArrow(svg);const st=coSteps[coI];coE.forEach(([u,v,cap,cost])=>{const f=st.f[fKey(u,v)]||0;const inPath=hasDirected(st.path,u,v);drawArrow(svg,coN[u],coN[v],{stroke:inPath?'#EF9F27':f>0?'#1D9E75':'#4b5563',sw:inPath?5:f>0?4:2.2,marker:inPath?'url(#arrowOrange)':'url(#arrow)'});drawEdgeLabel(svg,coN[u],coN[v],`${f}/${cap} | $${cost}`,{fill:inPath?'#fff':'#dbeafe',dy:(u===1&&v===3)?18:0})});Object.entries(coN).forEach(([id,p])=>{let fill='#243145';if(coI>0){if(id==='1')fill='#1D9E75';if(id==='4')fill='#E24B4A'}drawNode(svg,id,p.x,p.y,{fill})});setHtml('costDesc',st.d);setHtml('costState',`<b>Fluxo acumulado:</b> ${st.flow} | <b>Custo total:</b> ${st.cost}. Em residual, arcos reversos teriam custo negativo para permitir desfazer fluxo.`);setHtml('costCount',`Passo ${coI} de ${coSteps.length-1}`)}
+function stepCost(d){coI=Math.max(0,Math.min(coSteps.length-1,coI+d));drawCost()}
+
+// init
+window.addEventListener('load',()=>{drawConn();drawTrail();drawMST();drawVColor();drawEColor();drawMatch();drawFlow();drawCost();});
+</script>
+</body>
+</html>
