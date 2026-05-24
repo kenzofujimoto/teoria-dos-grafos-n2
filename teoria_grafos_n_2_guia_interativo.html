@@ -35,7 +35,7 @@
     .interactive{border:1px solid rgba(255,255,255,.09);background:#101622;border-radius:18px;padding:14px;margin:16px 0}.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0 10px}.btn{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-size:.9rem}.btn:hover{background:rgba(255,255,255,.08)}.btn.active{background:var(--green);border-color:var(--green)}.btn.blue.active{background:var(--blue);border-color:var(--blue)}
     .svgbox{width:100%;min-height:280px;border-radius:14px;background:linear-gradient(180deg,#111827,#0d1320);border:1px solid rgba(255,255,255,.06);overflow:hidden}.desc{background:rgba(255,255,255,.045);border-radius:12px;padding:12px;margin-top:10px;color:#e5e7eb}.state{font-size:.92rem;color:#cbd5e1;margin-top:8px}.legend{display:flex;gap:12px;flex-wrap:wrap;color:#cbd5e1;font-size:.86rem;margin:6px 0}.sw{display:inline-block;width:18px;height:4px;border-radius:999px;margin-right:5px;vertical-align:middle}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:middle}
     .steps{display:flex;gap:8px;align-items:center;margin-top:10px}.steps span{flex:1;text-align:center;color:#cbd5e1;font-size:.9rem}
-    .exercise-graph{min-height:420px;overflow:auto}.exercise-graph svg{min-width:760px}.solution-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}.solution-summary .card{padding:12px}.candidate-panel{margin-top:14px;overflow-x:auto}.candidate-panel h4{margin-top:0}.candidate-table{font-size:.9rem;min-width:760px}.candidate-table td:first-child{white-space:nowrap}.candidate-table .chosen{background:rgba(29,158,117,.12)}.candidate-table .blocked{color:#fecaca}.path-note{border-left:3px solid var(--orange);padding-left:10px;color:#fed7aa}.flow-table{font-size:.88rem;min-width:620px}
+    .exercise-graph{min-height:420px;overflow:auto}.exercise-graph svg{min-width:760px}.static-graph{min-height:320px;margin:14px 0;overflow:auto}.static-graph svg{min-width:700px}.solution-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}.solution-summary .card{padding:12px}.candidate-panel{margin-top:14px;overflow-x:auto}.candidate-panel h4{margin-top:0}.candidate-table{font-size:.9rem;min-width:760px}.candidate-table td:first-child{white-space:nowrap}.candidate-table .chosen{background:rgba(29,158,117,.12)}.candidate-table .blocked{color:#fecaca}.path-note{border-left:3px solid var(--orange);padding-left:10px;color:#fed7aa}.flow-table{font-size:.88rem;min-width:620px}
     .mini{font-size:.92rem}.kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);padding:1px 6px;border-radius:6px}.checklist li{list-style:'✓  ';padding-left:4px}.trap li{list-style:'⚠  ';padding-left:4px}
     @media (max-width:900px){.layout{grid-template-columns:1fr}nav{position:relative;top:0;max-height:none}.grid2,.grid3,.solution-summary{grid-template-columns:1fr}.wrap{padding:14px}header{padding:24px}.exercise-graph{min-height:360px}}
     @media print{body{background:#fff;color:#111}.wrap{max-width:none}.layout{display:block}nav,.controls,.steps{display:none}.section,header,.card,.interactive{box-shadow:none;background:#fff;color:#111;border-color:#ddd}.svgbox{background:#fff}.desc,.formula{background:#f3f4f6;color:#111}}
@@ -65,8 +65,9 @@
         <a href="#cobertura">8. Coberturas</a>
         <a href="#fluxo">9. Fluxo máximo</a>
         <a href="#custo">10. Fluxo com custo mínimo</a>
-        <a href="#custo-exercicios">10.1 Exercícios resolvidos</a>
-        <a href="#resumo">11. Checklist final</a>
+        <a href="#custo-exercicios">10.1 Lista de fluxo resolvida</a>
+        <a href="#exercicios-n2">11. Exercícios N2 resolvidos</a>
+        <a href="#resumo">12. Checklist final</a>
       </nav>
 
       <main>
@@ -437,7 +438,7 @@
         </section>
 
         <section id="custo-exercicios" class="section">
-          <h2>10.1 Exercícios resolvidos - fluxo com custo mínimo</h2>
+          <h2>10.1 Exercícios resolvidos - fluxo com custo mínimo (lista de fluxo)</h2>
           <p>Esta seção resolve a lista de exercícios de fluxo com custo mínimo. Em cada iteração, todos os caminhos possíveis no residual são listados; cada caminho eliminado mostra custo unitário, gargalo e arco de bloqueio.</p>
           <p class="path-note">Quando aparece arco residual invertido, a seta é desenhada no sentido invertido e o custo troca de sinal. Nos exercícios 2 e 3 aparece explicitamente o arco residual invertido <span class="kbd">6 -> 2</span> com <span class="kbd">custo -3</span>, reverso de <span class="kbd">2 -> 6</span>.</p>
 
@@ -466,8 +467,111 @@
           </div>
         </section>
 
+        <section id="exercicios-n2" class="section">
+          <h2>11. Exercícios N2 resolvidos</h2>
+          <p>Esta seção reúne as resoluções detalhadas das quatro questões enviadas. A leitura comum entre elas é: transforme a matriz em grafo, identifique o tipo de problema e justifique a resposta com a propriedade estrutural correta.</p>
+
+          <div class="card good">
+            <h3>Questão 1 — Segurança dos centros de treinamento</h3>
+            <p><b>Modelo:</b> coloração de vértices. Cada centro é um vértice; uma aresta indica que dois centros não podem ficar no mesmo turno.</p>
+            <div class="legend"><span><span class="dot" style="background:#3B82F6"></span>Turno 1</span><span><span class="dot" style="background:#1D9E75"></span>Turno 2</span><span><span class="dot" style="background:#EF9F27"></span>Turno 3</span><span><span class="dot" style="background:#9B5DE5"></span>Turno 4</span></div>
+            <div id="n2Q1Graph" class="svgbox static-graph"></div>
+            <p>A matriz gera, entre outras arestas, o subgrafo induzido pelos vértices <span class="kbd">{1,2,3,4}</span>. Nele existem todas as arestas possíveis:</p>
+            <div class="formula">{1-2, 1-3, 1-4, 2-3, 2-4, 3-4}</div>
+            <p>Logo, <span class="kbd">G[{1,2,3,4}] = K4</span>. Como todo vértice de uma clique precisa receber cor diferente, qualquer cronograma precisa de pelo menos 4 turnos:</p>
+            <div class="formula">χ(G) ≥ ω(G) ≥ 4</div>
+            <p>Agora basta exibir uma coloração válida com exatamente 4 turnos. Uma distribuição mínima é:</p>
+            <table>
+              <thead><tr><th>Turno</th><th>Centros alocados</th><th>Verificação</th></tr></thead>
+              <tbody>
+                <tr><td>Turno 1</td><td>1 e 5</td><td>Não há aresta 1-5.</td></tr>
+                <tr><td>Turno 2</td><td>2 e 6</td><td>Não há aresta 2-6.</td></tr>
+                <tr><td>Turno 3</td><td>3 e 7</td><td>Não há aresta 3-7.</td></tr>
+                <tr><td>Turno 4</td><td>4 e 8</td><td>Não há aresta 4-8.</td></tr>
+              </tbody>
+            </table>
+            <p><b>Conclusão:</b> o número mínimo de turnos é <span class="kbd">4</span>. O limite inferior vem da clique <span class="kbd">K4</span>, e a tabela prova que 4 turnos são suficientes.</p>
+          </div>
+
+          <div class="card warn">
+            <h3>Questão 2 — Iluminação temática das barracas</h3>
+            <p><b>Modelo:</b> bipartição/2-coloração de vértices. As duas modalidades de lâmpadas funcionam como duas cores; barracas ligadas por cabo precisam ficar em grupos diferentes.</p>
+            <div class="legend"><span><span class="sw" style="background:var(--orange)"></span>ciclo ímpar original</span><span><span class="sw" style="background:var(--red)"></span>nova ligação 1-3</span><span><span class="sw" style="background:var(--line)"></span>aresta fora do ciclo</span></div>
+            <div id="n2Q2Graph" class="svgbox static-graph"></div>
+            <p>Pela matriz, aparece o ciclo:</p>
+            <div class="formula">1 - 5 - 9 - 4 - 8 - 3 - 7 - 2 - 6 - 1</div>
+            <p>Esse ciclo usa 9 arestas. Portanto, é um ciclo ímpar <span class="kbd">C9</span>. Um grafo é bipartido se, e somente se, não possui ciclo ímpar. Como há um ciclo ímpar, não existe distribuição com apenas duas modalidades de lâmpadas.</p>
+            <table>
+              <thead><tr><th>Item</th><th>Resposta</th><th>Justificativa</th></tr></thead>
+              <tbody>
+                <tr><td>(a)</td><td>Não é possível.</td><td>A estrutura contém o ciclo ímpar <span class="kbd">C9</span>, então o grafo não é bipartido.</td></tr>
+                <tr><td>(b)</td><td>Também não é possível após adicionar a aresta 1-3.</td><td>Adicionar aresta não remove o <span class="kbd">C9</span> já existente. Além disso, a nova aresta cria outro ciclo ímpar: <span class="kbd">1 - 3 - 7 - 2 - 6 - 1</span>, de tamanho 5.</td></tr>
+              </tbody>
+            </table>
+            <p><b>Conclusão:</b> a prefeitura não consegue usar somente duas modalidades de lâmpadas sem violar a restrição, nem no grafo original nem após a ligação direta entre as barracas 1 e 3.</p>
+          </div>
+
+          <div class="card good">
+            <h3>Questão 3 — Rede central de distribuição de som</h3>
+            <p><b>Modelo:</b> árvore geradora mínima. É preciso conectar todos os 6 pontos com o menor comprimento total de cabo, sem circuitos fechados.</p>
+            <div class="legend"><span><span class="sw" style="background:var(--green)"></span>arestas escolhidas na AGM</span><span><span class="sw" style="background:var(--line)"></span>arestas descartadas</span></div>
+            <div id="n2Q3Graph" class="svgbox static-graph"></div>
+            <p>Aplicando Kruskal, ordenamos as conexões viáveis por peso e escolhemos apenas as que não fecham ciclo:</p>
+            <table>
+              <thead><tr><th>Ordem</th><th>Aresta</th><th>Peso</th><th>Decisão</th><th>Motivo</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>1-3</td><td>1</td><td>Seleciona</td><td>É a menor aresta e conecta dois componentes distintos.</td></tr>
+                <tr><td>2</td><td>2-6</td><td>2</td><td>Seleciona</td><td>Conecta dois componentes distintos.</td></tr>
+                <tr><td>3</td><td>2-5</td><td>3</td><td>Seleciona</td><td>Inclui o ponto 5 sem formar ciclo.</td></tr>
+                <tr><td>4</td><td>4-6</td><td>4</td><td>Seleciona</td><td>Inclui o ponto 4 no componente de 2 e 6.</td></tr>
+                <tr><td>5</td><td>1-4</td><td>5</td><td>Seleciona</td><td>Une os dois componentes restantes.</td></tr>
+              </tbody>
+            </table>
+            <p>Uma topologia ótima é:</p>
+            <div class="formula">{1-3, 2-6, 2-5, 4-6, 1-4}</div>
+            <p>O comprimento total mínimo é:</p>
+            <div class="formula">1 + 2 + 3 + 4 + 5 = 15 metros</div>
+            <p>Como o problema tem <span class="kbd">n = 6</span> vértices, uma árvore geradora deve ter exatamente <span class="kbd">n - 1 = 5</span> arestas. A solução encontrada tem 5 arestas, conecta todos os pontos e não possui ciclo. Portanto, é uma árvore geradora. Como Kruskal sempre escolhe a menor aresta segura em cada etapa, pela propriedade do corte a árvore obtida tem custo mínimo.</p>
+            <p><b>Conclusão:</b> o menor gasto total é <span class="kbd">15 metros</span>. Existem empates possíveis nas arestas de peso 5, então pode haver mais de uma árvore geradora mínima com o mesmo custo.</p>
+          </div>
+
+          <div class="card warn">
+            <h3>Questão 4 — Tabela de jogos da Supercopa das Nações</h3>
+            <p><b>Modelo:</b> coloração de arestas. Cada partida é uma aresta; partidas incidentes no mesmo vértice não podem ocorrer no mesmo dia, pois uma seleção não joga duas vezes no mesmo dia.</p>
+            <div class="legend"><span><span class="sw" style="background:#3B82F6"></span>Dia 1</span><span><span class="sw" style="background:#1D9E75"></span>Dia 2</span><span><span class="sw" style="background:#EF9F27"></span>Dia 3</span><span><span class="sw" style="background:#9B5DE5"></span>Dia 4</span></div>
+            <div id="n2Q4Graph" class="svgbox static-graph"></div>
+            <p>Os graus dos vértices são:</p>
+            <table>
+              <thead><tr><th>Seleção</th><th>Adversários</th><th>Grau</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>2, 3, 4</td><td>3</td></tr>
+                <tr><td>2</td><td>1, 3, 5, 6</td><td>4</td></tr>
+                <tr><td>3</td><td>1, 2, 4, 5</td><td>4</td></tr>
+                <tr><td>4</td><td>1, 3, 5, 6</td><td>4</td></tr>
+                <tr><td>5</td><td>2, 3, 4, 6</td><td>4</td></tr>
+                <tr><td>6</td><td>2, 4, 5</td><td>3</td></tr>
+              </tbody>
+            </table>
+            <p>O grau máximo é <span class="kbd">Δ(G)=4</span>. Esse é um limite inferior físico: uma seleção com 4 jogos precisa de pelo menos 4 dias, pois só pode jogar uma vez por dia.</p>
+            <div class="formula">χ'(G) ≥ Δ(G) = 4</div>
+            <p>Um cronograma válido com exatamente 4 dias é:</p>
+            <table>
+              <thead><tr><th>Dia</th><th>Partidas</th><th>Checagem</th></tr></thead>
+              <tbody>
+                <tr><td>Dia 1</td><td>1-4, 2-3, 5-6</td><td>Nenhuma seleção se repete.</td></tr>
+                <tr><td>Dia 2</td><td>2-5, 3-4</td><td>Nenhuma seleção se repete.</td></tr>
+                <tr><td>Dia 3</td><td>1-2, 3-5, 4-6</td><td>Nenhuma seleção se repete.</td></tr>
+                <tr><td>Dia 4</td><td>1-3, 2-6, 4-5</td><td>Nenhuma seleção se repete.</td></tr>
+              </tbody>
+            </table>
+            <p>Como há uma coloração de arestas com 4 cores e já foi provado que menos de 4 dias é impossível, temos:</p>
+            <div class="formula">χ'(G) = 4</div>
+            <p><b>Conclusão:</b> o número mínimo de dias é <span class="kbd">4</span>. Como o índice cromático é igual ao grau máximo, o grafo é de <b>Classe 1</b> na classificação de coloração de arestas.</p>
+          </div>
+        </section>
+
         <section id="resumo" class="section">
-          <h2>11. Checklist final para resolver exercícios</h2>
+          <h2>12. Checklist final para resolver exercícios</h2>
           <div class="grid2">
             <div class="card good">
               <h3>Quando aparecer...</h3>
@@ -669,8 +773,15 @@ function drawMinCostCandidates(ex,step){if(step.done){setHtml('minCostExerciseCa
 function drawMinCostFinal(ex,run){let rows='';ex.edges.forEach(e=>{const f=run.finalFlows[fKey(e.u,e.v)]||0;if(f>0)rows+=`<tr><td>${e.u} -> ${e.v}</td><td>${f}/${e.cap}</td><td>${e.cost}</td><td>${f*e.cost}</td></tr>`});setHtml('minCostExerciseFinal',`<h4>Fluxos finais encontrados</h4><table class="flow-table"><thead><tr><th>Arco</th><th>Fluxo/capacidade</th><th>Custo unitário</th><th>Contribuição</th></tr></thead><tbody>${rows}</tbody></table>`)}
 function drawMinCostExercise(){drawMinCostExerciseTabs();const ex=minCostExercises[minCostExerciseId],run=getMinCostRun(ex),step=run.steps[minCostStep];drawMinCostExerciseGraph(ex,step);if(step.done){setHtml('minCostExerciseDesc',`Encerramento: nenhum caminho residual de ${ex.source} até ${ex.sink} permanece disponível.`);setHtml('minCostExerciseState',`<b>Fluxo máximo: ${run.finalFlow}</b> | <b>Custo mínimo: ${run.finalCost}</b>`)}else{const reverse=step.selected.path.filter(e=>e.reverse).map(minArcText).join(', ');const reverseText=reverse?`<br><span class="tag red">arco residual invertido</span> ${reverse}`:'';setHtml('minCostExerciseDesc',`Iteração ${minCostStep+1}: escolhemos ${step.selected.text}, pois é o caminho residual de menor custo. Custo unitário=${step.pathCost}; gargalo=${step.augment}; custo adicionado=${step.augment}×${step.pathCost}=${step.augment*step.pathCost}.${reverseText}`);setHtml('minCostExerciseState',`<b>Após a iteração:</b> fluxo acumulado ${step.flow} | custo acumulado ${step.cost}. <b>Meta final:</b> Fluxo máximo: ${ex.expectedFlow} | Custo mínimo: ${ex.expectedCost}`)}setHtml('minCostExerciseCount',step.done?`Encerramento (${minCostStep+1} de ${run.steps.length})`:`Iteração ${minCostStep+1} de ${run.steps.length-1}`);drawMinCostCandidates(ex,step);drawMinCostFinal(ex,run)}
 
+// 11. Static graphs for N2 exercises
+function drawN2Q1(){const svg=svgStart('n2Q1Graph','0 0 760 360');const nodes={1:{x:120,y:85},2:{x:270,y:85},3:{x:120,y:250},4:{x:270,y:250},5:{x:490,y:85},6:{x:640,y:85},7:{x:490,y:250},8:{x:640,y:250}};const edges=[[1,2],[1,3],[1,4],[2,3],[2,4],[3,4],[5,6],[5,7],[5,8],[6,7],[6,8],[7,8],[1,8],[3,5]];const colors={1:'#3B82F6',5:'#3B82F6',2:'#1D9E75',6:'#1D9E75',3:'#EF9F27',7:'#EF9F27',4:'#9B5DE5',8:'#9B5DE5'};edges.forEach(([u,v])=>drawLine(svg,nodes[u],nodes[v],{stroke:(u===1&&v===8)||(u===3&&v===5)?'#06B6D4':'#4b5563',sw:(u===1&&v===8)||(u===3&&v===5)?3.4:2.3,opacity:.92}));Object.entries(nodes).forEach(([id,p])=>drawNode(svg,id,p.x,p.y,{fill:colors[id],stroke:'#fff',sw:1.8}));drawEdgeLabel(svg,{x:195,y:168},{x:195,y:168},'K4',{fill:'#bfdbfe'});drawEdgeLabel(svg,{x:565,y:168},{x:565,y:168},'K4',{fill:'#bfdbfe'})}
+function drawN2Q2(){const svg=svgStart('n2Q2Graph','0 0 760 360');const center={x:380,y:180},cycle=[1,5,9,4,8,3,7,2,6],nodes={};cycle.forEach((id,i)=>{const a=-Math.PI/2+i*2*Math.PI/cycle.length;nodes[id]={x:center.x+250*Math.cos(a),y:center.y+130*Math.sin(a)}});const p6=nodes[6];nodes[10]={x:p6.x+(p6.x-center.x)*.55,y:p6.y+(p6.y-center.y)*.55};cycle.forEach((u,i)=>{const v=cycle[(i+1)%cycle.length];drawLine(svg,nodes[u],nodes[v],{stroke:'#EF9F27',sw:4})});drawLine(svg,nodes[6],nodes[10],{stroke:'#4b5563',sw:2.5});drawLine(svg,nodes[1],nodes[3],{stroke:'#E24B4A',sw:4,dash:'8 6'});drawEdgeLabel(svg,nodes[1],nodes[3],'nova 1-3',{fill:'#fecaca',dy:-18});Object.entries(nodes).forEach(([id,p])=>drawNode(svg,id,p.x,p.y,{fill:id==='10'?'#243145':'#B45309',stroke:id==='10'?'rgba(255,255,255,.18)':'#fed7aa',sw:id==='10'?1.5:2}))}
+function drawN2Q3(){const svg=svgStart('n2Q3Graph','0 0 760 360');const nodes={1:{x:95,y:180},2:{x:275,y:70},3:{x:275,y:290},4:{x:500,y:95},5:{x:650,y:180},6:{x:500,y:285}};const tree=[[1,3],[2,6],[2,5],[4,6],[1,4]];const edges=[[1,2,6],[1,3,1],[1,4,5],[2,3,5],[2,5,3],[2,6,2],[3,4,7],[4,6,4],[5,6,6]];edges.forEach(([u,v,w])=>{const selected=hasEdge(tree,u,v);drawLine(svg,nodes[u],nodes[v],{stroke:selected?'#1D9E75':'#4b5563',sw:selected?4.8:2.2,opacity:selected?1:.68});drawEdgeLabel(svg,nodes[u],nodes[v],w,{fill:selected?'#a7f3d0':'#dbeafe'})});Object.entries(nodes).forEach(([id,p])=>drawNode(svg,id,p.x,p.y,{fill:'#243145'}))}
+function drawN2Q4(){const svg=svgStart('n2Q4Graph','0 0 760 360');const nodes={1:{x:380,y:55},2:{x:590,y:120},3:{x:590,y:250},4:{x:380,y:315},5:{x:170,y:250},6:{x:170,y:120}};const edges=[{e:[1,4],d:'D1',c:'#3B82F6',dx:-22},{e:[2,3],d:'D1',c:'#3B82F6',dx:24},{e:[5,6],d:'D1',c:'#3B82F6',dx:-24},{e:[2,5],d:'D2',c:'#1D9E75',dy:-12},{e:[3,4],d:'D2',c:'#1D9E75',dx:12,dy:12},{e:[1,2],d:'D3',c:'#EF9F27',dy:-14},{e:[3,5],d:'D3',c:'#EF9F27',dy:18},{e:[4,6],d:'D3',c:'#EF9F27',dx:-12,dy:12},{e:[1,3],d:'D4',c:'#9B5DE5',dx:20},{e:[2,6],d:'D4',c:'#9B5DE5',dy:-20},{e:[4,5],d:'D4',c:'#9B5DE5',dx:-12,dy:12}];edges.forEach(({e,d,c,dx,dy})=>{const[u,v]=e;drawLine(svg,nodes[u],nodes[v],{stroke:c,sw:4.2,opacity:.94});drawEdgeLabel(svg,nodes[u],nodes[v],d,{fill:'#fff',dx:dx||0,dy:dy||0})});Object.entries(nodes).forEach(([id,p])=>drawNode(svg,id,p.x,p.y,{fill:'#243145',stroke:'#fff',sw:1.7}))}
+function drawN2Graphs(){drawN2Q1();drawN2Q2();drawN2Q3();drawN2Q4()}
+
 // init
-window.addEventListener('load',()=>{drawConn();drawTrail();drawMST();drawVColor();drawEColor();drawMatch();drawCover();drawFlow();drawCost();drawMinCostExercise();});
+window.addEventListener('load',()=>{drawConn();drawTrail();drawMST();drawVColor();drawEColor();drawMatch();drawCover();drawFlow();drawCost();drawMinCostExercise();drawN2Graphs();});
 </script>
 </body>
 </html>
