@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="data:," />
   <title>Teoria dos Grafos — Guia Interativo Completo</title>
   <style>
     :root{
@@ -34,8 +35,9 @@
     .interactive{border:1px solid rgba(255,255,255,.09);background:#101622;border-radius:18px;padding:14px;margin:16px 0}.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0 10px}.btn{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-size:.9rem}.btn:hover{background:rgba(255,255,255,.08)}.btn.active{background:var(--green);border-color:var(--green)}.btn.blue.active{background:var(--blue);border-color:var(--blue)}
     .svgbox{width:100%;min-height:280px;border-radius:14px;background:linear-gradient(180deg,#111827,#0d1320);border:1px solid rgba(255,255,255,.06);overflow:hidden}.desc{background:rgba(255,255,255,.045);border-radius:12px;padding:12px;margin-top:10px;color:#e5e7eb}.state{font-size:.92rem;color:#cbd5e1;margin-top:8px}.legend{display:flex;gap:12px;flex-wrap:wrap;color:#cbd5e1;font-size:.86rem;margin:6px 0}.sw{display:inline-block;width:18px;height:4px;border-radius:999px;margin-right:5px;vertical-align:middle}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:middle}
     .steps{display:flex;gap:8px;align-items:center;margin-top:10px}.steps span{flex:1;text-align:center;color:#cbd5e1;font-size:.9rem}
+    .exercise-graph{min-height:420px;overflow:auto}.exercise-graph svg{min-width:760px}.solution-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}.solution-summary .card{padding:12px}.candidate-panel{margin-top:14px;overflow-x:auto}.candidate-panel h4{margin-top:0}.candidate-table{font-size:.9rem;min-width:760px}.candidate-table td:first-child{white-space:nowrap}.candidate-table .chosen{background:rgba(29,158,117,.12)}.candidate-table .blocked{color:#fecaca}.path-note{border-left:3px solid var(--orange);padding-left:10px;color:#fed7aa}.flow-table{font-size:.88rem;min-width:620px}
     .mini{font-size:.92rem}.kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);padding:1px 6px;border-radius:6px}.checklist li{list-style:'✓  ';padding-left:4px}.trap li{list-style:'⚠  ';padding-left:4px}
-    @media (max-width:900px){.layout{grid-template-columns:1fr}nav{position:relative;top:0;max-height:none}.grid2,.grid3{grid-template-columns:1fr}.wrap{padding:14px}header{padding:24px}}
+    @media (max-width:900px){.layout{grid-template-columns:1fr}nav{position:relative;top:0;max-height:none}.grid2,.grid3,.solution-summary{grid-template-columns:1fr}.wrap{padding:14px}header{padding:24px}.exercise-graph{min-height:360px}}
     @media print{body{background:#fff;color:#111}.wrap{max-width:none}.layout{display:block}nav,.controls,.steps{display:none}.section,header,.card,.interactive{box-shadow:none;background:#fff;color:#111;border-color:#ddd}.svgbox{background:#fff}.desc,.formula{background:#f3f4f6;color:#111}}
   </style>
 </head>
@@ -63,6 +65,7 @@
         <a href="#cobertura">8. Coberturas</a>
         <a href="#fluxo">9. Fluxo máximo</a>
         <a href="#custo">10. Fluxo com custo mínimo</a>
+        <a href="#custo-exercicios">10.1 Exercícios resolvidos</a>
         <a href="#resumo">11. Checklist final</a>
       </nav>
 
@@ -433,6 +436,36 @@
           </div>
         </section>
 
+        <section id="custo-exercicios" class="section">
+          <h2>10.1 Exercícios resolvidos - fluxo com custo mínimo</h2>
+          <p>Esta seção resolve a lista de exercícios de fluxo com custo mínimo. Em cada iteração, todos os caminhos possíveis no residual são listados; cada caminho eliminado mostra custo unitário, gargalo e arco de bloqueio.</p>
+          <p class="path-note">Quando aparece arco residual invertido, a seta é desenhada no sentido invertido e o custo troca de sinal. Nos exercícios 2 e 3 aparece explicitamente o arco residual invertido <span class="kbd">6 -> 2</span> com <span class="kbd">custo -3</span>, reverso de <span class="kbd">2 -> 6</span>.</p>
+
+          <div class="solution-summary">
+            <div class="card good"><h3>Exercício 1</h3><p><b>Fluxo máximo: 90</b></p><p><b>Custo mínimo: 915</b></p></div>
+            <div class="card good"><h3>Exercício 2</h3><p><b>Fluxo máximo: 120</b></p><p><b>Custo mínimo: 1115</b></p></div>
+            <div class="card good"><h3>Exercício 3</h3><p><b>Fluxo máximo: 135</b></p><p><b>Custo mínimo: 1340</b></p></div>
+            <div class="card good"><h3>Exercício 4</h3><p><b>Fluxo máximo: 175</b></p><p><b>Custo mínimo: 1370</b></p></div>
+          </div>
+
+          <div class="interactive">
+            <h3>Resolução passo a passo</h3>
+            <div id="minCostExerciseTabs" class="controls"></div>
+            <div class="legend">
+              <span><span class="sw" style="background:var(--orange)"></span>caminho escolhido</span>
+              <span><span class="sw" style="background:var(--green)"></span>fluxo já enviado</span>
+              <span><span class="sw" style="background:var(--red)"></span>arco residual invertido</span>
+              <span><span class="sw" style="background:var(--line)"></span>caminho eliminado da iteração</span>
+            </div>
+            <div id="minCostExerciseSvg" class="svgbox exercise-graph"></div>
+            <div id="minCostExerciseDesc" class="desc"></div>
+            <div id="minCostExerciseState" class="state"></div>
+            <div class="steps"><button class="btn" onclick="stepMinCostExercise(-1)">← Anterior</button><span id="minCostExerciseCount"></span><button class="btn" onclick="stepMinCostExercise(1)">Próximo →</button></div>
+            <div id="minCostExerciseCandidates" class="candidate-panel"></div>
+            <div id="minCostExerciseFinal" class="candidate-panel"></div>
+          </div>
+        </section>
+
         <section id="resumo" class="section">
           <h2>11. Checklist final para resolver exercícios</h2>
           <div class="grid2">
@@ -609,8 +642,35 @@ const coSteps=[
 function drawCost(){const svg=svgStart('costSvg');ensureArrow(svg);const st=coSteps[coI];coE.forEach(([u,v,cap,cost])=>{const f=st.f[fKey(u,v)]||0;const inPath=hasDirected(st.path,u,v);drawArrow(svg,coN[u],coN[v],{stroke:inPath?'#EF9F27':f>0?'#1D9E75':'#4b5563',sw:inPath?5:f>0?4:2.2,marker:inPath?'url(#arrowOrange)':'url(#arrow)'});drawEdgeLabel(svg,coN[u],coN[v],`${f}/${cap} | $${cost}`,{fill:inPath?'#fff':'#dbeafe',dy:(u===1&&v===3)?18:0})});Object.entries(coN).forEach(([id,p])=>{let fill='#243145';if(coI>0){if(id==='1')fill='#1D9E75';if(id==='4')fill='#E24B4A'}drawNode(svg,id,p.x,p.y,{fill})});setHtml('costDesc',st.d);setHtml('costState',`<b>Fluxo acumulado:</b> ${st.flow} | <b>Custo total:</b> ${st.cost}. Em residual, arcos reversos teriam custo negativo para permitir desfazer fluxo.`);setHtml('costCount',`Passo ${coI} de ${coSteps.length-1}`)}
 function stepCost(d){coI=Math.max(0,Math.min(coSteps.length-1,coI+d));drawCost()}
 
+// 10.1 Solved min-cost flow exercises
+const minCostExercises={
+1:{title:'Exercício 1',source:1,sink:9,expectedFlow:90,expectedCost:915,view:'0 0 760 500',nodes:{1:{x:70,y:250},2:{x:210,y:140},3:{x:210,y:360},4:{x:365,y:70},5:{x:385,y:250},6:{x:385,y:430},7:{x:545,y:140},8:{x:545,y:360},9:{x:695,y:250}},edges:[
+{u:1,v:2,cap:60,cost:1,dx:-26,dy:-12},{u:1,v:3,cap:60,cost:5,dx:-26,dy:12},{u:2,v:4,cap:30,cost:2,dy:-16},{u:4,v:7,cap:30,cost:2,dy:-18},{u:7,v:9,cap:60,cost:3,dx:24,dy:-10},{u:2,v:5,cap:40,cost:4,dy:-16},{u:3,v:5,cap:20,cost:1,dy:-16},{u:5,v:6,cap:15,cost:1,dx:-26},{u:3,v:6,cap:50,cost:3,dy:18},{u:5,v:8,cap:50,cost:4,dy:-16},{u:6,v:8,cap:40,cost:2,dy:18},{u:8,v:9,cap:60,cost:2,dx:24,dy:12}]},
+2:{title:'Exercício 2',source:1,sink:10,expectedFlow:120,expectedCost:1115,view:'0 0 780 520',nodes:{1:{x:55,y:270},2:{x:190,y:170},3:{x:190,y:370},4:{x:350,y:85},5:{x:350,y:220},6:{x:350,y:350},7:{x:525,y:85},8:{x:525,y:270},9:{x:525,y:445},10:{x:720,y:270}},edges:[
+{u:1,v:2,cap:80,cost:2,dx:-24,dy:-12},{u:1,v:3,cap:70,cost:3,dx:-24,dy:12},{u:2,v:4,cap:40,cost:1,dy:-16},{u:4,v:7,cap:40,cost:2,dy:-18},{u:7,v:10,cap:70,cost:2,dx:22,dy:-8},{u:2,v:5,cap:35,cost:4,dy:-16},{u:2,v:6,cap:30,cost:3,dx:-18,dy:2},{u:3,v:6,cap:40,cost:3,dy:16},{u:5,v:8,cap:45,cost:3,dy:-16},{u:6,v:8,cap:35,cost:1,dy:-16},{u:6,v:9,cap:30,cost:4,dy:18},{u:8,v:10,cap:80,cost:3,dy:-16},{u:9,v:10,cap:55,cost:1,dy:16}]},
+3:{title:'Exercício 3',source:1,sink:10,expectedFlow:135,expectedCost:1340,view:'0 0 780 520',nodes:{1:{x:55,y:270},2:{x:190,y:170},3:{x:190,y:370},4:{x:350,y:85},5:{x:350,y:220},6:{x:350,y:350},7:{x:525,y:85},8:{x:525,y:270},9:{x:525,y:445},10:{x:720,y:270}},edges:[
+{u:1,v:2,cap:90,cost:2,dx:-24,dy:-12},{u:1,v:3,cap:80,cost:3,dx:-24,dy:12},{u:2,v:4,cap:45,cost:1,dy:-16},{u:4,v:7,cap:45,cost:2,dy:-18},{u:7,v:10,cap:75,cost:2,dx:22,dy:-8},{u:2,v:5,cap:40,cost:4,dy:-16},{u:2,v:6,cap:35,cost:3,dx:-18,dy:2},{u:3,v:5,cap:35,cost:2,dx:18,dy:-4},{u:3,v:6,cap:45,cost:3,dy:16},{u:5,v:8,cap:50,cost:3,dy:-16},{u:6,v:9,cap:40,cost:4,dy:18},{u:8,v:10,cap:85,cost:4,dy:-16},{u:9,v:10,cap:65,cost:1,dy:16}]},
+4:{title:'Exercício 4',source:1,sink:10,expectedFlow:175,expectedCost:1370,view:'0 0 780 540',nodes:{1:{x:55,y:275},2:{x:195,y:155},3:{x:195,y:385},4:{x:360,y:85},5:{x:360,y:220},6:{x:360,y:345},7:{x:360,y:485},8:{x:545,y:195},9:{x:545,y:375},10:{x:720,y:285}},edges:[
+{u:1,v:2,cap:100,cost:1,dx:-24,dy:-12},{u:1,v:3,cap:100,cost:1,dx:-24,dy:12},{u:2,v:4,cap:50,cost:2,dy:-16},{u:4,v:8,cap:50,cost:2,dy:-18},{u:2,v:5,cap:40,cost:3,dy:-14},{u:5,v:8,cap:40,cost:1,dy:-16},{u:5,v:9,cap:30,cost:3,dy:14},{u:3,v:6,cap:40,cost:2,dy:-16},{u:6,v:9,cap:40,cost:2,dy:-18},{u:3,v:7,cap:55,cost:4,dy:16},{u:7,v:9,cap:45,cost:1,dy:18},{u:8,v:10,cap:80,cost:3,dx:20,dy:-10},{u:9,v:10,cap:100,cost:2,dx:20,dy:12}]}
+};
+let minCostExerciseId='1',minCostStep=0;
+function cloneFlowMap(flows){return Object.assign({},flows)}
+function minCostResidualEdges(ex,flows){const residual=[];ex.edges.forEach((e,i)=>{const f=flows[fKey(e.u,e.v)]||0;if(f<e.cap)residual.push({u:e.u,v:e.v,cap:e.cap-f,cost:e.cost,reverse:false,edgeIndex:i,originalU:e.u,originalV:e.v});if(f>0)residual.push({u:e.v,v:e.u,cap:f,cost:-e.cost,reverse:true,edgeIndex:i,originalU:e.u,originalV:e.v})});return residual}
+function minPathText(path){if(!path.length)return '';return [path[0].u].concat(path.map(e=>e.v)).join(' -> ')}
+function minArcText(e){return `${e.u} -> ${e.v}${e.reverse?` (arco residual invertido de ${e.originalU} -> ${e.originalV}, custo ${e.cost})`:''}`}
+function enumerateMinCostPaths(ex,flows){const adj={};minCostResidualEdges(ex,flows).forEach(e=>{const k=String(e.u);if(!adj[k])adj[k]=[];adj[k].push(e)});Object.values(adj).forEach(list=>list.sort((a,b)=>a.cost-b.cost||String(a.v).localeCompare(String(b.v),'pt-BR',{numeric:true})));const paths=[];function dfs(u,visited,path){if(String(u)===String(ex.sink)){const cost=path.reduce((sum,e)=>sum+e.cost,0);const bottleneck=Math.min(...path.map(e=>e.cap));const blocks=path.filter(e=>e.cap===bottleneck);paths.push({path:path.slice(),text:minPathText(path),cost,bottleneck,blocks});return}(adj[String(u)]||[]).forEach(e=>{const vk=String(e.v);if(visited.has(vk))return;visited.add(vk);path.push(e);dfs(e.v,visited,path);path.pop();visited.delete(vk)})}const start=new Set([String(ex.source)]);dfs(ex.source,start,[]);paths.sort((a,b)=>a.cost-b.cost||a.path.length-b.path.length||a.text.localeCompare(b.text,'pt-BR',{numeric:true}));return paths}
+function getMinCostRun(ex){if(ex.run)return ex.run;let flows={},flow=0,cost=0;const steps=[];while(true){const before=cloneFlowMap(flows);const candidates=enumerateMinCostPaths(ex,before);if(!candidates.length){steps.push({done:true,beforeFlows:before,candidates,flow,cost});break}const selected=candidates[0],augment=selected.bottleneck,pathCost=selected.cost;selected.path.forEach(edge=>{const original=ex.edges[edge.edgeIndex],k=fKey(original.u,original.v);flows[k]=(flows[k]||0)+(edge.reverse?-augment:augment)});flow+=augment;cost+=augment*pathCost;steps.push({done:false,beforeFlows:before,afterFlows:cloneFlowMap(flows),candidates,selected,augment,pathCost,flow,cost})}ex.run={steps,finalFlows:cloneFlowMap(flows),finalFlow:flow,finalCost:cost};return ex.run}
+function setMinCostExercise(id){minCostExerciseId=String(id);minCostStep=0;drawMinCostExercise()}
+function stepMinCostExercise(d){const run=getMinCostRun(minCostExercises[minCostExerciseId]);minCostStep=Math.max(0,Math.min(run.steps.length-1,minCostStep+d));drawMinCostExercise()}
+function drawMinCostExerciseTabs(){let html='';Object.entries(minCostExercises).forEach(([id,ex])=>{html+=`<button class="btn ${id===minCostExerciseId?'active':''}" onclick="setMinCostExercise('${id}')">${ex.title}</button>`});setHtml('minCostExerciseTabs',html)}
+function drawMinCostExerciseGraph(ex,step){const svg=svgStart('minCostExerciseSvg',ex.view);ensureArrow(svg);const selected=step.selected?step.selected.path:[];ex.edges.forEach((e,i)=>{const p1=ex.nodes[e.u],p2=ex.nodes[e.v],f=step.beforeFlows[fKey(e.u,e.v)]||0;const inPath=selected.some(pe=>!pe.reverse&&pe.edgeIndex===i);drawArrow(svg,p1,p2,{stroke:inPath?'#EF9F27':f>0?'#1D9E75':'#4b5563',sw:inPath?5:f>0?4:2.2,marker:inPath?'url(#arrowOrange)':'url(#arrow)'});drawEdgeLabel(svg,p1,p2,`${f}/${e.cap} | c ${e.cost}`,{fill:inPath?'#fff':'#dbeafe',dx:e.dx||0,dy:e.dy||0})});selected.filter(e=>e.reverse).forEach(e=>{const p1=ex.nodes[e.u],p2=ex.nodes[e.v];drawArrow(svg,p1,p2,{stroke:'#E24B4A',sw:5,dash:'7 5',marker:'url(#arrowRed)',r1:30,r2:30});drawEdgeLabel(svg,p1,p2,`res ${e.cap} | c ${e.cost}`,{fill:'#fecaca',dy:-26})});Object.entries(ex.nodes).forEach(([id,p])=>{let fill='#243145';if(String(id)===String(ex.source))fill='#1D9E75';if(String(id)===String(ex.sink))fill='#E24B4A';drawNode(svg,id,p.x,p.y,{fill})})}
+function candidateReason(candidate,selected,index){const blocks=candidate.blocks.map(minArcText).join(', ');if(index===0)return `Escolhido: menor custo unitário. Gargalo ${candidate.bottleneck}; arco de bloqueio: ${blocks}. Satura ${blocks}.`;if(candidate.cost===selected.cost)return `Eliminado nesta iteração por desempate da ordem de análise. Gargalo ${candidate.bottleneck}; arco de bloqueio: ${blocks}.`;return `Eliminado nesta iteração: custo ${candidate.cost} > ${selected.cost}. Gargalo ${candidate.bottleneck}; arco de bloqueio: ${blocks}.`}
+function drawMinCostCandidates(ex,step){if(step.done){setHtml('minCostExerciseCandidates','<h4>Caminhos candidatos no residual</h4><p><b>Sem capacidade residual</b> de '+ex.source+' até '+ex.sink+'. Todos os caminhos possíveis foram bloqueados, então o algoritmo encerra.</p>');return}let html='<h4>Caminhos candidatos no residual</h4><p>Eliminação dos caminhos possíveis nesta iteração: cada linha mostra o caminho, o custo unitário, o gargalo e o arco de bloqueio que saturaria se aquele caminho fosse escolhido.</p><table class="candidate-table"><thead><tr><th>Caminho</th><th>Custo</th><th>Gargalo</th><th>Arco de bloqueio / eliminação</th></tr></thead><tbody>';step.candidates.forEach((candidate,index)=>{const cls=index===0?' class="chosen"':'';html+=`<tr${cls}><td>${candidate.text}</td><td>${candidate.cost}</td><td>${candidate.bottleneck}</td><td>${candidateReason(candidate,step.selected,index)}</td></tr>`});html+='</tbody></table>';setHtml('minCostExerciseCandidates',html)}
+function drawMinCostFinal(ex,run){let rows='';ex.edges.forEach(e=>{const f=run.finalFlows[fKey(e.u,e.v)]||0;if(f>0)rows+=`<tr><td>${e.u} -> ${e.v}</td><td>${f}/${e.cap}</td><td>${e.cost}</td><td>${f*e.cost}</td></tr>`});setHtml('minCostExerciseFinal',`<h4>Fluxos finais encontrados</h4><table class="flow-table"><thead><tr><th>Arco</th><th>Fluxo/capacidade</th><th>Custo unitário</th><th>Contribuição</th></tr></thead><tbody>${rows}</tbody></table>`)}
+function drawMinCostExercise(){drawMinCostExerciseTabs();const ex=minCostExercises[minCostExerciseId],run=getMinCostRun(ex),step=run.steps[minCostStep];drawMinCostExerciseGraph(ex,step);if(step.done){setHtml('minCostExerciseDesc',`Encerramento: nenhum caminho residual de ${ex.source} até ${ex.sink} permanece disponível.`);setHtml('minCostExerciseState',`<b>Fluxo máximo: ${run.finalFlow}</b> | <b>Custo mínimo: ${run.finalCost}</b>`)}else{const reverse=step.selected.path.filter(e=>e.reverse).map(minArcText).join(', ');const reverseText=reverse?`<br><span class="tag red">arco residual invertido</span> ${reverse}`:'';setHtml('minCostExerciseDesc',`Iteração ${minCostStep+1}: escolhemos ${step.selected.text}, pois é o caminho residual de menor custo. Custo unitário=${step.pathCost}; gargalo=${step.augment}; custo adicionado=${step.augment}×${step.pathCost}=${step.augment*step.pathCost}.${reverseText}`);setHtml('minCostExerciseState',`<b>Após a iteração:</b> fluxo acumulado ${step.flow} | custo acumulado ${step.cost}. <b>Meta final:</b> Fluxo máximo: ${ex.expectedFlow} | Custo mínimo: ${ex.expectedCost}`)}setHtml('minCostExerciseCount',step.done?`Encerramento (${minCostStep+1} de ${run.steps.length})`:`Iteração ${minCostStep+1} de ${run.steps.length-1}`);drawMinCostCandidates(ex,step);drawMinCostFinal(ex,run)}
+
 // init
-window.addEventListener('load',()=>{drawConn();drawTrail();drawMST();drawVColor();drawEColor();drawMatch();drawCover();drawFlow();drawCost();});
+window.addEventListener('load',()=>{drawConn();drawTrail();drawMST();drawVColor();drawEColor();drawMatch();drawCover();drawFlow();drawCost();drawMinCostExercise();});
 </script>
 </body>
 </html>
