@@ -2292,16 +2292,25 @@ window.GRAPH_SITE_DATA = {
       },
       "steps": [
         {
-          "title": "Rede com fonte e sumidouro",
-          "text": "A rede tem uma fonte s e um sumidouro t. Todo fluxo enviado precisa respeitar capacidade nos arcos e conservação nos vértices intermediários.",
+          "title": "Rede inicial",
+          "text": "Começamos com fluxo zero em todos os arcos. Os rótulos mostram as capacidades originais; nas próximas etapas eles passam a mostrar fluxo enviado e capacidade residual restante.",
           "highlightVertices": [
             "s",
             "t"
-          ]
+          ],
+          "edgeLabels": {
+            "sa": "0/12",
+            "sb": "0/8",
+            "ac": "0/12",
+            "bd": "0/6",
+            "ct": "0/8",
+            "dt": "0/7"
+          }
         },
         {
-          "title": "Primeiro caminho aumentante",
-          "text": "Um caminho como s-a-c-t permite enviar fluxo limitado pelo menor arco do caminho. Esse menor valor é o gargalo da iteração.",
+          "title": "Iteração 1: caminho s-a-c-t",
+          "text": "Escolhemos s-a-c-t. As capacidades residuais são 12, 12 e 8, então gargalo=8; fluxo acumulado=8. Após enviar, c-t satura e fica com r=0.",
+          "bottleneck": 8,
           "highlightEdges": [
             "sa",
             "ac",
@@ -2312,20 +2321,17 @@ window.GRAPH_SITE_DATA = {
             "a",
             "c",
             "t"
-          ]
+          ],
+          "edgeLabels": {
+            "sa": "f=8/12 r=4",
+            "ac": "f=8/12 r=4",
+            "ct": "f=8/8 r=0"
+          }
         },
         {
-          "title": "Atualização residual",
-          "text": "Depois de enviar fluxo, a capacidade residual direta diminui e aparece capacidade reversa. O arco reverso representa a possibilidade de desfazer parte da escolha.",
-          "highlightEdges": [
-            "sa",
-            "ac",
-            "ct"
-          ]
-        },
-        {
-          "title": "Outro caminho disponível",
-          "text": "Enquanto existir caminho de s até t no residual, o algoritmo pode aumentar o fluxo. Caminhos diferentes competem pelas capacidades restantes.",
+          "title": "Iteração 2: caminho s-b-d-t",
+          "text": "No residual ainda existe s-b-d-t. As folgas são 8, 6 e 7, logo gargalo=6; fluxo acumulado=14. O arco b-d satura e d-t fica com r=1.",
+          "bottleneck": 6,
           "highlightEdges": [
             "sb",
             "bd",
@@ -2336,16 +2342,55 @@ window.GRAPH_SITE_DATA = {
             "b",
             "d",
             "t"
-          ]
+          ],
+          "edgeLabels": {
+            "sb": "f=6/8 r=2",
+            "bd": "f=6/6 r=0",
+            "dt": "f=6/7 r=1",
+            "ct": "f=8/8 r=0"
+          }
         },
         {
-          "title": "Corte final",
-          "text": "Quando não há mais caminho aumentante, os vértices alcançáveis a partir de s definem um corte mínimo. O valor do fluxo iguala a capacidade desse corte.",
+          "title": "Iteração 3: caminho s-a-c-d-t",
+          "text": "A última folga até t passa por s-a-c-d-t. As folgas são 4, 4, 3 e 1, portanto gargalo=1; fluxo acumulado=15. O arco d-t também satura.",
+          "bottleneck": 1,
+          "highlightEdges": [
+            "sa",
+            "ac",
+            "cd",
+            "dt"
+          ],
           "highlightVertices": [
             "s",
             "a",
-            "b"
-          ]
+            "c",
+            "d",
+            "t"
+          ],
+          "edgeLabels": {
+            "sa": "f=9/12 r=3",
+            "ac": "f=9/12 r=3",
+            "cd": "f=1/3 r=2",
+            "dt": "f=7/7 r=0",
+            "ct": "f=8/8 r=0"
+          }
+        },
+        {
+          "title": "Sem caminho aumentante",
+          "text": "Com c-t e d-t saturados, nenhum caminho residual chega ao sumidouro t. O corte final separa t do restante e tem capacidade 8+7=15, igual ao fluxo obtido.",
+          "highlightVertices": [
+            "s",
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "edgeLabels": {
+            "ct": "f=8/8 r=0",
+            "dt": "f=7/7 r=0",
+            "sa": "f=9/12 r=3",
+            "sb": "f=6/8 r=2"
+          }
         }
       ]
     },
@@ -2446,56 +2491,114 @@ window.GRAPH_SITE_DATA = {
       },
       "steps": [
         {
-          "title": "Capacidade e custo unitário",
-          "text": "Cada arco possui capacidade e custo unitário. O objetivo é enviar o fluxo exigido ou máximo pagando a menor soma de fluxo vezes custo.",
+          "title": "Rede inicial com custo",
+          "text": "Cada rótulo original mostra capacidade e custo unitário. O algoritmo procura caminhos residuais de menor custo e só depois calcula quanto ainda pode ser enviado.",
           "highlightEdges": [
             "e12",
             "e13"
-          ]
+          ],
+          "edgeLabels": {
+            "e12": "80,c2",
+            "e13": "70,c3",
+            "e24": "40,c1",
+            "e46": "70,c2",
+            "e36": "40,c3",
+            "e56": "80,c3"
+          }
         },
         {
-          "title": "Caminho barato inicial",
-          "text": "Avalie caminhos pelo custo total das arestas. Um caminho barato é escolhido primeiro, mas só pode receber o gargalo disponível.",
+          "title": "Iteração 1: 1-2-4-6",
+          "text": "O caminho 1-2-4-6 tem custo unitário 5. As folgas são 80, 40 e 70, então gargalo=40; fluxo acumulado=40. O custo acumulado vira 200.",
+          "bottleneck": 40,
           "highlightEdges": [
             "e12",
             "e24",
             "e46"
-          ]
+          ],
+          "highlightVertices": [
+            "1",
+            "2",
+            "4",
+            "6"
+          ],
+          "edgeLabels": {
+            "e12": "f=40/80 r=40",
+            "e24": "f=40/40 r=0",
+            "e46": "f=40/70 r=30"
+          }
         },
         {
-          "title": "Gargalo do caminho",
-          "text": "O gargalo é a menor capacidade residual ao longo do caminho escolhido. Esse valor define quanto fluxo pode ser enviado naquela rodada.",
-          "highlightEdges": [
-            "e12",
-            "e24",
-            "e46"
-          ]
-        },
-        {
-          "title": "Arco reverso com custo negativo",
-          "text": "Após enviar fluxo, aparece arco reverso com custo negativo. Ele permite cancelar parte de uma decisão anterior quando isso reduz o custo global.",
-          "highlightEdges": [
-            "e24",
-            "e45",
-            "e56"
-          ]
-        },
-        {
-          "title": "Menor caminho no residual",
-          "text": "A cada iteração, procure menor custo no grafo residual. Com custos negativos reversos, Bellman-Ford é uma escolha segura para encontrar o caminho.",
+          "title": "Iteração 2: 1-3-6",
+          "text": "O próximo caminho barato é 1-3-6, com custo unitário 6. As folgas são 70 e 40, então gargalo=40; fluxo acumulado=80. O custo acumulado chega a 440.",
+          "bottleneck": 40,
           "highlightEdges": [
             "e13",
-            "e36",
+            "e36"
+          ],
+          "highlightVertices": [
+            "1",
+            "3",
+            "6"
+          ],
+          "edgeLabels": {
+            "e13": "f=40/70 r=30",
+            "e36": "f=40/40 r=0",
+            "e46": "f=40/70 r=30"
+          }
+        },
+        {
+          "title": "Iteração 3: 1-2-5-6",
+          "text": "Resta enviar fluxo por 1-2-5-6, custo unitário 9. As folgas são 40, 35 e 80, logo gargalo=35; fluxo acumulado=115. O custo acumulado fecha em 755.",
+          "bottleneck": 35,
+          "highlightEdges": [
+            "e12",
+            "e25",
             "e56"
-          ]
+          ],
+          "highlightVertices": [
+            "1",
+            "2",
+            "5",
+            "6"
+          ],
+          "edgeLabels": {
+            "e12": "f=75/80 r=5",
+            "e25": "f=35/35 r=0",
+            "e56": "f=35/80 r=45",
+            "e24": "f=40/40 r=0",
+            "e36": "f=40/40 r=0"
+          }
+        },
+        {
+          "title": "Residual e arcos reversos",
+          "text": "Toda aresta com fluxo positivo cria arco reverso com custo negativo. Por exemplo, 4->2 teria custo -1 e permite desfazer parte do fluxo usado em 2->4 se um caminho futuro ficar melhor.",
+          "highlightEdges": [
+            "e24",
+            "e12",
+            "e46"
+          ],
+          "edgeLabels": {
+            "e24": "reverso r=40,c-1",
+            "e12": "reverso r=75,c-2",
+            "e46": "reverso r=40,c-2"
+          }
         },
         {
           "title": "Encerramento da solução",
-          "text": "O algoritmo encerra quando a demanda foi enviada ou quando não existe caminho residual viável. O custo final soma todos os fluxos positivos usados.",
+          "text": "Os arcos 2-4, 2-5 e 3-6 estão saturados, então não há novo caminho residual útil de 1 até 6. O fluxo máximo é 115 e o custo mínimo calculado é 755.",
           "highlightVertices": [
             "1",
             "6"
-          ]
+          ],
+          "edgeLabels": {
+            "e24": "r=0",
+            "e25": "r=0",
+            "e36": "r=0",
+            "e12": "r=5",
+            "e13": "r=30",
+            "e46": "r=30",
+            "e56": "r=45"
+          }
         }
       ]
     },
@@ -2923,19 +3026,13 @@ window.GRAPH_SITE_DATA = {
             "id": "e56",
             "u": "5",
             "v": "6"
-          },
-          {
-            "id": "e67",
-            "u": "6",
-            "v": "7"
           }
         ]
       },
       "cover": [
-        "1",
         "2",
-        "4",
-        "6"
+        "5",
+        "4"
       ],
       "matching": [
         "e15",
@@ -2945,105 +3042,84 @@ window.GRAPH_SITE_DATA = {
       "steps": [
         {
           "title": "Comece pela definição",
-          "text": "Uma cobertura de vértices K precisa tocar todas as arestas. Vamos construir K={1,2,4,6} destacando, em cada etapa, quais arestas já ficaram cobertas.",
+          "text": "Uma cobertura de vértices K toca toda aresta em pelo menos uma ponta. Aqui vamos construir K={2,5,4} e conferir a cobertura acumulada no próprio grafo.",
           "highlightVertices": [
-            "1",
             "2",
-            "4",
-            "6"
+            "5",
+            "4"
           ],
           "highlightEdges": []
         },
         {
-          "title": "Escolha o vértice 1",
-          "text": "Ao colocar 1 em K, toda aresta incidente em 1 fica coberta. Portanto as arestas 1-2 e 1-5 já estão protegidas pela cobertura.",
+          "title": "Escolha o vértice 2",
+          "text": "Ao colocar 2 em K, ficam cobertas todas as arestas incidentes nele: 1-2, 2-3 e 2-6. O vértice cobre as três de uma vez porque é ponta comum delas.",
           "highlightVertices": [
-            "1"
-          ],
-          "highlightEdges": [
-            "e12",
-            "e15"
-          ]
-        },
-        {
-          "title": "Adicione o vértice 2",
-          "text": "Com 2 em K, além de manter 1-2 coberta, passam a estar cobertas 2-3 e 2-6. As arestas cobertas agora são 1-2, 1-5, 2-3 e 2-6.",
-          "highlightVertices": [
-            "1",
             "2"
           ],
           "highlightEdges": [
             "e12",
-            "e15",
             "e23",
             "e26"
           ]
         },
         {
-          "title": "Adicione o vértice 4",
-          "text": "Com 4 em K, cobrimos 3-4 e 4-7. Repare que não precisamos colocar 3 nem 7 se as arestas incidentes a eles já tiverem outra ponta em K.",
+          "title": "Adicione o vértice 5",
+          "text": "Com 5 em K, a aresta 1-5 passa a estar coberta e 5-6 também. Agora já temos cobertas 1-2, 2-3, 2-6, 1-5 e 5-6.",
           "highlightVertices": [
-            "1",
             "2",
+            "5"
+          ],
+          "highlightEdges": [
+            "e12",
+            "e23",
+            "e26",
+            "e15",
+            "e56"
+          ]
+        },
+        {
+          "title": "Adicione o vértice 4",
+          "text": "O vértice 4 cobre as arestas restantes 3-4 e 4-7. Como as arestas anteriores permanecem cobertas, K={2,5,4} cobre o grafo inteiro.",
+          "highlightVertices": [
+            "2",
+            "5",
             "4"
           ],
           "highlightEdges": [
             "e12",
-            "e15",
             "e23",
             "e26",
+            "e15",
+            "e56",
             "e34",
             "e47"
           ]
         },
         {
-          "title": "Adicione o vértice 6",
-          "text": "Com 6 em K, cobrimos as arestas 5-6 e 6-7. Agora todas as arestas do grafo aparecem destacadas, então K={1,2,4,6} é cobertura válida.",
-          "highlightVertices": [
-            "1",
-            "2",
-            "4",
-            "6"
-          ],
-          "highlightEdges": [
-            "e12",
-            "e15",
-            "e23",
-            "e26",
-            "e34",
-            "e47",
-            "e56",
-            "e67"
-          ]
-        },
-        {
           "title": "Verificação aresta por aresta",
-          "text": "A checagem final é direta: 1-2 toca 1 e 2; 1-5 toca 1; 2-3 toca 2; 2-6 toca 2 e 6; 3-4 toca 4; 4-7 toca 4; 5-6 toca 6; 6-7 toca 6.",
+          "text": "A checagem final é direta: 1-2 toca 2; 1-5 toca 5; 2-3 toca 2; 2-6 toca 2; 3-4 toca 4; 4-7 toca 4; 5-6 toca 5.",
           "highlightVertices": [
-            "1",
             "2",
-            "4",
-            "6"
+            "5",
+            "4"
           ],
           "highlightEdges": [
             "e12",
-            "e15",
             "e23",
             "e26",
-            "e34",
-            "e47",
+            "e15",
             "e56",
-            "e67"
+            "e34",
+            "e47"
           ]
         },
         {
-          "title": "Comparação com emparelhamento M",
-          "text": "Um emparelhamento possível é M={{1,5},{2,3},{4,7}}. Como suas três arestas são disjuntas, qualquer cobertura precisa tocar cada uma delas: por isso |M|=3 ≤ |K|=4.",
+          "title": "Certificado com emparelhamento M",
+          "text": "Um emparelhamento possível é M={{1,5},{2,3},{4,7}}. As três arestas são disjuntas, então qualquer cobertura precisa de pelo menos três vértices; como K={2,5,4}, temos |M|=|K|=3.",
           "highlightVertices": [
-            "1",
             "2",
-            "4",
-            "6"
+            "5",
+            "4"
           ],
           "highlightEdges": [
             "e15",
@@ -3051,9 +3127,8 @@ window.GRAPH_SITE_DATA = {
             "e47",
             "e12",
             "e26",
-            "e34",
             "e56",
-            "e67"
+            "e34"
           ]
         }
       ]
@@ -4369,117 +4444,91 @@ window.GRAPH_SITE_DATA = {
             "id": "e56",
             "u": "5",
             "v": "6"
-          },
-          {
-            "id": "e67",
-            "u": "6",
-            "v": "7"
           }
         ]
       },
-      "solution": "Um emparelhamento possível é M={{1,5},{2,3},{4,7}}, com 3 arestas disjuntas. Uma cobertura compatível é K={1,2,4,6}, que toca todas as arestas listadas. Assim |M|=3 e |K|=4, verificando |M|≤|K|. A desigualdade faz sentido porque cada aresta do emparelhamento precisa ser coberta por pelo menos um vértice distinto.",
+      "solution": "Um emparelhamento possível é M={{1,5},{2,3},{4,7}}, com 3 arestas disjuntas. Uma cobertura mínima compatível é K={2,5,4}: o vértice 2 cobre 1-2, 2-3 e 2-6; o vértice 5 cobre 1-5 e 5-6; o vértice 4 cobre 3-4 e 4-7. Assim |M|=|K|=3, e a igualdade certifica que o emparelhamento é máximo e a cobertura é mínima.",
       "solutionSteps": [
         {
           "title": "Comece pela definição",
-          "text": "Uma cobertura de vértices K precisa tocar todas as arestas. Vamos construir K={1,2,4,6} destacando, em cada etapa, quais arestas já ficaram cobertas.",
+          "text": "Uma cobertura de vértices K toca toda aresta em pelo menos uma ponta. Aqui vamos construir K={2,5,4} e conferir a cobertura acumulada no próprio grafo.",
           "highlightVertices": [
-            "1",
             "2",
-            "4",
-            "6"
+            "5",
+            "4"
           ],
           "highlightEdges": []
         },
         {
-          "title": "Escolha o vértice 1",
-          "text": "Ao colocar 1 em K, toda aresta incidente em 1 fica coberta. Portanto as arestas 1-2 e 1-5 já estão protegidas pela cobertura.",
+          "title": "Escolha o vértice 2",
+          "text": "Ao colocar 2 em K, ficam cobertas todas as arestas incidentes nele: 1-2, 2-3 e 2-6. O vértice cobre as três de uma vez porque é ponta comum delas.",
           "highlightVertices": [
-            "1"
-          ],
-          "highlightEdges": [
-            "e12",
-            "e15"
-          ]
-        },
-        {
-          "title": "Adicione o vértice 2",
-          "text": "Com 2 em K, além de manter 1-2 coberta, passam a estar cobertas 2-3 e 2-6. As arestas cobertas agora são 1-2, 1-5, 2-3 e 2-6.",
-          "highlightVertices": [
-            "1",
             "2"
           ],
           "highlightEdges": [
             "e12",
-            "e15",
             "e23",
             "e26"
           ]
         },
         {
-          "title": "Adicione o vértice 4",
-          "text": "Com 4 em K, cobrimos 3-4 e 4-7. Repare que não precisamos colocar 3 nem 7 se as arestas incidentes a eles já tiverem outra ponta em K.",
+          "title": "Adicione o vértice 5",
+          "text": "Com 5 em K, a aresta 1-5 passa a estar coberta e 5-6 também. Agora já temos cobertas 1-2, 2-3, 2-6, 1-5 e 5-6.",
           "highlightVertices": [
-            "1",
             "2",
+            "5"
+          ],
+          "highlightEdges": [
+            "e12",
+            "e23",
+            "e26",
+            "e15",
+            "e56"
+          ]
+        },
+        {
+          "title": "Adicione o vértice 4",
+          "text": "O vértice 4 cobre as arestas restantes 3-4 e 4-7. Como as arestas anteriores permanecem cobertas, K={2,5,4} cobre o grafo inteiro.",
+          "highlightVertices": [
+            "2",
+            "5",
             "4"
           ],
           "highlightEdges": [
             "e12",
-            "e15",
             "e23",
             "e26",
+            "e15",
+            "e56",
             "e34",
             "e47"
           ]
         },
         {
-          "title": "Adicione o vértice 6",
-          "text": "Com 6 em K, cobrimos as arestas 5-6 e 6-7. Agora todas as arestas do grafo aparecem destacadas, então K={1,2,4,6} é cobertura válida.",
-          "highlightVertices": [
-            "1",
-            "2",
-            "4",
-            "6"
-          ],
-          "highlightEdges": [
-            "e12",
-            "e15",
-            "e23",
-            "e26",
-            "e34",
-            "e47",
-            "e56",
-            "e67"
-          ]
-        },
-        {
           "title": "Verificação aresta por aresta",
-          "text": "A checagem final é direta: 1-2 toca 1 e 2; 1-5 toca 1; 2-3 toca 2; 2-6 toca 2 e 6; 3-4 toca 4; 4-7 toca 4; 5-6 toca 6; 6-7 toca 6.",
+          "text": "A checagem final é direta: 1-2 toca 2; 1-5 toca 5; 2-3 toca 2; 2-6 toca 2; 3-4 toca 4; 4-7 toca 4; 5-6 toca 5.",
           "highlightVertices": [
-            "1",
             "2",
-            "4",
-            "6"
+            "5",
+            "4"
           ],
           "highlightEdges": [
             "e12",
-            "e15",
             "e23",
             "e26",
-            "e34",
-            "e47",
+            "e15",
             "e56",
-            "e67"
+            "e34",
+            "e47"
           ]
         },
         {
-          "title": "Comparação com emparelhamento M",
-          "text": "Um emparelhamento possível é M={{1,5},{2,3},{4,7}}. Como suas três arestas são disjuntas, qualquer cobertura precisa tocar cada uma delas: por isso |M|=3 ≤ |K|=4.",
+          "title": "Certificado com emparelhamento M",
+          "text": "Um emparelhamento possível é M={{1,5},{2,3},{4,7}}. As três arestas são disjuntas, então qualquer cobertura precisa de pelo menos três vértices; como K={2,5,4}, temos |M|=|K|=3.",
           "highlightVertices": [
-            "1",
             "2",
-            "4",
-            "6"
+            "5",
+            "4"
           ],
           "highlightEdges": [
             "e15",
@@ -4487,9 +4536,8 @@ window.GRAPH_SITE_DATA = {
             "e47",
             "e12",
             "e26",
-            "e34",
             "e56",
-            "e67"
+            "e34"
           ]
         }
       ]
@@ -4629,7 +4677,88 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "Um roteiro possível é enviar 6 por s-a-c-t, depois 6 por s-a-d-t, depois 3 por s-b-d-e-t, respeitando as capacidades. O fluxo acumulado chega a 15 nesse conjunto de caminhos. Para confirmar otimalidade, encontra-se no residual um corte com capacidade 15 ou verifica-se que não resta caminho aumentante de s a t."
+      "solution": "Um roteiro de Ford-Fulkerson é: enviar 6 por s-a-c-t, depois 6 por s-a-d-t e depois 3 por s-b-d-e-t. Os gargalos são 6, 6 e 3, com capacidades residuais atualizadas após cada envio. O fluxo acumulado chega a 15. Como a capacidade total que sai de s é 12+3=15, esse valor também é um limite superior; portanto o fluxo máximo é 15.",
+      "solutionSteps": [
+        {
+          "title": "Iteração 1: s-a-c-t",
+          "text": "O caminho s-a-c-t tem folgas 12, 12 e 6. Assim gargalo=6; fluxo acumulado=6. O arco c-t fica saturado, e os rótulos mostram f/capacidade e residual.",
+          "bottleneck": 6,
+          "highlightEdges": [
+            "e0",
+            "e2",
+            "e5"
+          ],
+          "highlightVertices": [
+            "s",
+            "a",
+            "c",
+            "t"
+          ],
+          "edgeLabels": {
+            "e0": "f=6/12 r=6",
+            "e2": "f=6/12 r=6",
+            "e5": "f=6/6 r=0"
+          }
+        },
+        {
+          "title": "Iteração 2: s-a-d-t",
+          "text": "Agora usamos s-a-d-t. As folgas são 6, 8 e 8, então gargalo=6; fluxo acumulado=12. O arco s-a satura e impede novos caminhos por a.",
+          "bottleneck": 6,
+          "highlightEdges": [
+            "e0",
+            "e3",
+            "e9"
+          ],
+          "highlightVertices": [
+            "s",
+            "a",
+            "d",
+            "t"
+          ],
+          "edgeLabels": {
+            "e0": "f=12/12 r=0",
+            "e3": "f=6/8 r=2",
+            "e9": "f=6/8 r=2",
+            "e5": "f=6/6 r=0"
+          }
+        },
+        {
+          "title": "Iteração 3: s-b-d-e-t",
+          "text": "O último caminho disponível saindo de s é s-b-d-e-t. As folgas são 3, 3, 4 e 7, logo gargalo=3; fluxo acumulado=15. A saída de s fica esgotada.",
+          "bottleneck": 3,
+          "highlightEdges": [
+            "e1",
+            "e4",
+            "e7",
+            "e8"
+          ],
+          "highlightVertices": [
+            "s",
+            "b",
+            "d",
+            "e",
+            "t"
+          ],
+          "edgeLabels": {
+            "e1": "f=3/3 r=0",
+            "e4": "f=3/3 r=0",
+            "e7": "f=3/4 r=1",
+            "e8": "f=3/7 r=4",
+            "e0": "f=12/12 r=0"
+          }
+        },
+        {
+          "title": "Corte de confirmação",
+          "text": "Como os arcos s-a e s-b estão saturados, o corte X={s} tem capacidade 15. O fluxo encontrado vale 15, então o corte certifica a otimalidade.",
+          "highlightVertices": [
+            "s"
+          ],
+          "edgeLabels": {
+            "e0": "f=12/12 r=0",
+            "e1": "f=3/3 r=0"
+          }
+        }
+      ]
     },
     {
       "id": "fluxo-custo-cafe",
@@ -4690,7 +4819,85 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "Cada rodovia vira arco direcionado com capacidade e custo. Primeiro busque caminhos de menor custo no residual, como Marilia-B-C-Jau, cujo custo unitário é 7, e envie o gargalo. Depois atualize capacidades residuais e prossiga com Marilia-A-C-Jau ou Marilia-A-Jau conforme o custo. O custo total é a soma fluxo do caminho vezes custo unitário. Arcos reversos aparecem com custo negativo quando há fluxo positivo."
+      "solution": "A resolução por custo mínimo escolhe caminhos residuais baratos e atualiza capacidades a cada envio. Primeiro Marilia-B-C-Jau tem custo unitário 7 e gargalo 15; depois Marilia-A-C-Jau também custa 7 e tem gargalo 10; por fim Marilia-A-Jau custa 9 e tem gargalo 8. O fluxo máximo é 33 mil sacas e o custo total é 15*7 + 10*7 + 8*9 = 247.",
+      "solutionSteps": [
+        {
+          "title": "Iteração 1: Marilia-B-C-Jau",
+          "text": "O caminho Marilia-B-C-Jau tem custo unitário 7. As folgas são 15, 15 e 25, então gargalo=15; fluxo acumulado=15. O custo acumulado é 105.",
+          "bottleneck": 15,
+          "highlightEdges": [
+            "e1",
+            "e3",
+            "e5"
+          ],
+          "highlightVertices": [
+            "Marilia",
+            "B",
+            "C",
+            "Jau"
+          ],
+          "edgeLabels": {
+            "e1": "f=15/15 r=0",
+            "e3": "f=15/15 r=0",
+            "e5": "f=15/25 r=10"
+          }
+        },
+        {
+          "title": "Iteração 2: Marilia-A-C-Jau",
+          "text": "Depois usamos Marilia-A-C-Jau, também com custo unitário 7. As folgas são 20, 10 e 10, então gargalo=10; fluxo acumulado=25. O custo acumulado é 175.",
+          "bottleneck": 10,
+          "highlightEdges": [
+            "e0",
+            "e2",
+            "e5"
+          ],
+          "highlightVertices": [
+            "Marilia",
+            "A",
+            "C",
+            "Jau"
+          ],
+          "edgeLabels": {
+            "e0": "f=10/20 r=10",
+            "e2": "f=10/10 r=0",
+            "e5": "f=25/25 r=0"
+          }
+        },
+        {
+          "title": "Iteração 3: Marilia-A-Jau",
+          "text": "Como C-Jau saturou, resta o caminho direto Marilia-A-Jau com custo unitário 9. As folgas são 10 e 8, logo gargalo=8; fluxo acumulado=33. O custo fecha em 247.",
+          "bottleneck": 8,
+          "highlightEdges": [
+            "e0",
+            "e4"
+          ],
+          "highlightVertices": [
+            "Marilia",
+            "A",
+            "Jau"
+          ],
+          "edgeLabels": {
+            "e0": "f=18/20 r=2",
+            "e4": "f=8/8 r=0",
+            "e5": "f=25/25 r=0"
+          }
+        },
+        {
+          "title": "Estado residual final",
+          "text": "As chegadas a Jau por C-Jau e A-Jau estão saturadas. Os reversos de custo negativo existem nos arcos usados, mas não liberam novo caminho mais barato com capacidade positiva até Jau.",
+          "highlightVertices": [
+            "Jau"
+          ],
+          "edgeLabels": {
+            "e4": "r=0",
+            "e5": "r=0",
+            "e0": "r=2",
+            "e1": "r=0",
+            "e2": "r=0",
+            "e3": "r=0"
+          }
+        }
+      ]
     },
     {
       "id": "final-q1-centros-treinamento",

@@ -90,6 +90,7 @@
     const mutedVertices = new Set((options.mutedVertices || []).map(String));
     const vertexColors = options.vertexColors || {};
     const edgeColors = options.edgeColors || {};
+    const edgeLabels = options.edgeLabels || {};
     const bounds = fitGraphViewBox(vertices);
     const svg = makeSvg('svg', {viewBox:bounds.viewBox, role:'img', preserveAspectRatio:'xMidYMid meet'});
     svg.style.setProperty('--graph-ratio', `${bounds.width} / ${bounds.height}`);
@@ -104,7 +105,18 @@
       if(!p1 || !p2) return;
       const chosen = highlightEdges.has(String(edge.id));
       const semanticColor = edgeColors[String(edge.id)];
-      const stroke = chosen ? '#f5a524' : semanticColor ? colorMap[semanticColor] || semanticColor : '#40516a';
+      const stroke = semanticColor ? colorMap[semanticColor] || semanticColor : '#40516a';
+      if(chosen){
+        const halo = makeSvg('line', {
+          x1:p1.x, y1:p1.y, x2:p2.x, y2:p2.y,
+          class:'edge-highlight-halo',
+          stroke:'#f5a524',
+          'stroke-width': semanticColor ? '10' : '8',
+          'stroke-linecap':'round',
+          opacity: semanticColor ? '.34' : '.48'
+        });
+        svg.append(halo);
+      }
       const line = makeSvg('line', {
         x1:p1.x, y1:p1.y, x2:p2.x, y2:p2.y,
         stroke,
@@ -114,13 +126,16 @@
       });
       if(graph.directed) line.setAttribute('marker-end', `url(#${marker.id})`);
       svg.append(line);
-      const label = edgeLabel(edge);
+      const edgeId = String(edge.id);
+      const label = Object.prototype.hasOwnProperty.call(edgeLabels, edgeId) ? edgeLabels[edgeId] : edgeLabel(edge);
       if(label !== ''){
         const x = (p1.x+p2.x)/2;
         const y = (p1.y+p2.y)/2;
-        const rect = makeSvg('rect', {x:x-26, y:y-13, width:'52', height:'24', rx:'7', fill:'#0a1020', opacity:'.9'});
+        const labelText = String(label);
+        const labelWidth = Math.max(52, Math.min(126, labelText.length * 7 + 18));
+        const rect = makeSvg('rect', {x:x-labelWidth/2, y:y-13, width:labelWidth, height:'24', rx:'7', fill:'#0a1020', opacity:'.9'});
         const text = makeSvg('text', {x, y:y+4, 'text-anchor':'middle', class:'svg-label'});
-        text.textContent = label;
+        text.textContent = labelText;
         svg.append(rect, text);
       }
     });
@@ -185,6 +200,7 @@
         mutedVertices: step.mutedVertices || [],
         vertexColors: animation.colors && animationId === 'vertexColoring' ? animation.colors : {},
         edgeColors: animation.colors && animationId === 'edgeColoring' ? animation.colors : {},
+        edgeLabels: step.edgeLabels || {},
         dimUnhighlighted: Boolean(step.highlightEdges && step.highlightEdges.length)
       });
       text.innerHTML = `<strong>${step.title}</strong><br>${step.text}`;
@@ -277,6 +293,7 @@
         highlightEdges: step.highlightEdges || [],
         highlightVertices: step.highlightVertices || [],
         mutedVertices: step.mutedVertices || [],
+        edgeLabels: step.edgeLabels || {},
         dimUnhighlighted: Boolean(step.highlightEdges && step.highlightEdges.length)
       });
       text.innerHTML = `<strong>${step.title}</strong><br>${step.text}`;
