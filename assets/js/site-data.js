@@ -694,15 +694,24 @@ window.GRAPH_SITE_DATA = {
       },
       "steps": [
         {
-          "title": "Grafo inicial",
-          "text": "O grafo está conectado: todo vértice alcança qualquer outro por algum caminho."
+          "title": "Grafo original conectado",
+          "text": "Comece verificando que todos os vértices pertencem à mesma componente: antes de remover qualquer vértice, existe caminho entre a parte esquerda e a parte direita do desenho.",
+          "highlightVertices": [
+            "1",
+            "4",
+            "7"
+          ]
         },
         {
-          "title": "Remove 4",
-          "text": "Ao remover o vértice 4, o lado {1,2,3} se separa do lado {5,6,7}. Portanto {4} é SCA.",
-          "mutedVertices": [
+          "title": "Procure vértice crítico",
+          "text": "O teste de conectividade remove um vértice por vez. O vértice 4 é candidato forte porque várias rotas entre os blocos passam por ele ou por arestas incidentes a ele.",
+          "highlightVertices": [
             "4"
-          ],
+          ]
+        },
+        {
+          "title": "Remoção separa componentes",
+          "text": "Ao retirar 4, sobram grupos que não conseguem mais se comunicar por caminhos internos suficientes. Isso caracteriza um subconjunto de articulação de tamanho 1.",
           "highlightVertices": [
             "1",
             "2",
@@ -710,13 +719,32 @@ window.GRAPH_SITE_DATA = {
             "5",
             "6",
             "7"
+          ],
+          "mutedVertices": [
+            "4"
           ]
         },
         {
-          "title": "Conclusão",
-          "text": "Como um único vértice desconecta o grafo, k(G)=1. Logo o grafo é 1-conexo, mas não 2-conexo.",
+          "title": "SCAM encontrado",
+          "text": "Como um único vértice já desconecta o grafo, o subconjunto de articulação mínimo, SCAM, tem tamanho 1. Não é necessário testar pares para provar o limite superior.",
           "highlightVertices": [
             "4"
+          ]
+        },
+        {
+          "title": "Valor de k(G)",
+          "text": "A conectividade k(G) é o tamanho do menor subconjunto de articulação. Portanto k(G)=1: o grafo é conectado, mas possui uma fragilidade estrutural simples.",
+          "highlightVertices": [
+            "4"
+          ]
+        },
+        {
+          "title": "Leitura h-conexa",
+          "text": "Se k(G)=1, então o grafo é 1-conexo e não é 2-conexo. Para ser 2-conexo, nenhum vértice isolado poderia desconectar a estrutura.",
+          "highlightVertices": [
+            "1",
+            "4",
+            "7"
           ]
         }
       ]
@@ -796,8 +824,8 @@ window.GRAPH_SITE_DATA = {
       },
       "steps": [
         {
-          "title": "Vértices",
-          "text": "Há n=5 vértices no desenho planar.",
+          "title": "Desenho sem cruzamentos",
+          "text": "O desenho mostrado já está no plano sem cruzamento de arestas fora dos vértices. Isso permite aplicar a fórmula de Euler diretamente nessa representação.",
           "highlightVertices": [
             "1",
             "2",
@@ -807,8 +835,19 @@ window.GRAPH_SITE_DATA = {
           ]
         },
         {
-          "title": "Arestas",
-          "text": "Há m=8 arestas: quatro no contorno e quatro ligando ao vértice central.",
+          "title": "Conte os vértices",
+          "text": "Há n=5 vértices. A contagem de vértices deve considerar todos os pontos do desenho, inclusive o vértice central que participa de quatro arestas.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "title": "Conte as arestas",
+          "text": "Há m=8 arestas: quatro no ciclo externo e quatro ligando o centro aos vértices externos. Cada segmento deve ser contado uma única vez.",
           "highlightEdges": [
             "e12",
             "e23",
@@ -821,8 +860,34 @@ window.GRAPH_SITE_DATA = {
           ]
         },
         {
-          "title": "Regiões",
-          "text": "O desenho possui r=5 regiões, incluindo a externa. A conta fecha: 5 - 8 + 5 = 2."
+          "title": "Regiões internas",
+          "text": "As arestas dividem o desenho em quatro regiões internas triangulares. Visualmente, cada região é delimitada por duas arestas radiais e uma aresta externa.",
+          "highlightEdges": [
+            "e12",
+            "e15",
+            "e25"
+          ]
+        },
+        {
+          "title": "Região externa também conta",
+          "text": "A região de fora do ciclo externo também entra em r. Portanto temos r=5 regiões no total: quatro internas mais a região externa.",
+          "highlightEdges": [
+            "e12",
+            "e23",
+            "e34",
+            "e41"
+          ]
+        },
+        {
+          "title": "Conferência de Euler",
+          "text": "Substituindo na fórmula, n - m + r = 5 - 8 + 5 = 2. A igualdade confirma consistência do desenho planar conexo.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
         }
       ]
     },
@@ -891,8 +956,15 @@ window.GRAPH_SITE_DATA = {
       },
       "steps": [
         {
-          "title": "Comece por 1",
-          "text": "Colorimos 1 de azul e seus vizinhos de verde.",
+          "title": "Tente duas cores",
+          "text": "Para testar bipartição, comece atribuindo uma cor ao vértice 1. Todos os seus vizinhos diretos precisam ficar na cor oposta.",
+          "highlightVertices": [
+            "1"
+          ]
+        },
+        {
+          "title": "Obrigação dos vizinhos",
+          "text": "Como 1 é adjacente a 2 e 5, esses dois vértices devem ficar na outra classe. Essa é a propagação típica de uma 2-coloração.",
           "highlightVertices": [
             "1",
             "2",
@@ -900,24 +972,35 @@ window.GRAPH_SITE_DATA = {
           ]
         },
         {
-          "title": "Propague",
-          "text": "A regra alterna cores pelos vizinhos. Se um vizinho já tem a mesma cor, apareceu conflito.",
-          "highlightEdges": [
-            "e12",
-            "e51",
-            "e23",
-            "e45"
+          "title": "Propagação pelo caminho",
+          "text": "O vértice 3, vizinho de 2, precisa voltar para a cor de 1. Depois, o vértice 4, vizinho de 3, precisaria receber a cor de 2.",
+          "highlightVertices": [
+            "2",
+            "3",
+            "4"
           ]
         },
         {
-          "title": "Ciclo ímpar",
-          "text": "O ciclo 1-2-3-4-5-1 tem tamanho 5. Ciclo ímpar impede bipartição.",
+          "title": "Conflito no triângulo",
+          "text": "A aresta 2-4 cria conflito, pois 2 e 4 seriam forçados para a mesma cor. O ciclo 2-3-4-2 tem tamanho 3, que é ímpar.",
           "highlightEdges": [
-            "e12",
             "e23",
             "e34",
-            "e45",
-            "e51"
+            "e24"
+          ],
+          "highlightVertices": [
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        {
+          "title": "Conclusão estrutural",
+          "text": "Como existe ciclo ímpar, o grafo não é bipartido. Logo não há como separar os vértices em apenas dois conjuntos independentes.",
+          "highlightEdges": [
+            "e23",
+            "e34",
+            "e24"
           ]
         }
       ]
@@ -995,30 +1078,58 @@ window.GRAPH_SITE_DATA = {
       ],
       "steps": [
         {
-          "title": "Graus pares",
-          "text": "A tem grau 4; B, C, D e E têm grau 2. Todos os graus são pares, então existe circuito euleriano."
+          "title": "Critério dos graus",
+          "text": "A tem grau 4, enquanto B, C, D e E têm grau 2. Como todos os graus são pares e o grafo é conexo, existe circuito euleriano.",
+          "highlightVertices": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ]
         },
         {
-          "title": "Triângulo esquerdo",
-          "text": "Usamos A-B, B-C e C-A uma única vez.",
+          "title": "Primeira aresta",
+          "text": "Comece por A-B. Em Euler, repetir vértice é permitido; o que nunca pode acontecer é atravessar a mesma aresta duas vezes.",
+          "highlightEdges": [
+            "ab"
+          ],
+          "highlightVertices": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "title": "Fecha o triângulo sem repetir aresta",
+          "text": "Siga por B-C e C-A. O vértice A reaparece, mas as arestas usadas são novas, então o percurso ainda é válido.",
           "highlightEdges": [
             "ab",
             "bc",
             "ca"
+          ],
+          "highlightVertices": [
+            "A",
+            "B",
+            "C"
           ]
         },
         {
-          "title": "Triângulo direito",
-          "text": "Seguimos por A-D, D-E e E-A. Nenhuma aresta foi repetida.",
+          "title": "Avança para o segundo bloco",
+          "text": "Depois de voltar a A, use A-D. Essa escolha atravessa a ponte interna para o outro ciclo sem reutilizar nenhuma aresta já marcada.",
           "highlightEdges": [
-            "ad",
-            "de",
-            "ea"
+            "ab",
+            "bc",
+            "ca",
+            "ad"
+          ],
+          "highlightVertices": [
+            "A",
+            "D"
           ]
         },
         {
-          "title": "Circuito completo",
-          "text": "Circuito: A-B-C-A-D-E-A. O teste automatizado garante que cada edge id aparece uma vez.",
+          "title": "Completa as arestas restantes",
+          "text": "Use D-E e depois E-A. Agora todas as seis arestas aparecem exatamente uma vez no percurso: AB, BC, CA, AD, DE e EA.",
           "highlightEdges": [
             "ab",
             "bc",
@@ -1026,6 +1137,26 @@ window.GRAPH_SITE_DATA = {
             "ad",
             "de",
             "ea"
+          ],
+          "highlightVertices": [
+            "A",
+            "D",
+            "E"
+          ]
+        },
+        {
+          "title": "Circuito euleriano",
+          "text": "O percurso começa e termina em A, usa cada aresta uma única vez e não deixa arestas sobrando. Portanto é um circuito euleriano correto.",
+          "highlightEdges": [
+            "ab",
+            "bc",
+            "ca",
+            "ad",
+            "de",
+            "ea"
+          ],
+          "highlightVertices": [
+            "A"
           ]
         }
       ]
@@ -1119,24 +1250,28 @@ window.GRAPH_SITE_DATA = {
       ],
       "steps": [
         {
-          "title": "Percurso de vértices",
-          "text": "Hamiltoniano olha vértices, não arestas. O ciclo precisa visitar cada vértice uma vez antes de retornar."
-        },
-        {
-          "title": "Ciclo válido",
-          "text": "1-2-3-4-5-6-1 visita todos os 6 vértices e retorna ao início.",
-          "highlightEdges": [
-            "e12",
-            "e23",
-            "e34",
-            "e45",
-            "e56",
-            "e61"
+          "title": "Objeto visitado",
+          "text": "Hamiltoniano controla vértices. O ciclo deve passar por cada vértice exatamente uma vez antes de retornar ao ponto de partida.",
+          "highlightVertices": [
+            "1"
           ]
         },
         {
-          "title": "Sem repetição interna",
-          "text": "O vértice 1 aparece no começo e no fim; os demais aparecem uma única vez.",
+          "title": "Início em 1",
+          "text": "Partindo de 1, siga para 2 e depois 3. Até aqui nenhum vértice foi repetido, então o caminho parcial continua hamiltoniano.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "3"
+          ],
+          "highlightEdges": [
+            "e12",
+            "e23"
+          ]
+        },
+        {
+          "title": "Completa a sequência interna",
+          "text": "Continue por 4, 5 e 6. A sequência 1-2-3-4-5-6 visitou todos os seis vértices uma vez.",
           "highlightVertices": [
             "1",
             "2",
@@ -1144,6 +1279,43 @@ window.GRAPH_SITE_DATA = {
             "4",
             "5",
             "6"
+          ],
+          "highlightEdges": [
+            "e12",
+            "e23",
+            "e34",
+            "e45",
+            "e56"
+          ]
+        },
+        {
+          "title": "Retorno permitido",
+          "text": "A aresta 6-1 fecha o ciclo. Repetir o vértice inicial no final é permitido; repetir qualquer outro vértice quebraria a condição.",
+          "highlightEdges": [
+            "e12",
+            "e23",
+            "e34",
+            "e45",
+            "e56",
+            "e61"
+          ],
+          "highlightVertices": [
+            "1",
+            "6"
+          ]
+        },
+        {
+          "title": "Comparação com Euler",
+          "text": "Observe que algumas arestas do grafo, como 1-4 e 2-5, ficaram sem uso. Isso é aceitável em Hamilton, pois a exigência recai sobre vértices, não arestas.",
+          "highlightEdges": [
+            "e14",
+            "e25"
+          ],
+          "highlightVertices": [
+            "1",
+            "2",
+            "4",
+            "5"
           ]
         }
       ]
@@ -1250,28 +1422,102 @@ window.GRAPH_SITE_DATA = {
       "expectedCost": 15,
       "steps": [
         {
-          "title": "Ordenação",
-          "text": "Ordene por peso: 1, 2, 3, 4, 5, ..."
+          "title": "Ordene por peso",
+          "text": "Kruskal começa ordenando as arestas por peso crescente. A leitura inicial é 1, 2, 3, 4, depois as arestas de peso 5 e, por último, as de peso 6 ou 7.",
+          "highlightEdges": [
+            "e13"
+          ]
         },
         {
-          "title": "Escolhas",
-          "text": "Entram 1-3, 2-6, 2-5 e 4-6 porque conectam componentes diferentes.",
+          "title": "Escolha 1-3",
+          "text": "A aresta 1-3 tem peso 1 e conecta dois componentes diferentes. Ela é segura e entra na árvore parcial sem formar ciclo.",
+          "highlightEdges": [
+            "e13"
+          ],
+          "highlightVertices": [
+            "1",
+            "3"
+          ]
+        },
+        {
+          "title": "Escolha 2-6",
+          "text": "A próxima aresta mais barata é 2-6, com peso 2. Como 2 e 6 ainda estão isolados entre si, a escolha une componentes distintos.",
+          "highlightEdges": [
+            "e13",
+            "e26"
+          ],
+          "highlightVertices": [
+            "2",
+            "6"
+          ]
+        },
+        {
+          "title": "Escolha 2-5",
+          "text": "A aresta 2-5 tem peso 3 e expande o componente de 2 e 6 para incluir 5. Ainda não há ciclo porque 5 estava fora desse componente.",
+          "highlightEdges": [
+            "e13",
+            "e26",
+            "e25"
+          ],
+          "highlightVertices": [
+            "2",
+            "5",
+            "6"
+          ]
+        },
+        {
+          "title": "Escolha 4-6",
+          "text": "A aresta 4-6, peso 4, conecta o vértice 4 ao componente que já contém 2, 5 e 6. A árvore parcial agora tem quatro arestas seguras.",
           "highlightEdges": [
             "e13",
             "e26",
             "e25",
             "e46"
+          ],
+          "highlightVertices": [
+            "2",
+            "4",
+            "5",
+            "6"
           ]
         },
         {
-          "title": "Fecha a árvore",
-          "text": "A aresta 1-4 une os dois componentes restantes. Temos n-1=5 arestas e custo 15.",
+          "title": "Fecha com 1-4",
+          "text": "Entre as arestas de peso 5, 1-4 une os dois grandes componentes restantes. Com cinco arestas para seis vértices, a árvore geradora está completa.",
           "highlightEdges": [
             "e13",
             "e26",
             "e25",
             "e46",
             "e14"
+          ],
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        },
+        {
+          "title": "Rejeite o que fecha ciclo",
+          "text": "Arestas restantes como 2-3 ou 3-5 seriam rejeitadas, porque suas pontas já ficaram conectadas pela árvore. O custo final é 1+2+3+4+5=15.",
+          "highlightEdges": [
+            "e13",
+            "e26",
+            "e25",
+            "e46",
+            "e14",
+            "e23"
+          ],
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
           ]
         }
       ]
@@ -1370,8 +1616,15 @@ window.GRAPH_SITE_DATA = {
       },
       "steps": [
         {
-          "title": "T={1}",
-          "text": "Começando em 1, a menor aresta que sai de T é 1-3.",
+          "title": "Comece com T={1}",
+          "text": "Prim mantém uma árvore parcial T. Começando pelo vértice 1, olhe apenas as arestas que saem de T para vértices ainda fora de T.",
+          "highlightVertices": [
+            "1"
+          ]
+        },
+        {
+          "title": "Escolha 1-3",
+          "text": "Da fronteira de 1, a aresta mais barata é 1-3, com peso 1. Agora T passa a ser {1,3}.",
           "highlightEdges": [
             "e13"
           ],
@@ -1381,8 +1634,23 @@ window.GRAPH_SITE_DATA = {
           ]
         },
         {
-          "title": "T={1,3}",
-          "text": "A menor aresta da fronteira agora pode ser 1-4 com peso 5.",
+          "title": "Atualize a fronteira",
+          "text": "Com T={1,3}, entram candidatas como 1-4, 1-2, 3-2, 3-4 e 3-5. A menor fronteira útil entre elas tem peso 5.",
+          "highlightEdges": [
+            "e12",
+            "e14",
+            "e23",
+            "e34",
+            "e35"
+          ],
+          "highlightVertices": [
+            "1",
+            "3"
+          ]
+        },
+        {
+          "title": "Escolha 1-4",
+          "text": "A aresta 1-4, peso 5, adiciona um vértice novo ao conjunto T. Arestas internas a T não podem ser escolhidas, pois não expandem a árvore.",
           "highlightEdges": [
             "e13",
             "e14"
@@ -1394,14 +1662,37 @@ window.GRAPH_SITE_DATA = {
           ]
         },
         {
-          "title": "Continua até n-1",
-          "text": "Prim sempre escolhe a menor aresta entre T e V-T, nunca a menor global que já está dentro de T.",
+          "title": "Leve o componente até 6",
+          "text": "A menor aresta que sai de T para fora agora é 4-6, peso 4. Essa escolha adiciona 6 e abre novas opções pela fronteira de 6.",
+          "highlightEdges": [
+            "e13",
+            "e14",
+            "e46"
+          ],
+          "highlightVertices": [
+            "1",
+            "3",
+            "4",
+            "6"
+          ]
+        },
+        {
+          "title": "Escolha 2-6 e 2-5",
+          "text": "Depois entram 2-6, peso 2, e 2-5, peso 3. Com todos os vértices em T e cinco arestas, Prim também chega ao custo 15.",
           "highlightEdges": [
             "e13",
             "e14",
             "e46",
             "e26",
             "e25"
+          ],
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
           ]
         }
       ]
@@ -1536,8 +1827,8 @@ window.GRAPH_SITE_DATA = {
       },
       "steps": [
         {
-          "title": "Clique K4",
-          "text": "Os vértices 1,2,3,4 formam K4. Isso força pelo menos 4 cores.",
+          "title": "Clique força limite inferior",
+          "text": "Os vértices 1, 2, 3 e 4 formam uma clique K4. Como todos são adjacentes entre si, quatro cores diferentes serão necessárias.",
           "highlightVertices": [
             "1",
             "2",
@@ -1546,22 +1837,56 @@ window.GRAPH_SITE_DATA = {
           ]
         },
         {
-          "title": "Reuso seguro",
-          "text": "Vértices não adjacentes podem repetir cor. Assim 1 e 5 ficam azuis, 2 e 6 verdes, 3 e 7 laranja, 4 e 8 roxos.",
+          "title": "Primeiras cores",
+          "text": "Atribua azul a 1 e verde a 2. Como existe aresta 1-2, os dois não podem compartilhar a mesma classe cromática.",
           "highlightVertices": [
             "1",
-            "5",
+            "2"
+          ],
+          "highlightEdges": [
+            "e12"
+          ]
+        },
+        {
+          "title": "Completa a clique",
+          "text": "Os vértices 3 e 4 também precisam de cores próprias dentro da clique. Isso atinge o limite inferior de quatro cores.",
+          "highlightVertices": [
+            "1",
             "2",
-            "6",
             "3",
+            "4"
+          ],
+          "highlightEdges": [
+            "e13",
+            "e14",
+            "e23",
+            "e24",
+            "e34"
+          ]
+        },
+        {
+          "title": "Reaproveite cores fora da clique",
+          "text": "Vértices fora da clique podem reaproveitar cores desde que não sejam adjacentes a vértices da mesma cor. Essa é a economia da partição cromática.",
+          "highlightVertices": [
+            "5",
+            "6",
             "7",
-            "4",
             "8"
           ]
         },
         {
-          "title": "Conclusão",
-          "text": "Como há limite inferior 4 e uma coloração com 4, χ(G)=4."
+          "title": "Partição cromática final",
+          "text": "Cada cor forma um conjunto independente: não há aresta ligando dois vértices da mesma classe. Como usamos quatro cores, a coloração é válida e ótima.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8"
+          ]
         }
       ]
     },
@@ -1674,11 +1999,17 @@ window.GRAPH_SITE_DATA = {
       "steps": [
         {
           "title": "Grau máximo",
-          "text": "O maior grau é 4. Logo são necessários pelo menos 4 dias/cores."
+          "text": "O maior grau do grafo é 4. Como uma seleção ou vértice com quatro arestas incidentes precisa de quatro cores distintas, Δ(G)=4 é limite inferior.",
+          "highlightVertices": [
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
         },
         {
-          "title": "Cores como emparelhamentos",
-          "text": "Cada cor contém arestas sem vértice comum.",
+          "title": "Dia 1",
+          "text": "No primeiro dia entram arestas sem vértices em comum: 1-4, 2-3 e 5-6. Cada cor de aresta é um emparelhamento.",
           "highlightEdges": [
             "e14",
             "e23",
@@ -1686,20 +2017,41 @@ window.GRAPH_SITE_DATA = {
           ]
         },
         {
-          "title": "Classe 1",
-          "text": "A coloração usa exatamente Δ(G)=4 cores, então o grafo é classe 1.",
+          "title": "Dia 2",
+          "text": "No segundo dia entram 2-5 e 3-4. Nenhum vértice aparece duas vezes dentro desse conjunto, então a restrição de incidência é respeitada.",
           "highlightEdges": [
-            "e14",
-            "e23",
-            "e56",
             "e25",
-            "e34",
+            "e34"
+          ]
+        },
+        {
+          "title": "Dia 3",
+          "text": "No terceiro dia entram 1-2, 3-5 e 4-6. A checagem local é sempre a mesma: arestas da mesma cor não podem tocar o mesmo vértice.",
+          "highlightEdges": [
             "e12",
             "e35",
-            "e46",
+            "e46"
+          ]
+        },
+        {
+          "title": "Dia 4",
+          "text": "No quarto dia entram 1-3, 2-6 e 4-5. Agora todas as arestas foram coloridas sem conflito entre arestas incidentes.",
+          "highlightEdges": [
             "e13",
             "e26",
             "e45"
+          ]
+        },
+        {
+          "title": "Classe 1",
+          "text": "Como a coloração usa exatamente Δ(G)=4 cores, o índice cromático é χ′(G)=4. Pelo critério estrutural, o grafo é classe 1.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
           ]
         }
       ]
@@ -1789,8 +2141,8 @@ window.GRAPH_SITE_DATA = {
       ],
       "steps": [
         {
-          "title": "Emparelhamento",
-          "text": "M={AC,BD,EF} tem 3 arestas disjuntas.",
+          "title": "Emparelhamento como arestas disjuntas",
+          "text": "Um emparelhamento escolhe arestas que não compartilham vértices. Por isso AC, BD e EF podem coexistir: nenhuma delas encosta na outra.",
           "highlightEdges": [
             "eAC",
             "eBD",
@@ -1798,8 +2150,34 @@ window.GRAPH_SITE_DATA = {
           ]
         },
         {
-          "title": "Cobertura",
-          "text": "K={A,D,E} toca todas as arestas do grafo.",
+          "title": "Vértices saturados",
+          "text": "As arestas escolhidas saturam A, C, B, D, E e F. Quando todos os vértices são saturados, o emparelhamento também é perfeito.",
+          "highlightEdges": [
+            "eAC",
+            "eBD",
+            "eEF"
+          ],
+          "highlightVertices": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F"
+          ]
+        },
+        {
+          "title": "Maximal e máximo",
+          "text": "Esse emparelhamento é maximal porque não dá para adicionar outra aresta. Também é máximo, pois três arestas já saturam seis vértices.",
+          "highlightEdges": [
+            "eAC",
+            "eBD",
+            "eEF"
+          ]
+        },
+        {
+          "title": "Cobertura de vértices",
+          "text": "A cobertura destacada toca todas as arestas do grafo. Cada aresta precisa ter pelo menos uma ponta dentro do conjunto de cobertura.",
           "highlightVertices": [
             "A",
             "D",
@@ -1807,8 +2185,18 @@ window.GRAPH_SITE_DATA = {
           ]
         },
         {
-          "title": "Certificado",
-          "text": "Como |M|=|K|=3, M é máximo e K é mínima."
+          "title": "Relação em bipartidos",
+          "text": "Em grafos bipartidos, o Teorema de König liga emparelhamento máximo e cobertura mínima: os tamanhos ótimos coincidem.",
+          "highlightEdges": [
+            "eAC",
+            "eBD",
+            "eEF"
+          ],
+          "highlightVertices": [
+            "A",
+            "D",
+            "E"
+          ]
         }
       ]
     },
@@ -1901,12 +2289,31 @@ window.GRAPH_SITE_DATA = {
       },
       "steps": [
         {
-          "title": "Capacidades",
-          "text": "Cada arco limita quanto recurso pode passar. O gargalo de um caminho é a menor capacidade residual nele."
+          "title": "Rede com fonte e sumidouro",
+          "text": "A rede tem uma fonte s e um sumidouro t. Todo fluxo enviado precisa respeitar capacidade nos arcos e conservação nos vértices intermediários.",
+          "highlightVertices": [
+            "s",
+            "t"
+          ]
         },
         {
-          "title": "Caminho aumentante",
-          "text": "Escolhendo s-a-c-t, o gargalo é min(12,12,8)=8.",
+          "title": "Primeiro caminho aumentante",
+          "text": "Um caminho como s-a-c-t permite enviar fluxo limitado pelo menor arco do caminho. Esse menor valor é o gargalo da iteração.",
+          "highlightEdges": [
+            "sa",
+            "ac",
+            "ct"
+          ],
+          "highlightVertices": [
+            "s",
+            "a",
+            "c",
+            "t"
+          ]
+        },
+        {
+          "title": "Atualização residual",
+          "text": "Depois de enviar fluxo, a capacidade residual direta diminui e aparece capacidade reversa. O arco reverso representa a possibilidade de desfazer parte da escolha.",
           "highlightEdges": [
             "sa",
             "ac",
@@ -1914,12 +2321,27 @@ window.GRAPH_SITE_DATA = {
           ]
         },
         {
-          "title": "Residual",
-          "text": "Depois de enviar fluxo, surgem arcos reversos para permitir desfazer parte da escolha em iterações futuras.",
+          "title": "Outro caminho disponível",
+          "text": "Enquanto existir caminho de s até t no residual, o algoritmo pode aumentar o fluxo. Caminhos diferentes competem pelas capacidades restantes.",
           "highlightEdges": [
-            "sa",
-            "ac",
-            "ct"
+            "sb",
+            "bd",
+            "dt"
+          ],
+          "highlightVertices": [
+            "s",
+            "b",
+            "d",
+            "t"
+          ]
+        },
+        {
+          "title": "Corte final",
+          "text": "Quando não há mais caminho aumentante, os vértices alcançáveis a partir de s definem um corte mínimo. O valor do fluxo iguala a capacidade desse corte.",
+          "highlightVertices": [
+            "s",
+            "a",
+            "b"
           ]
         }
       ]
@@ -2021,8 +2443,16 @@ window.GRAPH_SITE_DATA = {
       },
       "steps": [
         {
-          "title": "Custo unitário",
-          "text": "O caminho 1-2-4-6 tem custo 2+1+2=5. O custo adicionado é fluxo enviado vezes 5.",
+          "title": "Capacidade e custo unitário",
+          "text": "Cada arco possui capacidade e custo unitário. O objetivo é enviar o fluxo exigido ou máximo pagando a menor soma de fluxo vezes custo.",
+          "highlightEdges": [
+            "e12",
+            "e13"
+          ]
+        },
+        {
+          "title": "Caminho barato inicial",
+          "text": "Avalie caminhos pelo custo total das arestas. Um caminho barato é escolhido primeiro, mas só pode receber o gargalo disponível.",
           "highlightEdges": [
             "e12",
             "e24",
@@ -2030,8 +2460,8 @@ window.GRAPH_SITE_DATA = {
           ]
         },
         {
-          "title": "Gargalo",
-          "text": "O gargalo do caminho é a menor capacidade residual dos arcos escolhidos.",
+          "title": "Gargalo do caminho",
+          "text": "O gargalo é a menor capacidade residual ao longo do caminho escolhido. Esse valor define quanto fluxo pode ser enviado naquela rodada.",
           "highlightEdges": [
             "e12",
             "e24",
@@ -2039,8 +2469,30 @@ window.GRAPH_SITE_DATA = {
           ]
         },
         {
-          "title": "Arco reverso",
-          "text": "Se 2->6 tivesse fluxo e custo 3, o residual poderia conter 6->2 com custo -3 para desfazer fluxo anterior."
+          "title": "Arco reverso com custo negativo",
+          "text": "Após enviar fluxo, aparece arco reverso com custo negativo. Ele permite cancelar parte de uma decisão anterior quando isso reduz o custo global.",
+          "highlightEdges": [
+            "e24",
+            "e45",
+            "e56"
+          ]
+        },
+        {
+          "title": "Menor caminho no residual",
+          "text": "A cada iteração, procure menor custo no grafo residual. Com custos negativos reversos, Bellman-Ford é uma escolha segura para encontrar o caminho.",
+          "highlightEdges": [
+            "e13",
+            "e36",
+            "e56"
+          ]
+        },
+        {
+          "title": "Encerramento da solução",
+          "text": "O algoritmo encerra quando a demanda foi enviada ou quando não existe caminho residual viável. O custo final soma todos os fluxos positivos usados.",
+          "highlightVertices": [
+            "1",
+            "6"
+          ]
         }
       ]
     }
@@ -3637,7 +4089,105 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "É uma árvore geradora mínima. Por Kruskal, ordene as arestas por peso e escolha apenas as que não fecham ciclo: 1-3 peso 1, 2-6 peso 2, 2-5 peso 3, 4-6 peso 4 e 1-4 peso 5. Essas 5 arestas conectam todos os 6 vértices e têm custo total 1+2+3+4+5=15 metros. Como uma árvore com n vértices tem exatamente n-1 arestas, aqui 6 vértices exigem 5 arestas. A estrutura é conexa e sem ciclos, logo transmite o sinal a todos os pontos sem loops fechados."
+      "solution": "É uma árvore geradora mínima. Por Kruskal, ordene as arestas por peso e escolha apenas as que não fecham ciclo: 1-3 peso 1, 2-6 peso 2, 2-5 peso 3, 4-6 peso 4 e 1-4 peso 5. Essas 5 arestas conectam todos os 6 vértices e têm custo total 1+2+3+4+5=15 metros. Como uma árvore com n vértices tem exatamente n-1 arestas, aqui 6 vértices exigem 5 arestas. A estrutura é conexa e sem ciclos, logo transmite o sinal a todos os pontos sem loops fechados.",
+      "solutionSteps": [
+        {
+          "title": "Matriz vira grafo ponderado",
+          "text": "Ignore as entradas ∞ e leia cada valor finito fora da diagonal como uma aresta possível. O peso representa metros de cabo entre dois pontos de áudio."
+        },
+        {
+          "title": "Escolhe 1-3",
+          "text": "A menor distância é 1 metro na aresta 1-3. Como os dois pontos ainda estão em componentes separados, Kruskal aceita essa conexão.",
+          "highlightEdges": [
+            "e1"
+          ],
+          "highlightVertices": [
+            "1",
+            "3"
+          ]
+        },
+        {
+          "title": "Escolhe 2-6",
+          "text": "A próxima aresta é 2-6 com peso 2. Ela cria outro componente conectado e ainda não fecha ciclo com nada escolhido anteriormente.",
+          "highlightEdges": [
+            "e1",
+            "e5"
+          ],
+          "highlightVertices": [
+            "2",
+            "6"
+          ]
+        },
+        {
+          "title": "Escolhe 2-5",
+          "text": "A aresta 2-5 tem peso 3 e adiciona o ponto 5 ao componente de 2 e 6. O custo acumulado passa a ser 1+2+3=6.",
+          "highlightEdges": [
+            "e1",
+            "e5",
+            "e4"
+          ],
+          "highlightVertices": [
+            "2",
+            "5",
+            "6"
+          ]
+        },
+        {
+          "title": "Escolhe 4-6",
+          "text": "A aresta 4-6 tem peso 4 e conecta o ponto 4 ao mesmo bloco. O custo acumulado passa a ser 10 e ainda não existe ciclo.",
+          "highlightEdges": [
+            "e1",
+            "e5",
+            "e4",
+            "e8"
+          ],
+          "highlightVertices": [
+            "2",
+            "4",
+            "5",
+            "6"
+          ]
+        },
+        {
+          "title": "Escolhe 1-4 e completa",
+          "text": "Entre as arestas de peso 5, a conexão 1-4 une os dois componentes restantes. Agora há 6 vértices e 5 arestas, exatamente n-1.",
+          "highlightEdges": [
+            "e1",
+            "e5",
+            "e4",
+            "e8",
+            "e2"
+          ],
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        },
+        {
+          "title": "Rejeita arestas que fariam ciclo",
+          "text": "Depois da árvore completa, arestas como 2-3 ou 3-5 são rejeitadas/ignoradas porque fechariam ciclo. O cabo mínimo total é 15 metros.",
+          "highlightEdges": [
+            "e1",
+            "e5",
+            "e4",
+            "e8",
+            "e2",
+            "e3"
+          ],
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        }
+      ]
     },
     {
       "id": "final-q4-supercopa-jogos",

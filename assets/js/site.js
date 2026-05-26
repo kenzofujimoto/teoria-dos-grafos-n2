@@ -62,6 +62,23 @@
     return '';
   }
 
+  function fitGraphViewBox(vertices){
+    if(!vertices.length) return {viewBox:'0 0 720 380', width:720, height:380};
+    const xs = vertices.map(vertex => Number(vertex.x)).filter(Number.isFinite);
+    const ys = vertices.map(vertex => Number(vertex.y)).filter(Number.isFinite);
+    if(!xs.length || !ys.length) return {viewBox:'0 0 720 380', width:720, height:380};
+    const padding = 72;
+    const minX = Math.min(...xs) - padding;
+    const minY = Math.min(...ys) - padding;
+    const width = Math.max(260, Math.max(...xs) - Math.min(...xs) + padding * 2);
+    const height = Math.max(220, Math.max(...ys) - Math.min(...ys) + padding * 2);
+    return {
+      viewBox: `${minX} ${minY} ${width} ${height}`,
+      width,
+      height
+    };
+  }
+
   function renderGraph(container, graph, options={}){
     container.innerHTML = '';
     const vertices = graphVertices(graph);
@@ -72,7 +89,9 @@
     const mutedVertices = new Set((options.mutedVertices || []).map(String));
     const vertexColors = options.vertexColors || {};
     const edgeColors = options.edgeColors || {};
-    const svg = makeSvg('svg', {viewBox:'0 0 720 380', role:'img'});
+    const bounds = fitGraphViewBox(vertices);
+    const svg = makeSvg('svg', {viewBox:bounds.viewBox, role:'img', preserveAspectRatio:'xMidYMid meet'});
+    svg.style.setProperty('--graph-ratio', `${bounds.width} / ${bounds.height}`);
     const defs = makeSvg('defs', {});
     const marker = makeSvg('marker', {id:`arrow-${Math.random().toString(16).slice(2)}`, viewBox:'0 0 10 10', refX:'8', refY:'5', markerWidth:'6', markerHeight:'6', orient:'auto-start-reverse'});
     marker.append(makeSvg('path', {d:'M 0 0 L 10 5 L 0 10 z', fill:'#91a4bf'}));
@@ -114,6 +133,26 @@
       svg.append(circle, text);
     });
     container.append(svg);
+  }
+
+  function initRailToggle(){
+    const layout = $('[data-sidebar-layout]');
+    const toggle = $('[data-sidebar-toggle]');
+    if(!layout || !toggle) return;
+    const rail = document.getElementById(toggle.getAttribute('aria-controls'));
+    if(!rail) return;
+    const storageKey = `${document.body.dataset.view || 'site'}-rail-collapsed`;
+    const setCollapsed = collapsed => {
+      layout.classList.toggle('rail-collapsed', collapsed);
+      rail.classList.toggle('is-collapsed', collapsed);
+      toggle.setAttribute('aria-expanded', String(!collapsed));
+      toggle.setAttribute('title', collapsed ? 'Expandir menu' : 'Recolher menu');
+      try { localStorage.setItem(storageKey, collapsed ? '1' : '0'); } catch(error) { console.warn('Rail preference could not be saved.', error); }
+    };
+    let initial = false;
+    try { initial = localStorage.getItem(storageKey) === '1'; } catch(error) { console.warn('Rail preference could not be read.', error); }
+    setCollapsed(initial);
+    toggle.addEventListener('click', () => setCollapsed(!rail.classList.contains('is-collapsed')));
   }
 
   function renderAnimation(animationId){
@@ -205,10 +244,40 @@
     window.addEventListener('hashchange', () => select((location.hash || '').replace('#','')));
   }
 
-  function renderExerciseGraph(graph){
+  function renderExerciseGraph(graph, steps=[]){
+    const wrap = el('div', {class:'solution-graph'});
+    wrap.append(el('h4', {}, ['Grafo da resolução']));
     const box = el('div', {class:'graph-box'});
-    renderGraph(box, graph || {vertices:[], edges:[]});
-    return box;
+    const text = el('div', {class:'step-text'});
+    const controls = el('div', {class:'step-controls'});
+    const prev = el('button', {type:'button'}, ['Anterior']);
+    const count = el('span');
+    const next = el('button', {type:'button'}, ['Próximo']);
+    controls.append(prev, count, next);
+    wrap.append(box, text);
+    const visualSteps = steps && steps.length ? steps : [{
+      title:'Modelo visual',
+      text:'O desenho abaixo é o grafo usado para interpretar a resolução. Os vértices representam os elementos do problema e as arestas representam relações, conflitos, conexões ou partidas.'
+    }];
+    let index = 0;
+    const draw = () => {
+      const step = visualSteps[index];
+      renderGraph(box, graph || {vertices:[], edges:[]}, {
+        highlightEdges: step.highlightEdges || [],
+        highlightVertices: step.highlightVertices || [],
+        mutedVertices: step.mutedVertices || [],
+        dimUnhighlighted: Boolean(step.highlightEdges && step.highlightEdges.length)
+      });
+      text.innerHTML = `<strong>${step.title}</strong><br>${step.text}`;
+      count.textContent = `${index + 1} / ${visualSteps.length}`;
+      prev.disabled = index === 0;
+      next.disabled = index === visualSteps.length - 1;
+    };
+    prev.addEventListener('click', () => { index = Math.max(0, index - 1); draw(); });
+    next.addEventListener('click', () => { index = Math.min(visualSteps.length - 1, index + 1); draw(); });
+    draw();
+    if(visualSteps.length > 1) wrap.append(controls);
+    return wrap;
   }
 
   function renderMatrix(matrix){
@@ -253,10 +322,11 @@
         exercise.questions.forEach(question => questions.append(el('li', {}, [question])));
         prompt.append(questions);
         if(exercise.matrix) prompt.append(renderMatrix(exercise.matrix));
-        body.append(prompt, renderExerciseGraph(exercise.graph));
+        body.append(prompt);
         const solution = el('div', {class:'solution'});
         solution.append(el('h3', {}, ['Resolução']));
         solution.append(el('p', {html:exercise.solution}));
+        if(exercise.graph) solution.append(renderExerciseGraph(exercise.graph, exercise.solutionSteps || []));
         card.append(head, body, solution);
         list.append(card);
       });
@@ -274,6 +344,7 @@
   }
 
   const view = document.body.dataset.view;
+  initRailToggle();
   if(view === 'home') renderHome();
   if(view === 'theory') renderTheory();
   if(view === 'exercises') renderExercises();

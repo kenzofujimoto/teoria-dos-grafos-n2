@@ -17,11 +17,19 @@
     </nav>
   </header>
 
-  <main class="app-layout">
-    <aside class="rail">
-      <h1>Teoria</h1>
-      <p>Uma aba para cada conteúdo dos PDFs.</p>
-      <div id="theoryTabs" class="tab-list"></div>
+  <main class="app-layout" data-sidebar-layout>
+    <aside id="theoryRail" class="rail">
+      <div class="rail-head">
+        <h1 class="rail-title">Teoria</h1>
+        <button class="rail-toggle" type="button" data-sidebar-toggle aria-controls="theoryRail" aria-expanded="true" title="Recolher menu">
+          <span class="rail-toggle-lines" aria-hidden="true"></span>
+          <span class="sr-only">Alternar menu lateral</span>
+        </button>
+      </div>
+      <div class="rail-content">
+        <p>Uma aba para cada conteúdo dos PDFs.</p>
+        <div id="theoryTabs" class="tab-list"></div>
+      </div>
     </aside>
     <section id="theoryContent" class="content-stage"></section>
   </main>

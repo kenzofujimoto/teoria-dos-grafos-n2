@@ -17,11 +17,19 @@
     </nav>
   </header>
 
-  <main class="app-layout">
-    <aside class="rail">
-      <h1>Exercícios</h1>
-      <p>Enunciado completo, grafo redesenhado e resolução passo a passo.</p>
-      <div id="exerciseFilters" class="tab-list"></div>
+  <main class="app-layout" data-sidebar-layout>
+    <aside id="exerciseRail" class="rail">
+      <div class="rail-head">
+        <h1 class="rail-title">Exercícios</h1>
+        <button class="rail-toggle" type="button" data-sidebar-toggle aria-controls="exerciseRail" aria-expanded="true" title="Recolher menu">
+          <span class="rail-toggle-lines" aria-hidden="true"></span>
+          <span class="sr-only">Alternar menu lateral</span>
+        </button>
+      </div>
+      <div class="rail-content">
+        <p>Enunciado completo, grafo redesenhado e resolução passo a passo.</p>
+        <div id="exerciseFilters" class="tab-list"></div>
+      </div>
     </aside>
     <section class="content-stage">
       <div class="section-heading tight">
