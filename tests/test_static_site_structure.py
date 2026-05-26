@@ -291,6 +291,52 @@ def test_kruskal_exercise_keeps_matrix_in_prompt_and_graph_steps_in_solution():
     assert any(step.get("highlightEdges") for step in steps)
 
 
+def test_kruskal_prim_exercises_have_matrices_and_visual_solution_steps():
+    data = load_site_data()
+    exercises = {exercise["id"]: exercise for exercise in data["exercises"]}
+
+    for exercise_id in ["mst-prim-kruskal-visual", "mst-predios", "final-q3-rede-som"]:
+        exercise = exercises[exercise_id]
+        assert exercise.get("matrix"), f"{exercise_id} must show its weighted matrix in the prompt"
+        assert exercise["matrix"]["headers"], f"{exercise_id} matrix needs labels"
+        assert len(exercise["matrix"]["rows"]) == len(exercise["matrix"]["headers"])
+        assert all(len(row) == len(exercise["matrix"]["headers"]) for row in exercise["matrix"]["rows"])
+
+        steps = exercise.get("solutionSteps", [])
+        assert len(steps) >= 5, f"{exercise_id} needs a visual algorithm walkthrough"
+        assert any("rejeit" in step["text"].lower() for step in steps), f"{exercise_id} must explain rejected cycle edges"
+        assert any(step.get("highlightEdges") for step in steps), f"{exercise_id} needs highlighted edges"
+
+
+def test_matching_theory_has_alternating_and_augmenting_path_animations():
+    data = load_site_data()
+    matching_topic = next(topic for topic in data["theoryTopics"] if topic["slug"] == "emparelhamentos-2")
+
+    assert "alternatingPath" in matching_topic["animations"]
+    assert "augmentingPath" in matching_topic["animations"]
+
+    for animation_id, phrase in [
+        ("alternatingPath", "caminho alternante"),
+        ("augmentingPath", "caminho aumentante"),
+    ]:
+        animation = data["animations"][animation_id]
+        full_text = " ".join([animation["title"]] + [step["title"] + " " + step["text"] for step in animation["steps"]])
+        assert phrase in full_text.lower()
+        assert len(animation["steps"]) >= 5
+        assert animation.get("matching"), f"{animation_id} must show the current matching"
+        assert animation.get("path"), f"{animation_id} must declare the path order"
+
+
+def test_exercise_filters_support_direct_hash_and_mobile_auto_collapse():
+    js = JS_FILE.read_text(encoding="utf-8")
+
+    assert "selectExerciseFromHash" in js
+    assert "data-exercise-id" in js
+    assert "scrollIntoView" in js
+    assert "collapseRailOnMobile" in js
+    assert "matchMedia('(max-width: 920px)')" in js
+
+
 def test_animations_have_detailed_step_by_step_explanations():
     data = load_site_data()
 

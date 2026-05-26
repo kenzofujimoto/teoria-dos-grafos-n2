@@ -18,6 +18,34 @@ def edge_key(edge: dict) -> tuple[str, str]:
     return tuple(sorted((str(edge["u"]), str(edge["v"]))))
 
 
+def assert_path_is_connected(edges: dict, path: list[str]) -> tuple[str, str]:
+    assert path, "Path must be explicitly defined"
+    current = str(edges[path[0]]["u"])
+    start = current
+    for edge_id in path:
+        edge = edges[edge_id]
+        endpoints = {str(edge["u"]), str(edge["v"])}
+        assert current in endpoints, f"Path is disconnected at edge {edge_id}"
+        current = str(edge["v"] if current == str(edge["u"]) else edge["u"])
+    return start, current
+
+
+def assert_valid_matching(edges: dict, matching: set[str]):
+    seen = set()
+    for edge_id in matching:
+        edge = edges[edge_id]
+        endpoints = {str(edge["u"]), str(edge["v"])}
+        assert not (seen & endpoints), f"Matching edge {edge_id} shares an endpoint"
+        seen |= endpoints
+    return seen
+
+
+def assert_edges_alternate_by_matching(path: list[str], matching: set[str]):
+    states = [edge_id in matching for edge_id in path]
+    for left, right in zip(states, states[1:]):
+        assert left != right, "Path edges must alternate between matching and non-matching edges"
+
+
 def test_eulerian_animation_uses_each_edge_once():
     data = load_site_data()
     animation = data["animations"]["eulerianTrail"]
@@ -113,3 +141,35 @@ def test_matching_and_cover_are_valid():
     cover = {str(vertex) for vertex in animation["cover"]}
     for edge in edges.values():
         assert str(edge["u"]) in cover or str(edge["v"]) in cover
+
+
+def test_alternating_path_animation_alternates_matching_status():
+    data = load_site_data()
+    animation = data["animations"]["alternatingPath"]
+    edges = {edge["id"]: edge for edge in animation["graph"]["edges"]}
+    matching = set(animation["matching"])
+    path = animation["path"]
+
+    assert set(path) <= set(edges)
+    assert_valid_matching(edges, matching)
+    assert_path_is_connected(edges, path)
+    assert_edges_alternate_by_matching(path, matching)
+
+
+def test_augmenting_path_animation_starts_and_ends_free_and_increases_matching():
+    data = load_site_data()
+    animation = data["animations"]["augmentingPath"]
+    edges = {edge["id"]: edge for edge in animation["graph"]["edges"]}
+    matching = set(animation["matching"])
+    new_matching = set(animation["newMatching"])
+    path = animation["path"]
+
+    matched_vertices = assert_valid_matching(edges, matching)
+    new_matched_vertices = assert_valid_matching(edges, new_matching)
+    start, end = assert_path_is_connected(edges, path)
+    assert_edges_alternate_by_matching(path, matching)
+
+    assert start not in matched_vertices
+    assert end not in matched_vertices
+    assert len(new_matching) == len(matching) + 1
+    assert len(new_matched_vertices) == len(matched_vertices) + 2
