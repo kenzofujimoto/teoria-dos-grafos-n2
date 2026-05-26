@@ -327,6 +327,36 @@ def test_matching_theory_has_alternating_and_augmenting_path_animations():
         assert animation.get("path"), f"{animation_id} must declare the path order"
 
 
+def test_cover_topic_has_edge_by_edge_walkthrough():
+    data = load_site_data()
+    cover_topic = next(topic for topic in data["theoryTopics"] if topic["slug"] == "coberturas")
+    cover_exercise = next(exercise for exercise in data["exercises"] if exercise["id"] == "cobertura-basica")
+
+    assert "vertexCoverWalkthrough" in cover_topic["animations"]
+
+    animation = data["animations"]["vertexCoverWalkthrough"]
+    steps = animation["steps"]
+    graph_edges = {edge["id"] for edge in animation["graph"]["edges"]}
+
+    assert len(steps) >= 6
+    assert animation["cover"] == ["1", "2", "4", "6"]
+    assert cover_exercise["solutionSteps"] == steps
+    assert any("K={1,2,4,6}" in step["text"] for step in steps)
+    assert any("M={{1,5},{2,3},{4,7}}" in step["text"] for step in steps)
+
+    highlighted_edges = set()
+    previous_count = 0
+    for step in steps:
+        current = set(step.get("highlightEdges", []))
+        if current:
+            assert current >= highlighted_edges, "Covered edges should remain highlighted cumulatively"
+            highlighted_edges = current
+            assert len(highlighted_edges) >= previous_count
+            previous_count = len(highlighted_edges)
+
+    assert highlighted_edges == graph_edges
+
+
 def test_exercise_filters_support_direct_hash_and_mobile_auto_collapse():
     js = JS_FILE.read_text(encoding="utf-8")
 

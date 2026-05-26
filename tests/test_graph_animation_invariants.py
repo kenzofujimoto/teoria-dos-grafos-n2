@@ -173,3 +173,22 @@ def test_augmenting_path_animation_starts_and_ends_free_and_increases_matching()
     assert end not in matched_vertices
     assert len(new_matching) == len(matching) + 1
     assert len(new_matched_vertices) == len(matched_vertices) + 2
+
+
+def test_vertex_cover_walkthrough_covers_edges_cumulatively():
+    data = load_site_data()
+    animation = data["animations"]["vertexCoverWalkthrough"]
+    edges = {edge["id"]: edge for edge in animation["graph"]["edges"]}
+    cover = {str(vertex) for vertex in animation["cover"]}
+
+    for edge_id, edge in edges.items():
+        assert str(edge["u"]) in cover or str(edge["v"]) in cover, f"{edge_id} is not covered"
+
+    covered_edges = set()
+    for step in animation["steps"]:
+        highlighted = set(step.get("highlightEdges", []))
+        if highlighted:
+            assert highlighted >= covered_edges
+            covered_edges = highlighted
+
+    assert covered_edges == set(edges)
