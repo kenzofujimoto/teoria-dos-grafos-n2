@@ -428,7 +428,8 @@ window.GRAPH_SITE_DATA = {
         }
       ],
       "animations": [
-        "matchingAndCover"
+        "matchingAndCover",
+        "vertexCoverWalkthrough"
       ]
     },
     {
@@ -2846,6 +2847,216 @@ window.GRAPH_SITE_DATA = {
           ]
         }
       ]
+    },
+    "vertexCoverWalkthrough": {
+      "title": "Cobertura de vértices passo a passo",
+      "graph": {
+        "vertices": [
+          {
+            "id": "1",
+            "x": 140,
+            "y": 95
+          },
+          {
+            "id": "2",
+            "x": 345,
+            "y": 95
+          },
+          {
+            "id": "3",
+            "x": 550,
+            "y": 95
+          },
+          {
+            "id": "4",
+            "x": 550,
+            "y": 290
+          },
+          {
+            "id": "5",
+            "x": 140,
+            "y": 290
+          },
+          {
+            "id": "6",
+            "x": 345,
+            "y": 290
+          },
+          {
+            "id": "7",
+            "x": 690,
+            "y": 290
+          }
+        ],
+        "edges": [
+          {
+            "id": "e12",
+            "u": "1",
+            "v": "2"
+          },
+          {
+            "id": "e15",
+            "u": "1",
+            "v": "5"
+          },
+          {
+            "id": "e23",
+            "u": "2",
+            "v": "3"
+          },
+          {
+            "id": "e26",
+            "u": "2",
+            "v": "6"
+          },
+          {
+            "id": "e34",
+            "u": "3",
+            "v": "4"
+          },
+          {
+            "id": "e47",
+            "u": "4",
+            "v": "7"
+          },
+          {
+            "id": "e56",
+            "u": "5",
+            "v": "6"
+          },
+          {
+            "id": "e67",
+            "u": "6",
+            "v": "7"
+          }
+        ]
+      },
+      "cover": [
+        "1",
+        "2",
+        "4",
+        "6"
+      ],
+      "matching": [
+        "e15",
+        "e23",
+        "e47"
+      ],
+      "steps": [
+        {
+          "title": "Comece pela definição",
+          "text": "Uma cobertura de vértices K precisa tocar todas as arestas. Vamos construir K={1,2,4,6} destacando, em cada etapa, quais arestas já ficaram cobertas.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "4",
+            "6"
+          ],
+          "highlightEdges": []
+        },
+        {
+          "title": "Escolha o vértice 1",
+          "text": "Ao colocar 1 em K, toda aresta incidente em 1 fica coberta. Portanto as arestas 1-2 e 1-5 já estão protegidas pela cobertura.",
+          "highlightVertices": [
+            "1"
+          ],
+          "highlightEdges": [
+            "e12",
+            "e15"
+          ]
+        },
+        {
+          "title": "Adicione o vértice 2",
+          "text": "Com 2 em K, além de manter 1-2 coberta, passam a estar cobertas 2-3 e 2-6. As arestas cobertas agora são 1-2, 1-5, 2-3 e 2-6.",
+          "highlightVertices": [
+            "1",
+            "2"
+          ],
+          "highlightEdges": [
+            "e12",
+            "e15",
+            "e23",
+            "e26"
+          ]
+        },
+        {
+          "title": "Adicione o vértice 4",
+          "text": "Com 4 em K, cobrimos 3-4 e 4-7. Repare que não precisamos colocar 3 nem 7 se as arestas incidentes a eles já tiverem outra ponta em K.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "4"
+          ],
+          "highlightEdges": [
+            "e12",
+            "e15",
+            "e23",
+            "e26",
+            "e34",
+            "e47"
+          ]
+        },
+        {
+          "title": "Adicione o vértice 6",
+          "text": "Com 6 em K, cobrimos as arestas 5-6 e 6-7. Agora todas as arestas do grafo aparecem destacadas, então K={1,2,4,6} é cobertura válida.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "4",
+            "6"
+          ],
+          "highlightEdges": [
+            "e12",
+            "e15",
+            "e23",
+            "e26",
+            "e34",
+            "e47",
+            "e56",
+            "e67"
+          ]
+        },
+        {
+          "title": "Verificação aresta por aresta",
+          "text": "A checagem final é direta: 1-2 toca 1 e 2; 1-5 toca 1; 2-3 toca 2; 2-6 toca 2 e 6; 3-4 toca 4; 4-7 toca 4; 5-6 toca 6; 6-7 toca 6.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "4",
+            "6"
+          ],
+          "highlightEdges": [
+            "e12",
+            "e15",
+            "e23",
+            "e26",
+            "e34",
+            "e47",
+            "e56",
+            "e67"
+          ]
+        },
+        {
+          "title": "Comparação com emparelhamento M",
+          "text": "Um emparelhamento possível é M={{1,5},{2,3},{4,7}}. Como suas três arestas são disjuntas, qualquer cobertura precisa tocar cada uma delas: por isso |M|=3 ≤ |K|=4.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "4",
+            "6"
+          ],
+          "highlightEdges": [
+            "e15",
+            "e23",
+            "e47",
+            "e12",
+            "e26",
+            "e34",
+            "e56",
+            "e67"
+          ]
+        }
+      ]
     }
   },
   "exercises": [
@@ -4087,50 +4298,201 @@ window.GRAPH_SITE_DATA = {
       ],
       "graph": {
         "vertices": [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7"
+          {
+            "id": "1",
+            "x": 140,
+            "y": 95
+          },
+          {
+            "id": "2",
+            "x": 345,
+            "y": 95
+          },
+          {
+            "id": "3",
+            "x": 550,
+            "y": 95
+          },
+          {
+            "id": "4",
+            "x": 550,
+            "y": 290
+          },
+          {
+            "id": "5",
+            "x": 140,
+            "y": 290
+          },
+          {
+            "id": "6",
+            "x": 345,
+            "y": 290
+          },
+          {
+            "id": "7",
+            "x": 690,
+            "y": 290
+          }
         ],
         "edges": [
-          [
+          {
+            "id": "e12",
+            "u": "1",
+            "v": "2"
+          },
+          {
+            "id": "e15",
+            "u": "1",
+            "v": "5"
+          },
+          {
+            "id": "e23",
+            "u": "2",
+            "v": "3"
+          },
+          {
+            "id": "e26",
+            "u": "2",
+            "v": "6"
+          },
+          {
+            "id": "e34",
+            "u": "3",
+            "v": "4"
+          },
+          {
+            "id": "e47",
+            "u": "4",
+            "v": "7"
+          },
+          {
+            "id": "e56",
+            "u": "5",
+            "v": "6"
+          },
+          {
+            "id": "e67",
+            "u": "6",
+            "v": "7"
+          }
+        ]
+      },
+      "solution": "Um emparelhamento possível é M={{1,5},{2,3},{4,7}}, com 3 arestas disjuntas. Uma cobertura compatível é K={1,2,4,6}, que toca todas as arestas listadas. Assim |M|=3 e |K|=4, verificando |M|≤|K|. A desigualdade faz sentido porque cada aresta do emparelhamento precisa ser coberta por pelo menos um vértice distinto.",
+      "solutionSteps": [
+        {
+          "title": "Comece pela definição",
+          "text": "Uma cobertura de vértices K precisa tocar todas as arestas. Vamos construir K={1,2,4,6} destacando, em cada etapa, quais arestas já ficaram cobertas.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "4",
+            "6"
+          ],
+          "highlightEdges": []
+        },
+        {
+          "title": "Escolha o vértice 1",
+          "text": "Ao colocar 1 em K, toda aresta incidente em 1 fica coberta. Portanto as arestas 1-2 e 1-5 já estão protegidas pela cobertura.",
+          "highlightVertices": [
+            "1"
+          ],
+          "highlightEdges": [
+            "e12",
+            "e15"
+          ]
+        },
+        {
+          "title": "Adicione o vértice 2",
+          "text": "Com 2 em K, além de manter 1-2 coberta, passam a estar cobertas 2-3 e 2-6. As arestas cobertas agora são 1-2, 1-5, 2-3 e 2-6.",
+          "highlightVertices": [
             "1",
             "2"
           ],
-          [
+          "highlightEdges": [
+            "e12",
+            "e15",
+            "e23",
+            "e26"
+          ]
+        },
+        {
+          "title": "Adicione o vértice 4",
+          "text": "Com 4 em K, cobrimos 3-4 e 4-7. Repare que não precisamos colocar 3 nem 7 se as arestas incidentes a eles já tiverem outra ponta em K.",
+          "highlightVertices": [
             "1",
-            "5"
-          ],
-          [
             "2",
-            "3"
-          ],
-          [
-            "2",
-            "6"
-          ],
-          [
-            "3",
             "4"
           ],
-          [
+          "highlightEdges": [
+            "e12",
+            "e15",
+            "e23",
+            "e26",
+            "e34",
+            "e47"
+          ]
+        },
+        {
+          "title": "Adicione o vértice 6",
+          "text": "Com 6 em K, cobrimos as arestas 5-6 e 6-7. Agora todas as arestas do grafo aparecem destacadas, então K={1,2,4,6} é cobertura válida.",
+          "highlightVertices": [
+            "1",
+            "2",
             "4",
-            "7"
-          ],
-          [
-            "5",
             "6"
           ],
-          [
-            "6",
-            "7"
+          "highlightEdges": [
+            "e12",
+            "e15",
+            "e23",
+            "e26",
+            "e34",
+            "e47",
+            "e56",
+            "e67"
           ]
-        ]
-      },
-      "solution": "Um emparelhamento possível é M={{1,5},{2,3},{4,7}}, com 3 arestas disjuntas. Uma cobertura compatível é K={1,2,4,6}, que toca todas as arestas listadas. Assim |M|=3 e |K|=4, verificando |M|≤|K|. A desigualdade faz sentido porque cada aresta do emparelhamento precisa ser coberta por pelo menos um vértice distinto."
+        },
+        {
+          "title": "Verificação aresta por aresta",
+          "text": "A checagem final é direta: 1-2 toca 1 e 2; 1-5 toca 1; 2-3 toca 2; 2-6 toca 2 e 6; 3-4 toca 4; 4-7 toca 4; 5-6 toca 6; 6-7 toca 6.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "4",
+            "6"
+          ],
+          "highlightEdges": [
+            "e12",
+            "e15",
+            "e23",
+            "e26",
+            "e34",
+            "e47",
+            "e56",
+            "e67"
+          ]
+        },
+        {
+          "title": "Comparação com emparelhamento M",
+          "text": "Um emparelhamento possível é M={{1,5},{2,3},{4,7}}. Como suas três arestas são disjuntas, qualquer cobertura precisa tocar cada uma delas: por isso |M|=3 ≤ |K|=4.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "4",
+            "6"
+          ],
+          "highlightEdges": [
+            "e15",
+            "e23",
+            "e47",
+            "e12",
+            "e26",
+            "e34",
+            "e56",
+            "e67"
+          ]
+        }
+      ]
     },
     {
       "id": "corte-minimo",
