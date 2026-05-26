@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <title>Teoria dos Grafos - N2</title>
+</head>
+<body data-view="home">
+  <header class="topbar">
+    <a class="brand" href="index.html">Grafos N2</a>
+    <nav class="main-nav" aria-label="Navegação principal">
+      <a href="teoria/index.html">Teoria</a>
+      <a href="exercicios/index.html">Exercícios</a>
+      <a href="teoria_grafos_n_2_guia_interativo.html">Guia legado</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <h1>Teoria dos Grafos com páginas, animações e exercícios resolvidos.</h1>
+        <p>Um site de estudo para a N2: teoria separada por matéria dos PDFs, exercícios com enunciado completo, grafos redesenhados e animações conferidas por invariantes.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="teoria/index.html">Estudar teoria</a>
+          <a class="button" href="exercicios/index.html">Resolver exercícios</a>
+        </div>
+      </div>
+      <div class="hero-panel" aria-label="Resumo visual do site">
+        <div class="network-preview">
+          <span style="--x:18%;--y:24%">1</span>
+          <span style="--x:46%;--y:14%">2</span>
+          <span style="--x:76%;--y:30%">3</span>
+          <span style="--x:28%;--y:72%">4</span>
+          <span style="--x:62%;--y:70%">5</span>
+          <svg viewBox="0 0 360 240" aria-hidden="true">
+            <path d="M65 58 L166 34 L274 72 L224 168 L101 173 Z" />
+            <path d="M166 34 L101 173 M166 34 L224 168 M65 58 L224 168 M274 72 L101 173" />
+          </svg>
+        </div>
+        <div class="mini-stats" id="homeStats"></div>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <h2>Rotas de estudo</h2>
+        <p>Os blocos abaixo são gerados a partir da base de dados do site, que espelha os PDFs enviados.</p>
+      </div>
+      <div id="homeTopicGrid" class="topic-grid"></div>
+    </section>
+
+    <section class="section-shell compact">
+      <div class="section-heading">
+        <h2>Animações centrais</h2>
+        <p>As animações usam dados explícitos de vértices, arestas, cores, matching, coberturas, fluxos e caminhos. O percurso euleriano agora é testado para não repetir arestas.</p>
+      </div>
+      <div id="homeAnimationGrid" class="animation-grid"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Baseado nos PDFs de Teoria dos Grafos enviados para a N2.</span>
+  </footer>
+
+  <script src="assets/js/site-data.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

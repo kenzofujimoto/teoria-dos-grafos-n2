@@ -634,9 +634,9 @@ function drawConn(){const st=connSteps[connI],svg=svgStart('connSvg');connE.forE
 function stepConn(d){connI=Math.max(0,Math.min(connSteps.length-1,connI+d));drawConn()}
 
 // 3. Euler/Hamilton
-const trailN={a:{x:130,y:185},b:{x:255,y:80},c:{x:430,y:80},d:{x:555,y:185},e:{x:430,y:295},f:{x:255,y:295}};
-const trailE=[['a','b'],['b','c'],['c','d'],['d','e'],['e','f'],['f','a'],['b','f'],['c','e']];
-const paths={euler:[['a','b'],['b','c'],['c','d'],['d','e'],['e','c'],['e','f'],['f','b'],['f','a']],ham:[['a','b'],['b','c'],['c','d'],['d','e'],['e','f'],['f','a']]};
+const trailN={a:{x:350,y:62},b:{x:555,y:155},c:{x:475,y:315},d:{x:225,y:315},e:{x:145,y:155}};
+const trailE=[['a','b'],['a','c'],['a','d'],['a','e'],['b','c'],['b','d'],['b','e'],['c','d'],['c','e'],['d','e']];
+const paths={euler:[['a','b'],['b','c'],['c','d'],['d','e'],['e','a'],['a','c'],['c','e'],['e','b'],['b','d'],['d','a']],ham:[['a','b'],['b','c'],['c','d'],['d','e'],['e','a']]};
 let trailMode='euler',trailI=0;
 function setTrail(m){trailMode=m;trailI=0;document.getElementById('trailEuler').classList.toggle('active',m==='euler');document.getElementById('trailHam').classList.toggle('active',m==='ham');drawTrail()}
 function drawTrail(){const svg=svgStart('trailSvg');const seq=paths[trailMode];trailE.forEach(([u,v])=>{let used=false,cur=false;for(let i=0;i<trailI&&i<seq.length;i++){if(hasEdge([seq[i]],u,v)){used=true;if(i===trailI-1)cur=true}}drawLine(svg,trailN[u],trailN[v],{stroke:cur?'#EF9F27':used?'#1D9E75':'#4b5563',sw:cur?5:used?4:2.2})});Object.entries(trailN).forEach(([id,p])=>drawNode(svg,id,p.x,p.y,{fill:'#243145'}));const label=trailMode==='euler'?'Euleriano: a ideia é usar todas as arestas uma única vez.':'Hamiltoniano: a ideia é usar todos os vértices uma única vez e voltar ao início.';const pathText=trailI===0?'nenhum trecho usado ainda':seq.slice(0,trailI).map(e=>e.join('→')).join(' | ');setHtml('trailDesc',trailI===0?'Estado inicial: grafo sem percurso destacado. Clique em Próximo para iniciar.<br><b>Modo:</b> '+label:label+'<br><b>Trecho destacado:</b> '+pathText);setHtml('trailCount',`Passo ${trailI} de ${seq.length}`)}

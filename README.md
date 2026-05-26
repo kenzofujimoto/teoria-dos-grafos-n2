@@ -1,6 +1,6 @@
 # Teoria dos Grafos - Guia Interativo
 
-Guia interativo em HTML para estudar os principais topicos de Teoria dos Grafos com explicacoes, exemplos e animacoes SVG.
+Site estatico multipagina para estudar os principais topicos de Teoria dos Grafos com explicacoes, exercicios resolvidos e animacoes SVG.
 
 ## Como visualizar
 
@@ -9,7 +9,7 @@ Este projeto nao precisa de build nem instalacao de dependencias.
 Para abrir direto no navegador, use o arquivo:
 
 ```text
-teoria_grafos_n_2_guia_interativo.html
+index.html
 ```
 
 Para testar com um servidor local:
@@ -21,8 +21,10 @@ python -m http.server 8080 --bind 127.0.0.1
 Depois acesse:
 
 ```text
-http://127.0.0.1:8080/teoria_grafos_n_2_guia_interativo.html
+http://127.0.0.1:8080/index.html
 ```
+
+O guia antigo continua disponivel em `teoria_grafos_n_2_guia_interativo.html`.
 
 ## Conteudo
 
@@ -36,10 +38,12 @@ http://127.0.0.1:8080/teoria_grafos_n_2_guia_interativo.html
 - Coberturas de vertices
 - Fluxo maximo com Ford-Fulkerson
 - Fluxo com custo minimo
+- Area de teoria separada por materia/PDF
+- Area de exercicios com enunciado, grafo e resolucao
 
 ## Animacoes
 
-As animacoes sao feitas com SVG e JavaScript puro dentro do proprio HTML. Elas permitem avancar e voltar passo a passo para acompanhar os algoritmos e conceitos visualmente.
+As animacoes sao feitas com SVG e JavaScript puro. Elas permitem avancar e voltar passo a passo para acompanhar algoritmos e conceitos visualmente.
 
 ## Deploy na Vercel
 
@@ -52,7 +56,7 @@ O arquivo `vercel.json` faz a rota raiz `/` apontar para o HTML principal:
   "rewrites": [
     {
       "source": "/",
-      "destination": "/teoria_grafos_n_2_guia_interativo.html"
+      "destination": "/index.html"
     }
   ]
 }
@@ -69,6 +73,10 @@ Na Vercel, use as configuracoes padrao para um projeto estatico:
 ```text
 .
 +-- README.md
++-- index.html
++-- teoria/
++-- exercicios/
++-- assets/
 +-- teoria_grafos_n_2_guia_interativo.html
 +-- vercel.json
 ```
