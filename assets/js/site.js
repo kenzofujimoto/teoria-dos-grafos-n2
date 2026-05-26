@@ -211,6 +211,27 @@
     return box;
   }
 
+  function renderMatrix(matrix){
+    const wrap = el('div', {class:'matrix-wrap'});
+    wrap.append(el('h3', {}, ['Matriz fornecida']));
+    const table = el('table', {class:'matrix-table'});
+    const thead = el('thead');
+    const headerRow = el('tr');
+    headerRow.append(el('th'));
+    matrix.headers.forEach(header => headerRow.append(el('th', {}, [String(header)])));
+    thead.append(headerRow);
+    const tbody = el('tbody');
+    matrix.rows.forEach((row, index) => {
+      const tr = el('tr');
+      tr.append(el('th', {}, [String(matrix.headers[index])]));
+      row.forEach(value => tr.append(el('td', {}, [String(value)])));
+      tbody.append(tr);
+    });
+    table.append(thead, tbody);
+    wrap.append(table);
+    return wrap;
+  }
+
   function renderExercises(){
     const filters = $('#exerciseFilters');
     const list = $('#exerciseList');
@@ -231,6 +252,7 @@
         const questions = el('ol', {class:'question-list'});
         exercise.questions.forEach(question => questions.append(el('li', {}, [question])));
         prompt.append(questions);
+        if(exercise.matrix) prompt.append(renderMatrix(exercise.matrix));
         body.append(prompt, renderExerciseGraph(exercise.graph));
         const solution = el('div', {class:'solution'});
         solution.append(el('h3', {}, ['Resolução']));
