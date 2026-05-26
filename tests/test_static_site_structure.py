@@ -72,3 +72,26 @@ def test_exercises_include_full_prompt_and_solution():
         assert exercise["questions"], f"{exercise['id']} must list the requested items"
         assert len(exercise["solution"]) >= 120, f"{exercise['id']} has a shallow solution"
         assert exercise.get("graph"), f"{exercise['id']} must include a graph/visual model"
+
+
+def test_final_image_exercises_include_complete_statements_and_matrices():
+    data = load_site_data()
+    exercises = {exercise["id"]: exercise for exercise in data["exercises"]}
+
+    expected = {
+        "final-q1-centros-treinamento": (8, "Copa do Mundo de 2026", "menor número de turnos"),
+        "final-q2-barracas-iluminacao": (10, "Festa Junina", "Barraça 1 à Barraca 3"),
+        "final-q3-rede-som": (6, "Rede Central de Distribuição de Som", "comprimento total mínimo"),
+        "final-q4-supercopa-jogos": (6, "Supercopa das Nações", "Classe 1"),
+    }
+
+    for exercise_id, (size, phrase_a, phrase_b) in expected.items():
+        exercise = exercises[exercise_id]
+        matrix = exercise.get("matrix")
+
+        assert phrase_a in exercise["prompt"]
+        assert phrase_b in exercise["prompt"] or phrase_b in " ".join(exercise["questions"])
+        assert matrix, f"{exercise_id} must include the original matrix"
+        assert len(matrix["headers"]) == size
+        assert len(matrix["rows"]) == size
+        assert all(len(row) == size for row in matrix["rows"])
