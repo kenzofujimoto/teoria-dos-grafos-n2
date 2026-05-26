@@ -339,10 +339,11 @@ def test_cover_topic_has_edge_by_edge_walkthrough():
     graph_edges = {edge["id"] for edge in animation["graph"]["edges"]}
 
     assert len(steps) >= 6
-    assert animation["cover"] == ["1", "2", "4", "6"]
+    assert animation["cover"] == ["2", "5", "4"]
     assert cover_exercise["solutionSteps"] == steps
-    assert any("K={1,2,4,6}" in step["text"] for step in steps)
+    assert any("K={2,5,4}" in step["text"] for step in steps)
     assert any("M={{1,5},{2,3},{4,7}}" in step["text"] for step in steps)
+    assert any("|M|=|K|=3" in step["text"] or "|K|=3" in step["text"] for step in steps)
 
     highlighted_edges = set()
     previous_count = 0
@@ -355,6 +356,38 @@ def test_cover_topic_has_edge_by_edge_walkthrough():
             previous_count = len(highlighted_edges)
 
     assert highlighted_edges == graph_edges
+
+
+def test_edge_coloring_keeps_original_matching_colors_while_highlighting_steps():
+    data = load_site_data()
+    js = JS_FILE.read_text(encoding="utf-8")
+    animation = data["animations"]["edgeColoring"]
+
+    assert animation["colors"], "Edge coloring animation must declare the color of each matching"
+    assert all(step.get("highlightEdges") for step in animation["steps"][1:5])
+    assert "const stroke = chosen ? '#f5a524'" not in js
+    assert "edge-highlight-halo" in js
+
+
+def test_flow_animations_show_bottlenecks_and_updated_residual_capacities():
+    data = load_site_data()
+
+    for animation_id in ["flowResidual", "minCostResidual"]:
+        animation = data["animations"][animation_id]
+        iterative_steps = [
+            step for step in animation["steps"]
+            if "gargalo" in step["text"].lower() or "iteração" in step["text"].lower()
+        ]
+
+        assert len(iterative_steps) >= 3, f"{animation_id} needs detailed flow iterations"
+        for step in iterative_steps:
+            assert step.get("highlightEdges"), f"{animation_id} step {step['title']} must highlight the path"
+            assert step.get("edgeLabels"), f"{animation_id} step {step['title']} must update capacities visually"
+            assert "gargalo" in step["text"].lower()
+            assert any(
+                marker in " ".join(str(value).lower() for value in step["edgeLabels"].values())
+                for marker in ["r=", "f=", "residual"]
+            )
 
 
 def test_exercise_filters_support_direct_hash_and_mobile_auto_collapse():

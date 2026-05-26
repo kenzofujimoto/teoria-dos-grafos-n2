@@ -181,6 +181,9 @@ def test_vertex_cover_walkthrough_covers_edges_cumulatively():
     edges = {edge["id"]: edge for edge in animation["graph"]["edges"]}
     cover = {str(vertex) for vertex in animation["cover"]}
 
+    assert animation["cover"] == ["2", "5", "4"]
+    assert "e67" not in edges
+
     for edge_id, edge in edges.items():
         assert str(edge["u"]) in cover or str(edge["v"]) in cover, f"{edge_id} is not covered"
 
@@ -192,3 +195,29 @@ def test_vertex_cover_walkthrough_covers_edges_cumulatively():
             covered_edges = highlighted
 
     assert covered_edges == set(edges)
+
+
+def test_flow_iteration_edge_labels_match_highlighted_paths():
+    data = load_site_data()
+
+    for animation_id in ["flowResidual", "minCostResidual"]:
+        animation = data["animations"][animation_id]
+        edges = {edge["id"]: edge for edge in animation["graph"]["edges"]}
+        running_flow = 0
+
+        for step in animation["steps"]:
+            highlighted = set(step.get("highlightEdges", []))
+            labels = step.get("edgeLabels", {})
+
+            assert highlighted <= set(edges), f"{animation_id} highlights an unknown edge"
+            assert set(labels) <= set(edges), f"{animation_id} labels an unknown edge"
+
+            if step.get("bottleneck") is None:
+                continue
+
+            assert highlighted, f"{animation_id} bottleneck steps must highlight the path"
+            assert highlighted <= set(labels), f"{animation_id} bottleneck path must show updated residual labels"
+            assert step["bottleneck"] > 0
+            running_flow += step["bottleneck"]
+            assert f"gargalo={step['bottleneck']}" in step["text"].lower()
+            assert f"fluxo acumulado={running_flow}" in step["text"].lower()
