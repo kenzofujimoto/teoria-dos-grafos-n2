@@ -5,6 +5,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_FILE = ROOT / "assets" / "js" / "site-data.js"
+CSS_FILE = ROOT / "assets" / "css" / "site.css"
+JS_FILE = ROOT / "assets" / "js" / "site.js"
+THEORY_PAGE = ROOT / "teoria" / "index.html"
+EXERCISES_PAGE = ROOT / "exercicios" / "index.html"
 
 
 def load_site_data() -> dict:
@@ -231,3 +235,71 @@ def test_theory_topics_are_deep_enough_for_study():
         assert sum(len(section["body"]) for section in topic["sections"]) >= 1200, f"{slug} is too shallow"
         for term in terms:
             assert term.lower() in theory_text.lower(), f"{slug} missing term: {term}"
+
+
+def test_sidebar_is_collapsible_on_theory_and_exercises_pages():
+    for page in (THEORY_PAGE, EXERCISES_PAGE):
+        text = page.read_text(encoding="utf-8")
+        assert "data-sidebar-toggle" in text
+        assert "aria-expanded" in text
+        assert "aria-controls" in text
+
+    css = CSS_FILE.read_text(encoding="utf-8")
+    js = JS_FILE.read_text(encoding="utf-8")
+
+    assert ".rail-toggle" in css
+    assert ".app-layout.rail-collapsed" in css
+    assert ".rail.is-collapsed" in css
+    assert "initRailToggle" in js
+    assert "rail-collapsed" in js
+
+
+def test_graphs_fit_available_width_without_horizontal_drag():
+    css = CSS_FILE.read_text(encoding="utf-8")
+    js = JS_FILE.read_text(encoding="utf-8")
+
+    assert "min-width:680px" not in css.replace(" ", "")
+    graph_box_rule = re.search(r"\.graph-box\s*\{(?P<body>[^}]*)\}", css, re.S)
+    graph_svg_rule = re.search(r"\.graph-box svg\s*\{(?P<body>[^}]*)\}", css, re.S)
+
+    assert graph_box_rule, "graph-box rule is required"
+    assert graph_svg_rule, "graph-box svg rule is required"
+    assert "overflow:hidden" in graph_box_rule.group("body").replace(" ", "")
+    assert "max-width:100%" in graph_svg_rule.group("body").replace(" ", "")
+    assert "height:auto" in graph_svg_rule.group("body").replace(" ", "")
+    assert "fitGraphViewBox" in js
+    assert "preserveAspectRatio" in js
+
+
+def test_exercise_graphs_are_rendered_inside_solution_area():
+    js = JS_FILE.read_text(encoding="utf-8")
+
+    assert "solution-graph" in js
+    assert "body.append(prompt, renderExerciseGraph" not in js
+    assert "solution.append(renderExerciseGraph" in js
+
+
+def test_kruskal_exercise_keeps_matrix_in_prompt_and_graph_steps_in_solution():
+    data = load_site_data()
+    exercise = next(item for item in data["exercises"] if item["id"] == "final-q3-rede-som")
+
+    assert exercise["matrix"]["headers"] == ["1", "2", "3", "4", "5", "6"]
+    assert exercise["graph"]["edges"], "Kruskal exercise needs a graph for the solution"
+    steps = exercise.get("solutionSteps", [])
+    assert len(steps) >= 6
+    assert any("rejeita" in step["text"].lower() for step in steps)
+    assert any(step.get("highlightEdges") for step in steps)
+
+
+def test_animations_have_detailed_step_by_step_explanations():
+    data = load_site_data()
+
+    for animation_id, animation in data["animations"].items():
+        steps = animation.get("steps", [])
+        assert len(steps) >= 5, f"{animation_id} needs more visual steps"
+        for step in steps:
+            assert len(step.get("text", "")) >= 70, f"{animation_id} has a shallow step"
+        assert any(
+            step.get("highlightEdges") or step.get("highlightVertices") or step.get("mutedVertices")
+            for step in steps
+        ), f"{animation_id} needs at least one highlighted visual state"
