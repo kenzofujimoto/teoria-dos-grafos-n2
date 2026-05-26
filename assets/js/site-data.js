@@ -383,7 +383,9 @@ window.GRAPH_SITE_DATA = {
         }
       ],
       "animations": [
-        "matchingAndCover"
+        "matchingAndCover",
+        "alternatingPath",
+        "augmentingPath"
       ]
     },
     {
@@ -2495,6 +2497,355 @@ window.GRAPH_SITE_DATA = {
           ]
         }
       ]
+    },
+    "alternatingPath": {
+      "title": "Caminho alternante em emparelhamentos",
+      "graph": {
+        "vertices": [
+          {
+            "id": "L1",
+            "x": 130,
+            "y": 90
+          },
+          {
+            "id": "L2",
+            "x": 130,
+            "y": 190
+          },
+          {
+            "id": "L3",
+            "x": 130,
+            "y": 290
+          },
+          {
+            "id": "R1",
+            "x": 520,
+            "y": 90
+          },
+          {
+            "id": "R2",
+            "x": 520,
+            "y": 190
+          },
+          {
+            "id": "R3",
+            "x": 520,
+            "y": 290
+          }
+        ],
+        "edges": [
+          {
+            "id": "m1",
+            "u": "L1",
+            "v": "R1"
+          },
+          {
+            "id": "m2",
+            "u": "L2",
+            "v": "R2"
+          },
+          {
+            "id": "x1",
+            "u": "R2",
+            "v": "L1"
+          },
+          {
+            "id": "x2",
+            "u": "R3",
+            "v": "L2"
+          },
+          {
+            "id": "x3",
+            "u": "L3",
+            "v": "R1"
+          }
+        ]
+      },
+      "matching": [
+        "m1",
+        "m2"
+      ],
+      "path": [
+        "x2",
+        "m2",
+        "x1",
+        "m1"
+      ],
+      "steps": [
+        {
+          "title": "Emparelhamento atual M",
+          "text": "As arestas L1-R1 e L2-R2 pertencem ao emparelhamento M. Como não compartilham vértices, formam uma escolha válida de pares.",
+          "highlightEdges": [
+            "m1",
+            "m2"
+          ],
+          "highlightVertices": [
+            "L1",
+            "R1",
+            "L2",
+            "R2"
+          ]
+        },
+        {
+          "title": "Comece por aresta fora de M",
+          "text": "O caminho alternante começa em R3-L2, uma aresta que não está no emparelhamento. A primeira marcação é fora de M.",
+          "highlightEdges": [
+            "x2"
+          ],
+          "highlightVertices": [
+            "R3",
+            "L2"
+          ]
+        },
+        {
+          "title": "Agora use uma aresta de M",
+          "text": "Saindo de L2, a próxima aresta do caminho é L2-R2, que está em M. A sequência alterna fora de M, dentro de M.",
+          "highlightEdges": [
+            "x2",
+            "m2"
+          ],
+          "highlightVertices": [
+            "R3",
+            "L2",
+            "R2"
+          ]
+        },
+        {
+          "title": "Volte para fora de M",
+          "text": "De R2 para L1 usamos R2-L1, que não pertence ao emparelhamento. A regra continua: não escolhida, escolhida, não escolhida.",
+          "highlightEdges": [
+            "x2",
+            "m2",
+            "x1"
+          ],
+          "highlightVertices": [
+            "R3",
+            "L2",
+            "R2",
+            "L1"
+          ]
+        },
+        {
+          "title": "Finalize em uma aresta de M",
+          "text": "O trecho L1-R1 fecha o exemplo usando uma aresta emparelhada. O caminho inteiro alterna entre arestas fora e dentro de M.",
+          "highlightEdges": [
+            "x2",
+            "m2",
+            "x1",
+            "m1"
+          ],
+          "highlightVertices": [
+            "R3",
+            "L2",
+            "R2",
+            "L1",
+            "R1"
+          ]
+        },
+        {
+          "title": "Por que não é aumentante",
+          "text": "Esse caminho é alternante, mas termina em R1, que já estava saturado por M. Logo ele não aumenta automaticamente o tamanho do emparelhamento.",
+          "highlightEdges": [
+            "m1",
+            "m2",
+            "x1",
+            "x2"
+          ],
+          "highlightVertices": [
+            "R1",
+            "R3"
+          ]
+        }
+      ]
+    },
+    "augmentingPath": {
+      "title": "Caminho aumentante e inversão de arestas",
+      "graph": {
+        "vertices": [
+          {
+            "id": "L1",
+            "x": 130,
+            "y": 90
+          },
+          {
+            "id": "L2",
+            "x": 130,
+            "y": 190
+          },
+          {
+            "id": "L3",
+            "x": 130,
+            "y": 290
+          },
+          {
+            "id": "R1",
+            "x": 520,
+            "y": 90
+          },
+          {
+            "id": "R2",
+            "x": 520,
+            "y": 190
+          },
+          {
+            "id": "R3",
+            "x": 520,
+            "y": 290
+          }
+        ],
+        "edges": [
+          {
+            "id": "m1",
+            "u": "R1",
+            "v": "L1"
+          },
+          {
+            "id": "m2",
+            "u": "R2",
+            "v": "L2"
+          },
+          {
+            "id": "a",
+            "u": "L3",
+            "v": "R2"
+          },
+          {
+            "id": "b",
+            "u": "L2",
+            "v": "R1"
+          },
+          {
+            "id": "c",
+            "u": "L1",
+            "v": "R3"
+          },
+          {
+            "id": "d",
+            "u": "L3",
+            "v": "R3"
+          }
+        ]
+      },
+      "matching": [
+        "m1",
+        "m2"
+      ],
+      "path": [
+        "a",
+        "m2",
+        "b",
+        "m1",
+        "c"
+      ],
+      "newMatching": [
+        "a",
+        "b",
+        "c"
+      ],
+      "steps": [
+        {
+          "title": "Emparelhamento inicial",
+          "text": "O emparelhamento atual é M={L1-R1, L2-R2}. Os vértices L3 e R3 estão livres, isto é, não são saturados por nenhuma aresta de M.",
+          "highlightEdges": [
+            "m1",
+            "m2"
+          ],
+          "highlightVertices": [
+            "L3",
+            "R3"
+          ]
+        },
+        {
+          "title": "Comece em vértice livre",
+          "text": "Um caminho aumentante precisa começar livre. A primeira aresta L3-R2 está fora de M e leva de L3 para um vértice já saturado.",
+          "highlightEdges": [
+            "a"
+          ],
+          "highlightVertices": [
+            "L3",
+            "R2"
+          ]
+        },
+        {
+          "title": "Alterne pela aresta de M",
+          "text": "Como R2 está saturado por L2-R2, o caminho segue pela aresta emparelhada R2-L2. A alternância fora/dentro de M é preservada.",
+          "highlightEdges": [
+            "a",
+            "m2"
+          ],
+          "highlightVertices": [
+            "L3",
+            "R2",
+            "L2"
+          ]
+        },
+        {
+          "title": "Continue alternando",
+          "text": "Depois usamos L2-R1, fora de M, e R1-L1, dentro de M. O caminho ainda alterna corretamente entre arestas livres e escolhidas.",
+          "highlightEdges": [
+            "a",
+            "m2",
+            "b",
+            "m1"
+          ],
+          "highlightVertices": [
+            "L3",
+            "R2",
+            "L2",
+            "R1",
+            "L1"
+          ]
+        },
+        {
+          "title": "Termine em outro vértice livre",
+          "text": "A última aresta L1-R3 está fora de M e chega ao vértice livre R3. Agora o caminho é aumentante: começa e termina livres.",
+          "highlightEdges": [
+            "a",
+            "m2",
+            "b",
+            "m1",
+            "c"
+          ],
+          "highlightVertices": [
+            "L3",
+            "R3"
+          ]
+        },
+        {
+          "title": "Inverta o status das arestas",
+          "text": "Para aumentar M, removemos as arestas do caminho que estavam em M e adicionamos as que estavam fora. Entram L3-R2, L2-R1 e L1-R3.",
+          "highlightEdges": [
+            "a",
+            "b",
+            "c"
+          ],
+          "highlightVertices": [
+            "L1",
+            "L2",
+            "L3",
+            "R1",
+            "R2",
+            "R3"
+          ]
+        },
+        {
+          "title": "Tamanho aumenta em 1",
+          "text": "Antes havia 2 arestas emparelhadas; depois da inversão há 3. Esse é o Teorema de Berge em ação: caminho aumentante prova que M não era máximo.",
+          "highlightEdges": [
+            "a",
+            "b",
+            "c"
+          ],
+          "highlightVertices": [
+            "L1",
+            "L2",
+            "L3",
+            "R1",
+            "R2",
+            "R3"
+          ]
+        }
+      ]
     }
   },
   "exercises": [
@@ -2871,7 +3222,171 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "Por Kruskal, ordene as arestas: 5,6,7,8,8,9,10,15,20. Inclua sempre que não formar ciclo: c-e(5), a-b(6), d-f(7), d-e(8), b-d(9). Isso conecta todos os 6 vértices com 5 arestas e custo 35. Por Prim, partindo de a, uma sequência possível é a-b(6), b-d(9), d-f(7), d-e(8), e-c(5), também com custo 35."
+      "solution": "Por Kruskal, ordene as arestas: 5,6,7,8,8,9,10,15,20. Inclua sempre que não formar ciclo: c-e(5), a-b(6), d-f(7), d-e(8), b-d(9). Isso conecta todos os 6 vértices com 5 arestas e custo 35. Por Prim, partindo de a, uma sequência possível é a-b(6), b-d(9), d-f(7), d-e(8), e-c(5), também com custo 35.",
+      "matrix": {
+        "headers": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f"
+        ],
+        "rows": [
+          [
+            0,
+            6,
+            "∞",
+            15,
+            "∞",
+            "∞"
+          ],
+          [
+            6,
+            0,
+            20,
+            9,
+            "∞",
+            "∞"
+          ],
+          [
+            "∞",
+            20,
+            0,
+            10,
+            5,
+            "∞"
+          ],
+          [
+            15,
+            9,
+            10,
+            0,
+            8,
+            7
+          ],
+          [
+            "∞",
+            "∞",
+            5,
+            8,
+            0,
+            8
+          ],
+          [
+            "∞",
+            "∞",
+            "∞",
+            7,
+            8,
+            0
+          ]
+        ]
+      },
+      "solutionSteps": [
+        {
+          "title": "Transforme a lista em matriz ponderada",
+          "text": "A matriz do enunciado registra o custo de cada aresta. Valores ∞ indicam ausência de ligação direta; os demais valores entram na ordenação do Kruskal."
+        },
+        {
+          "title": "Escolha c-e(5)",
+          "text": "A menor aresta é c-e com peso 5. Como c e e começam em componentes separados, a aresta é aceita e inicia a árvore parcial.",
+          "highlightEdges": [
+            "e5"
+          ],
+          "highlightVertices": [
+            "c",
+            "e"
+          ]
+        },
+        {
+          "title": "Escolha a-b(6) e d-f(7)",
+          "text": "As próximas arestas aceitas são a-b, peso 6, e d-f, peso 7. Cada uma une dois componentes diferentes e não cria ciclo.",
+          "highlightEdges": [
+            "e5",
+            "e0",
+            "e7"
+          ],
+          "highlightVertices": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f"
+          ]
+        },
+        {
+          "title": "Escolha d-e(8)",
+          "text": "A aresta d-e, peso 8, conecta o bloco d-f ao bloco c-e. A árvore parcial cresce mantendo a propriedade de não ter ciclos.",
+          "highlightEdges": [
+            "e5",
+            "e0",
+            "e7",
+            "e6"
+          ],
+          "highlightVertices": [
+            "c",
+            "d",
+            "e",
+            "f"
+          ]
+        },
+        {
+          "title": "Rejeite e-f(8)",
+          "text": "A outra aresta de peso 8, e-f, é rejeitada porque e e f já estão conectados por e-d-f. Adicioná-la fecharia ciclo dentro do mesmo componente.",
+          "highlightEdges": [
+            "e5",
+            "e0",
+            "e7",
+            "e6",
+            "e8"
+          ],
+          "highlightVertices": [
+            "d",
+            "e",
+            "f"
+          ]
+        },
+        {
+          "title": "Escolha b-d(9) e finalize",
+          "text": "A aresta b-d, peso 9, une os dois componentes restantes. Com 6 vértices e 5 arestas aceitas, a árvore geradora mínima está completa.",
+          "highlightEdges": [
+            "e5",
+            "e0",
+            "e7",
+            "e6",
+            "e3"
+          ],
+          "highlightVertices": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f"
+          ]
+        },
+        {
+          "title": "Custo total",
+          "text": "O custo final é 5+6+7+8+9=35. Arestas posteriores como c-d, a-d e b-c são ignoradas porque já existe uma árvore com n-1 arestas.",
+          "highlightEdges": [
+            "e5",
+            "e0",
+            "e7",
+            "e6",
+            "e3"
+          ],
+          "highlightVertices": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f"
+          ]
+        }
+      ]
     },
     {
       "id": "mst-predios",
@@ -2960,7 +3475,248 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "Ordenando os pesos, Kruskal escolhe D-E(6), G-H(11), A-B(12), D-G(15), H-I(18), C-F(20), B-C(27) e A-D(35), evitando ciclos e conectando todos os prédios. A árvore tem 8 arestas para 9 vértices. O custo total é 144. Prim chega ao mesmo custo, embora a ordem dependa do vértice inicial."
+      "solution": "Ordenando os pesos, Kruskal escolhe D-E(6), G-H(11), A-B(12), D-G(15), H-I(18), C-F(20), B-C(27) e A-D(35), evitando ciclos e conectando todos os prédios. A árvore tem 8 arestas para 9 vértices. O custo total é 144. Prim chega ao mesmo custo, embora a ordem dependa do vértice inicial.",
+      "matrix": {
+        "headers": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I"
+        ],
+        "rows": [
+          [
+            0,
+            12,
+            "∞",
+            35,
+            "∞",
+            "∞",
+            "∞",
+            "∞",
+            "∞"
+          ],
+          [
+            12,
+            0,
+            27,
+            "∞",
+            42,
+            "∞",
+            "∞",
+            "∞",
+            "∞"
+          ],
+          [
+            "∞",
+            27,
+            0,
+            "∞",
+            "∞",
+            20,
+            "∞",
+            "∞",
+            "∞"
+          ],
+          [
+            35,
+            "∞",
+            "∞",
+            0,
+            6,
+            "∞",
+            15,
+            "∞",
+            "∞"
+          ],
+          [
+            "∞",
+            42,
+            "∞",
+            6,
+            0,
+            51,
+            "∞",
+            44,
+            "∞"
+          ],
+          [
+            "∞",
+            "∞",
+            20,
+            "∞",
+            51,
+            0,
+            "∞",
+            "∞",
+            39
+          ],
+          [
+            "∞",
+            "∞",
+            "∞",
+            15,
+            "∞",
+            "∞",
+            0,
+            11,
+            "∞"
+          ],
+          [
+            "∞",
+            "∞",
+            "∞",
+            "∞",
+            44,
+            "∞",
+            11,
+            0,
+            18
+          ],
+          [
+            "∞",
+            "∞",
+            "∞",
+            "∞",
+            "∞",
+            39,
+            "∞",
+            18,
+            0
+          ]
+        ]
+      },
+      "solutionSteps": [
+        {
+          "title": "Leia a matriz de distâncias",
+          "text": "Cada prédio vira vértice e cada distância finita vira uma aresta ponderada. O objetivo é conectar todos os prédios com custo total mínimo."
+        },
+        {
+          "title": "Escolha D-E(6), G-H(11) e A-B(12)",
+          "text": "Kruskal aceita as três menores arestas porque elas conectam componentes separados. Até aqui, nenhum ciclo pode aparecer.",
+          "highlightEdges": [
+            "e5",
+            "e10",
+            "e0"
+          ],
+          "highlightVertices": [
+            "A",
+            "B",
+            "D",
+            "E",
+            "G",
+            "H"
+          ]
+        },
+        {
+          "title": "Una o bloco central por D-G(15)",
+          "text": "A aresta D-G, peso 15, liga o componente D-E ao componente G-H. Ela é segura porque cruza componentes diferentes.",
+          "highlightEdges": [
+            "e5",
+            "e10",
+            "e0",
+            "e7"
+          ],
+          "highlightVertices": [
+            "D",
+            "E",
+            "G",
+            "H"
+          ]
+        },
+        {
+          "title": "Expanda com H-I(18) e C-F(20)",
+          "text": "H-I adiciona o prédio I ao bloco central e C-F cria um novo bloco para C e F. Ambas são aceitas por não fecharem ciclo.",
+          "highlightEdges": [
+            "e5",
+            "e10",
+            "e0",
+            "e7",
+            "e11",
+            "e4"
+          ],
+          "highlightVertices": [
+            "C",
+            "F",
+            "H",
+            "I"
+          ]
+        },
+        {
+          "title": "Escolha B-C(27)",
+          "text": "A aresta B-C conecta o bloco A-B ao bloco C-F. O componente da esquerda agora contém A, B, C e F.",
+          "highlightEdges": [
+            "e5",
+            "e10",
+            "e0",
+            "e7",
+            "e11",
+            "e4",
+            "e2"
+          ],
+          "highlightVertices": [
+            "A",
+            "B",
+            "C",
+            "F"
+          ]
+        },
+        {
+          "title": "Escolha A-D(35) e conecte tudo",
+          "text": "A-D une o bloco A-B-C-F ao bloco D-E-G-H-I. Com 9 vértices e 8 arestas aceitas, a árvore geradora está completa.",
+          "highlightEdges": [
+            "e5",
+            "e10",
+            "e0",
+            "e7",
+            "e11",
+            "e4",
+            "e2",
+            "e1"
+          ],
+          "highlightVertices": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I"
+          ]
+        },
+        {
+          "title": "Rejeite o restante",
+          "text": "Arestas posteriores, como F-I(39), B-E(42), E-H(44) e E-F(51), são rejeitadas/ignoradas porque fechariam ciclos. O custo é 144.",
+          "highlightEdges": [
+            "e5",
+            "e10",
+            "e0",
+            "e7",
+            "e11",
+            "e4",
+            "e2",
+            "e1",
+            "e9"
+          ],
+          "highlightVertices": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I"
+          ]
+        }
+      ]
     },
     {
       "id": "coloracao-hospital",

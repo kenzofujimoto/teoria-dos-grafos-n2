@@ -8,6 +8,7 @@
   };
 
   const $ = (selector, root=document) => root.querySelector(selector);
+  let railController = null;
   const el = (tag, attrs={}, children=[]) => {
     const node = document.createElement(tag);
     Object.entries(attrs).forEach(([key,value]) => {
@@ -142,6 +143,7 @@
     const rail = document.getElementById(toggle.getAttribute('aria-controls'));
     if(!rail) return;
     const storageKey = `${document.body.dataset.view || 'site'}-rail-collapsed`;
+    const isMobileRail = () => window.matchMedia('(max-width: 920px)').matches;
     const setCollapsed = collapsed => {
       layout.classList.toggle('rail-collapsed', collapsed);
       rail.classList.toggle('is-collapsed', collapsed);
@@ -149,10 +151,16 @@
       toggle.setAttribute('title', collapsed ? 'Expandir menu' : 'Recolher menu');
       try { localStorage.setItem(storageKey, collapsed ? '1' : '0'); } catch(error) { console.warn('Rail preference could not be saved.', error); }
     };
-    let initial = false;
-    try { initial = localStorage.getItem(storageKey) === '1'; } catch(error) { console.warn('Rail preference could not be read.', error); }
+    let stored = null;
+    try { stored = localStorage.getItem(storageKey); } catch(error) { console.warn('Rail preference could not be read.', error); }
+    const initial = stored === null ? isMobileRail() : stored === '1';
     setCollapsed(initial);
     toggle.addEventListener('click', () => setCollapsed(!rail.classList.contains('is-collapsed')));
+    railController = {setCollapsed, isMobileRail};
+  }
+
+  function collapseRailOnMobile(){
+    if(railController && railController.isMobileRail()) railController.setCollapsed(true);
   }
 
   function renderAnimation(animationId){
@@ -237,7 +245,10 @@
     tabs.innerHTML = '';
     data.theoryTopics.forEach(topic => {
       const button = el('button', {type:'button', 'data-slug':topic.slug}, [topic.title]);
-      button.addEventListener('click', () => select(topic.slug));
+      button.addEventListener('click', () => {
+        select(topic.slug);
+        collapseRailOnMobile();
+      });
       tabs.append(button);
     });
     select((location.hash || '').replace('#','') || data.theoryTopics[0].slug);
@@ -303,14 +314,37 @@
 
   function renderExercises(){
     const filters = $('#exerciseFilters');
+    const quickLinks = $('#exerciseQuickLinks');
     const list = $('#exerciseList');
     const topicsWithExercises = data.theoryTopics.filter(topic => data.exercises.some(exercise => exercise.topicSlug === topic.slug));
-    const render = slug => {
+    let currentSlug = 'todos';
+    const scrollToExercise = exerciseId => {
+      if(!exerciseId) return;
+      requestAnimationFrame(() => {
+        const card = $(`[data-exercise-id="${CSS.escape(exerciseId)}"]`, list);
+        if(card) card.scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    };
+    const render = (slug, targetExerciseId='') => {
+      currentSlug = slug;
       [...filters.children].forEach(button => button.classList.toggle('active', button.dataset.slug === slug));
       const exercises = slug === 'todos' ? data.exercises : data.exercises.filter(exercise => exercise.topicSlug === slug);
       list.innerHTML = '';
+      if(quickLinks){
+        quickLinks.innerHTML = '';
+        exercises.forEach(exercise => {
+          const jump = el('button', {type:'button', 'data-exercise-link':exercise.id}, [exercise.title]);
+          jump.classList.toggle('active', exercise.id === targetExerciseId);
+          jump.addEventListener('click', () => {
+            location.hash = exercise.id;
+            selectExerciseFromHash();
+            collapseRailOnMobile();
+          });
+          quickLinks.append(jump);
+        });
+      }
       exercises.forEach(exercise => {
-        const card = el('article', {class:'exercise-card'});
+        const card = el('article', {class:'exercise-card', 'data-exercise-id':exercise.id});
         const head = el('div', {class:'exercise-head'});
         head.append(el('div', {html:`<span class="source">${exercise.sourcePdf}${exercise.page ? `, p. ${exercise.page}` : ''}</span><h3>${exercise.title}</h3><p>${slugLabel(exercise.topicSlug)}</p>`}));
         head.append(el('span', {class:'tag'}, [exercise.id]));
@@ -330,17 +364,50 @@
         card.append(head, body, solution);
         list.append(card);
       });
+      scrollToExercise(targetExerciseId);
+    };
+    const selectExerciseFromHash = () => {
+      const hash = decodeURIComponent((location.hash || '').replace('#',''));
+      if(!hash){
+        render(currentSlug || 'todos');
+        return false;
+      }
+      const exercise = data.exercises.find(item => item.id === hash);
+      if(exercise){
+        render(exercise.topicSlug, exercise.id);
+        return true;
+      }
+      const topic = data.theoryTopics.find(item => item.slug === hash);
+      if(topic && data.exercises.some(exerciseItem => exerciseItem.topicSlug === topic.slug)){
+        render(topic.slug);
+        return true;
+      }
+      if(hash === 'todos'){
+        render('todos');
+        return true;
+      }
+      render('todos');
+      return false;
     };
     filters.innerHTML = '';
     const all = el('button', {type:'button', 'data-slug':'todos'}, ['Todos']);
-    all.addEventListener('click', () => render('todos'));
+    all.addEventListener('click', () => {
+      location.hash = 'todos';
+      render('todos');
+      collapseRailOnMobile();
+    });
     filters.append(all);
     topicsWithExercises.forEach(topic => {
       const button = el('button', {type:'button', 'data-slug':topic.slug}, [topic.title]);
-      button.addEventListener('click', () => render(topic.slug));
+      button.addEventListener('click', () => {
+        location.hash = topic.slug;
+        render(topic.slug);
+        collapseRailOnMobile();
+      });
       filters.append(button);
     });
-    render('todos');
+    if(!selectExerciseFromHash()) render('todos');
+    window.addEventListener('hashchange', selectExerciseFromHash);
   }
 
   const view = document.body.dataset.view;

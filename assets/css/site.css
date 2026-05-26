@@ -55,7 +55,7 @@ h3{font-size:1.16rem;line-height:1.25}
 }
 .brand{font-weight:850;font-size:1.05rem}
 .main-nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.main-nav a,.button,.tab-list button,.step-controls button{
+.main-nav a,.button,.tab-list button,.step-controls button,.exercise-jump-list button{
   border:1px solid rgba(255,255,255,.1);
   background:rgba(255,255,255,.045);
   color:#f8fbff;
@@ -64,7 +64,7 @@ h3{font-size:1.16rem;line-height:1.25}
   font:700 .9rem/1 Inter,system-ui,sans-serif;
   cursor:pointer;
 }
-.main-nav a:hover,.main-nav a.active,.button.primary,.tab-list button.active,.step-controls button:hover{
+.main-nav a:hover,.main-nav a.active,.button.primary,.tab-list button.active,.step-controls button:hover,.exercise-jump-list button:hover,.exercise-jump-list button.active{
   background:var(--green);
   border-color:var(--green);
   color:#07110d;
@@ -244,6 +244,16 @@ main{width:min(1180px,calc(100% - 36px));margin:0 auto}
 .step-controls span{flex:1;text-align:center;color:var(--muted);font-size:.9rem}
 .step-text{margin-top:10px;border-left:3px solid var(--orange);padding-left:10px;color:#dce7f7}
 .exercise-list{display:grid;gap:16px}
+.exercise-jump-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:0 0 16px;
+}
+.exercise-jump-list button{
+  font-size:.82rem;
+  line-height:1.2;
+}
 .exercise-card{padding:0;overflow:hidden}
 .exercise-head{display:flex;justify-content:space-between;gap:12px;align-items:start;padding:16px;border-bottom:1px solid rgba(255,255,255,.08)}
 .exercise-body{display:block;padding:16px}
