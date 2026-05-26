@@ -96,3 +96,138 @@ def test_final_image_exercises_include_complete_statements_and_matrices():
         assert len(matrix["headers"]) == size
         assert len(matrix["rows"]) == size
         assert all(len(row) == size for row in matrix["rows"])
+
+
+def test_theory_topics_are_deep_enough_for_study():
+    data = load_site_data()
+    topics = {topic["slug"]: topic for topic in data["theoryTopics"]}
+
+    required_terms = {
+        "conceitos-basicos-conectividade": [
+            "dual direcional",
+            "grafo complementar",
+            "k-regular",
+            "subconjunto de articulação",
+            "SCAM",
+            "h-conexo",
+            "percursos internamente disjuntos",
+        ],
+        "grafos-planares-k-partidos": [
+            "região externa",
+            "n - m + r = 2",
+            "k-partido",
+            "bipartido",
+            "conjunto independente",
+            "ciclo ímpar",
+        ],
+        "percursos-eulerianos-hamiltonianos": [
+            "trilha",
+            "circuito euleriano",
+            "grafo euleriano",
+            "semi-euleriano",
+            "caminho hamiltoniano",
+            "ciclo hamiltoniano",
+            "Ore",
+            "Dirac",
+            "PCV",
+        ],
+        "arvore-geradora-fundamentos": [
+            "subgrafo gerador",
+            "n-1",
+            "árvore parcial",
+            "propriedade do corte",
+            "custo total",
+        ],
+        "kruskal-prim": [
+            "ordenação",
+            "componentes",
+            "rejeita",
+            "T",
+            "V-T",
+            "fronteira",
+        ],
+        "coloracao-vertices": [
+            "k-coloração",
+            "número cromático",
+            "partição cromática",
+            "clique",
+            "Teorema das 4 cores",
+            "coloração sequencial",
+            "coloração por classe",
+        ],
+        "coloracao-arestas": [
+            "índice cromático",
+            "Δ(G)",
+            "Teorema de Vizing",
+            "classe 1",
+            "classe 2",
+            "emparelhamento",
+            "bipartido",
+        ],
+        "emparelhamentos-1": [
+            "maximal",
+            "máximo",
+            "perfeito",
+            "satura",
+            "vértice livre",
+            "α'",
+        ],
+        "emparelhamentos-2": [
+            "caminho alternante",
+            "caminho aumentante",
+            "diferença simétrica",
+            "Teorema de Berge",
+            "Teorema de Hall",
+            "N(S)",
+        ],
+        "coberturas": [
+            "cobertura mínima",
+            "|M| ≤ |K|",
+            "|M| = |K|",
+            "König",
+            "emparelhamento máximo",
+        ],
+        "fluxos-1": [
+            "fonte",
+            "sumidouro",
+            "conservação",
+            "capacidade",
+            "corte",
+            "capacidade do corte",
+        ],
+        "fluxos-2": [
+            "Ford-Fulkerson",
+            "grafo de folgas",
+            "residual",
+            "folga",
+            "caminho aumentante",
+            "fluxo máximo-corte mínimo",
+        ],
+        "fluxos-3": [
+            "custo unitário",
+            "custo total",
+            "arco reverso",
+            "custo negativo",
+            "menor custo",
+            "Bellman-Ford",
+        ],
+        "fluxo-custo-minimo": [
+            "capacidade",
+            "custo",
+            "gargalo",
+            "residual",
+            "arco reverso",
+            "custo negativo",
+        ],
+    }
+
+    for slug, terms in required_terms.items():
+        topic = topics[slug]
+        theory_text = " ".join(
+            [topic["title"], topic["summary"]]
+            + [f"{section['heading']} {section['body']}" for section in topic["sections"]]
+        )
+        assert len(topic["sections"]) >= 6, f"{slug} needs more sections"
+        assert sum(len(section["body"]) for section in topic["sections"]) >= 1200, f"{slug} is too shallow"
+        for term in terms:
+            assert term.lower() in theory_text.lower(), f"{slug} missing term: {term}"
