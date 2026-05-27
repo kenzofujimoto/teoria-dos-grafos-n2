@@ -271,11 +271,18 @@ def test_graphs_fit_available_width_without_horizontal_drag():
     assert "preserveAspectRatio" in js
 
 
-def test_exercise_graphs_are_rendered_inside_solution_area():
+def test_exercise_graphs_are_rendered_in_prompt_when_no_matrix_and_in_solution_area():
     js = JS_FILE.read_text(encoding="utf-8")
+    data = load_site_data()
+    graph_only_exercises = [
+        exercise for exercise in data["exercises"]
+        if exercise.get("graph") and not exercise.get("matrix")
+    ]
 
     assert "solution-graph" in js
-    assert "body.append(prompt, renderExerciseGraph" not in js
+    assert graph_only_exercises, "At least one exercise must rely on a provided graph instead of a matrix"
+    assert "renderStaticExerciseGraph(exercise.graph, 'Grafo fornecido')" in js
+    assert "if(!exercise.matrix && exercise.graph)" in js
     assert "solution.append(renderExerciseGraph" in js
 
 
