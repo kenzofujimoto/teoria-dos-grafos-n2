@@ -398,6 +398,58 @@ def test_matching_exercises_highlight_given_matching_in_prompt_and_solution():
     assert any(step.get("edgeColors") for step in steps), "Matching steps need stable semantic colors"
 
 
+def test_euler_hamilton_exercises_explain_path_cycle_trail_circuit_and_odd_degrees():
+    data = load_site_data()
+    exercises = {exercise["id"]: exercise for exercise in data["exercises"]}
+    pcv = exercises["percursos-pcv"]
+    euler_list = exercises["caminho-euleriano-lista"]
+
+    pcv_text = " ".join(
+        [pcv["solution"]]
+        + [step["title"] + " " + step["text"] for step in pcv.get("solutionSteps", [])]
+    ).lower()
+    for term in [
+        "caminho hamiltoniano",
+        "ciclo hamiltoniano",
+        "percurso euleriano",
+        "circuito euleriano",
+        "graus pares",
+        "vértices ímpares",
+        "vizinho mais próximo",
+    ]:
+        assert term in pcv_text
+
+    assert pcv["hamiltonianPath"] == ["1", "2", "3", "5", "6", "7", "4", "9", "8"]
+    assert pcv["hamiltonianCycle"] == ["1", "2", "3", "5", "6", "7", "4", "9", "8", "1"]
+    assert pcv["eulerianCircuit"], "Exercise needs an explicit Eulerian circuit"
+    assert pcv["nearestNeighborRun"]["path"] == ["1", "8", "2", "3", "4", "7", "6", "5"]
+    assert pcv["nearestNeighborRun"]["length"] == 34
+    assert pcv["nearestNeighborRun"]["deadEnd"] == "5"
+
+    steps = pcv.get("solutionSteps", [])
+    assert len(steps) >= 10
+    assert any("grau" in step["title"].lower() and step.get("highlightVertices") is not None for step in steps)
+    assert any("hamiltoniano" in step["title"].lower() and step.get("highlightEdges") for step in steps)
+    assert any("euleriano" in step["title"].lower() and step.get("highlightEdges") for step in steps)
+    assert any("pcv" in step["title"].lower() and step.get("edgeLabels") for step in steps)
+
+    list_text = " ".join(
+        [euler_list["solution"]]
+        + [step["title"] + " " + step["text"] for step in euler_list.get("solutionSteps", [])]
+    ).lower()
+    for term in [
+        "0 vértices ímpares",
+        "exatamente 2 vértices ímpares",
+        "4 ou mais vértices ímpares",
+        "semi-euleriano",
+        "não existe caminho euleriano",
+    ]:
+        assert term in list_text
+    assert euler_list["degreeTable"] == {"1": 3, "2": 2, "3": 3, "4": 2}
+    assert euler_list["oddVertices"] == ["1", "3"]
+    assert len(euler_list.get("solutionSteps", [])) >= 6
+
+
 def test_flow_animations_show_bottlenecks_and_updated_residual_capacities():
     data = load_site_data()
 

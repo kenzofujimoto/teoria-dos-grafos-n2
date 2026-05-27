@@ -103,6 +103,57 @@ def test_hamiltonian_animation_visits_vertices_once_before_returning():
     assert len(cycle[:-1]) == len(set(cycle[:-1])), "Hamiltonian cycle repeats a vertex"
 
 
+def test_pcv_exercise_walkthrough_paths_match_the_graph():
+    data = load_site_data()
+    exercise = next(item for item in data["exercises"] if item["id"] == "percursos-pcv")
+    edges = {edge["id"]: edge for edge in graph_edges(exercise["graph"])}
+    vertices = set(graph_vertices(exercise["graph"]))
+
+    degrees = {vertex: 0 for vertex in vertices}
+    for edge in edges.values():
+        degrees[str(edge["u"])] += 1
+        degrees[str(edge["v"])] += 1
+    assert degrees == exercise["degreeTable"]
+    assert exercise["oddVertices"] == []
+
+    def assert_vertex_walk_uses_edges(vertex_walk: list[str]):
+        used_edges = []
+        for left, right in zip(vertex_walk, vertex_walk[1:]):
+            candidates = [
+                edge_id for edge_id, edge in edges.items()
+                if {str(edge["u"]), str(edge["v"])} == {str(left), str(right)}
+            ]
+            assert candidates, f"Missing edge {left}-{right}"
+            used_edges.append(candidates[0])
+        return used_edges
+
+    hamiltonian_path = [str(vertex) for vertex in exercise["hamiltonianPath"]]
+    hamiltonian_cycle = [str(vertex) for vertex in exercise["hamiltonianCycle"]]
+    assert set(hamiltonian_path) == vertices
+    assert len(hamiltonian_path) == len(vertices)
+    assert len(hamiltonian_path) == len(set(hamiltonian_path))
+    assert hamiltonian_cycle[0] == hamiltonian_cycle[-1]
+    assert set(hamiltonian_cycle[:-1]) == vertices
+    assert_vertex_walk_uses_edges(hamiltonian_cycle)
+
+    circuit = [str(edge_id) for edge_id in exercise["eulerianCircuit"]]
+    assert set(circuit) == set(edges)
+    assert len(circuit) == len(set(circuit))
+    start, end = assert_path_is_connected(edges, circuit)
+    assert start == end
+
+    weighted_edges = {
+        frozenset((str(edge["u"]), str(edge["v"]))): edge["weight"]
+        for edge in graph_edges(exercise["graph"])
+    }
+    nn_run = exercise["nearestNeighborRun"]
+    nn_path = [str(vertex) for vertex in nn_run["path"]]
+    nn_length = sum(weighted_edges[frozenset((left, right))] for left, right in zip(nn_path, nn_path[1:]))
+    assert nn_length == nn_run["length"]
+    assert set(nn_run["unvisited"]) == vertices - set(nn_path)
+    assert nn_run["deadEnd"] == nn_path[-1]
+
+
 def test_mst_animation_is_tree_with_expected_cost():
     data = load_site_data()
     animation = data["animations"]["kruskalMst"]
