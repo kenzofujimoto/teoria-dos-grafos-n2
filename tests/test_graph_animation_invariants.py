@@ -18,6 +18,20 @@ def edge_key(edge: dict) -> tuple[str, str]:
     return tuple(sorted((str(edge["u"]), str(edge["v"]))))
 
 
+def graph_edges(graph: dict) -> list[dict]:
+    normalized = []
+    for index, edge in enumerate(graph["edges"]):
+        if isinstance(edge, list):
+            normalized.append({"id": f"e{index}", "u": str(edge[0]), "v": str(edge[1])})
+        else:
+            normalized.append({"id": str(edge["id"]), "u": str(edge["u"]), "v": str(edge["v"])})
+    return normalized
+
+
+def graph_vertices(graph: dict) -> list[str]:
+    return [str(vertex["id"] if isinstance(vertex, dict) else vertex) for vertex in graph["vertices"]]
+
+
 def assert_path_is_connected(edges: dict, path: list[str]) -> tuple[str, str]:
     assert path, "Path must be explicitly defined"
     current = str(edges[path[0]]["u"])
@@ -124,6 +138,41 @@ def test_colorings_match_graph_constraints():
             incident_colors.setdefault(endpoint, set())
             assert color not in incident_colors[endpoint]
             incident_colors[endpoint].add(color)
+
+
+def test_coloring_exercise_solution_colors_are_valid():
+    data = load_site_data()
+    exercises = {exercise["id"]: exercise for exercise in data["exercises"]}
+
+    vertex_coloring_ids = [
+        "coloracao-hospital",
+        "coloracao-produtos-quimicos",
+        "final-q1-centros-treinamento",
+    ]
+    edge_coloring_ids = [
+        "coloracao-arestas-vizing",
+        "final-q4-supercopa-jogos",
+    ]
+
+    for exercise_id in vertex_coloring_ids:
+        exercise = exercises[exercise_id]
+        colors = exercise.get("solutionColors", {}).get("vertices", {})
+        assert set(colors) == set(graph_vertices(exercise["graph"])), f"{exercise_id} must color every vertex"
+        for edge in graph_edges(exercise["graph"]):
+            assert colors[str(edge["u"])] != colors[str(edge["v"])], f"{exercise_id} repeats a vertex color on {edge['id']}"
+
+    for exercise_id in edge_coloring_ids:
+        exercise = exercises[exercise_id]
+        edges = graph_edges(exercise["graph"])
+        colors = exercise.get("solutionColors", {}).get("edges", {})
+        assert set(colors) == {edge["id"] for edge in edges}, f"{exercise_id} must color every edge"
+        incident_colors: dict[str, set[str]] = {}
+        for edge in edges:
+            color = colors[edge["id"]]
+            for endpoint in (edge["u"], edge["v"]):
+                incident_colors.setdefault(endpoint, set())
+                assert color not in incident_colors[endpoint], f"{exercise_id} repeats an edge color at {endpoint}"
+                incident_colors[endpoint].add(color)
 
 
 def test_matching_and_cover_are_valid():

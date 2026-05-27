@@ -374,6 +374,9 @@ def test_edge_coloring_keeps_original_matching_colors_while_highlighting_steps()
     assert all(step.get("highlightEdges") for step in animation["steps"][1:5])
     assert "const stroke = chosen ? '#f5a524'" not in js
     assert "edge-highlight-halo" in js
+    assert "solutionColors || {}" in js
+    assert "vertexColors: colorOptions.vertices || {}" in js
+    assert "edgeColors: colorOptions.edges || {}" in js
 
 
 def test_flow_animations_show_bottlenecks_and_updated_residual_capacities():
