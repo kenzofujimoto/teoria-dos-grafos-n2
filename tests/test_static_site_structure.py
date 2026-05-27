@@ -392,12 +392,25 @@ def test_flow_animations_show_bottlenecks_and_updated_residual_capacities():
 
 def test_exercise_filters_support_direct_hash_and_mobile_auto_collapse():
     js = JS_FILE.read_text(encoding="utf-8")
+    exercises_html = EXERCISES_PAGE.read_text(encoding="utf-8")
 
     assert "selectExerciseFromHash" in js
     assert "data-exercise-id" in js
     assert "scrollIntoView" in js
     assert "collapseRailOnMobile" in js
     assert "matchMedia('(max-width: 920px)')" in js
+    assert "exerciseQuickLinks" not in exercises_html
+    assert "data-exercise-link" not in js
+
+
+def test_exercise_solutions_are_hidden_until_user_requests_them():
+    js = JS_FILE.read_text(encoding="utf-8")
+
+    assert "Mostrar resolução" in js
+    assert "Ocultar resolução" in js
+    assert "data-solution-toggle" in js
+    assert "aria-expanded" in js
+    assert "solution.hidden = true" in js
 
 
 def test_animations_have_detailed_step_by_step_explanations():
