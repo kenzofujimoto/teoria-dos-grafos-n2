@@ -106,6 +106,34 @@ def test_hamiltonian_animation_visits_vertices_once_before_returning():
     assert len(cycle[:-1]) == len(set(cycle[:-1])), "Hamiltonian cycle repeats a vertex"
 
 
+def test_planarity_exercise_counts_match_each_drawn_graph():
+    data = load_site_data()
+    exercise = next(item for item in data["exercises"] if item["id"] == "planaridade-euler")
+    prompt_graphs = {item["key"]: item["graph"] for item in exercise["promptGraphs"]}
+
+    assert set(prompt_graphs) == {"I", "II", "III", "IV"}
+    for key, result in exercise["planarityResults"].items():
+        graph = prompt_graphs[key]
+        vertices = graph_vertices(graph)
+        edges = graph_edges(graph)
+        assert result["n"] == len(vertices)
+        assert result["m"] == len(edges)
+
+        if result["planar"]:
+            assert result["r"] == 2 - result["n"] + result["m"]
+        else:
+            assert "r" not in result
+
+    graph_i_edges = {edge_key(edge) for edge in graph_edges(prompt_graphs["I"])}
+    graph_i_vertices = graph_vertices(prompt_graphs["I"])
+    expected_k5_edges = {
+        tuple(sorted((left, right)))
+        for index, left in enumerate(graph_i_vertices)
+        for right in graph_i_vertices[index + 1:]
+    }
+    assert graph_i_edges == expected_k5_edges
+
+
 def test_pcv_exercise_walkthrough_paths_match_the_graph():
     data = load_site_data()
     exercise = next(item for item in data["exercises"] if item["id"] == "percursos-pcv")

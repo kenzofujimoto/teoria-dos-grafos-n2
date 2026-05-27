@@ -287,6 +287,48 @@ def test_exercise_graphs_are_rendered_in_prompt_when_no_matrix_and_in_solution_a
     assert "solution.append(renderExerciseGraph" in js
 
 
+def test_planarity_exercise_draws_all_prompt_graphs_and_animates_euler_checks():
+    data = load_site_data()
+    js = JS_FILE.read_text(encoding="utf-8")
+    exercise = next(item for item in data["exercises"] if item["id"] == "planaridade-euler")
+
+    assert "exercise.promptGraphs" in js
+    assert "step.graph || graph" in js
+    assert exercise["matrix"]["headers"] == ["0", "1", "2", "3", "4"]
+    assert len(exercise["promptGraphs"]) == 4
+    assert [item["title"] for item in exercise["promptGraphs"]] == [
+        "Grafo I",
+        "Grafo II",
+        "Grafo III",
+        "Grafo IV",
+    ]
+
+    results = exercise["planarityResults"]
+    assert results["I"] == {"planar": False, "n": 5, "m": 10}
+    assert results["II"] == {"planar": True, "n": 5, "m": 8, "r": 5}
+    assert results["III"] == {"planar": True, "n": 8, "m": 12, "r": 6}
+    assert results["IV"] == {"planar": True, "n": 5, "m": 7, "r": 4}
+
+    text = " ".join(
+        [exercise["solution"]]
+        + [step["title"] + " " + step["text"] for step in exercise.get("solutionSteps", [])]
+    )
+    for expected in [
+        "K5",
+        "não é planar",
+        "5-8+5=2",
+        "8-12+6=2",
+        "5-7+4=2",
+        "região externa",
+    ]:
+        assert expected in text
+
+    steps = exercise.get("solutionSteps", [])
+    assert len(steps) >= 8
+    assert all(step.get("graph") for step in steps if step["title"].startswith("Grafo "))
+    assert any(step.get("highlightEdges") for step in steps)
+
+
 def test_kruskal_exercise_keeps_matrix_in_prompt_and_graph_steps_in_solution():
     data = load_site_data()
     exercise = next(item for item in data["exercises"] if item["id"] == "final-q3-rede-som")
