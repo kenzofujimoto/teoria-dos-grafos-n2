@@ -308,6 +308,15 @@
     return wrap;
   }
 
+  function renderStaticExerciseGraph(graph, title){
+    const wrap = el('div', {class:'solution-graph prompt-graph'});
+    wrap.append(el('h4', {}, [title]));
+    const box = el('div', {class:'graph-box'});
+    wrap.append(box);
+    renderGraph(box, graph || {vertices:[], edges:[]});
+    return wrap;
+  }
+
   function renderMatrix(matrix){
     const wrap = el('div', {class:'matrix-wrap'});
     wrap.append(el('h3', {}, ['Matriz fornecida']));
@@ -359,6 +368,7 @@
         exercise.questions.forEach(question => questions.append(el('li', {}, [question])));
         prompt.append(questions);
         if(exercise.matrix) prompt.append(renderMatrix(exercise.matrix));
+        if(!exercise.matrix && exercise.graph) prompt.append(renderStaticExerciseGraph(exercise.graph, 'Grafo fornecido'));
         const solutionId = `solution-${exercise.id}`;
         const solutionToggle = el('button', {
           type:'button',
