@@ -331,7 +331,6 @@
 
   function renderExercises(){
     const filters = $('#exerciseFilters');
-    const quickLinks = $('#exerciseQuickLinks');
     const list = $('#exerciseList');
     const topicsWithExercises = data.theoryTopics.filter(topic => data.exercises.some(exercise => exercise.topicSlug === topic.slug));
     let currentSlug = 'todos';
@@ -347,19 +346,6 @@
       [...filters.children].forEach(button => button.classList.toggle('active', button.dataset.slug === slug));
       const exercises = slug === 'todos' ? data.exercises : data.exercises.filter(exercise => exercise.topicSlug === slug);
       list.innerHTML = '';
-      if(quickLinks){
-        quickLinks.innerHTML = '';
-        exercises.forEach(exercise => {
-          const jump = el('button', {type:'button', 'data-exercise-link':exercise.id}, [exercise.title]);
-          jump.classList.toggle('active', exercise.id === targetExerciseId);
-          jump.addEventListener('click', () => {
-            location.hash = exercise.id;
-            selectExerciseFromHash();
-            collapseRailOnMobile();
-          });
-          quickLinks.append(jump);
-        });
-      }
       exercises.forEach(exercise => {
         const card = el('article', {class:'exercise-card', 'data-exercise-id':exercise.id});
         const head = el('div', {class:'exercise-head'});
@@ -373,11 +359,27 @@
         exercise.questions.forEach(question => questions.append(el('li', {}, [question])));
         prompt.append(questions);
         if(exercise.matrix) prompt.append(renderMatrix(exercise.matrix));
-        body.append(prompt);
-        const solution = el('div', {class:'solution'});
+        const solutionId = `solution-${exercise.id}`;
+        const solutionToggle = el('button', {
+          type:'button',
+          class:'button solution-toggle',
+          'data-solution-toggle':exercise.id,
+          'aria-controls':solutionId,
+          'aria-expanded':'false'
+        }, ['Mostrar resolução']);
+        body.append(prompt, solutionToggle);
+        const solution = el('div', {class:'solution', id:solutionId});
+        solution.hidden = true;
         solution.append(el('h3', {}, ['Resolução']));
         solution.append(el('p', {html:exercise.solution}));
         if(exercise.graph) solution.append(renderExerciseGraph(exercise.graph, exercise.solutionSteps || []));
+        solutionToggle.addEventListener('click', () => {
+          const willShow = solutionToggle.getAttribute('aria-expanded') !== 'true';
+          solution.hidden = !willShow;
+          solutionToggle.setAttribute('aria-expanded', String(willShow));
+          solutionToggle.textContent = willShow ? 'Ocultar resolução' : 'Mostrar resolução';
+          if(willShow) requestAnimationFrame(() => solution.scrollIntoView({behavior:'smooth', block:'nearest'}));
+        });
         card.append(head, body, solution);
         list.append(card);
       });
