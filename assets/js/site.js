@@ -289,7 +289,7 @@
     let index = 0;
     const draw = () => {
       const step = visualSteps[index];
-      renderGraph(box, graph || {vertices:[], edges:[]}, {
+      renderGraph(box, step.graph || graph || {vertices:[], edges:[]}, {
         highlightEdges: step.highlightEdges || [],
         highlightVertices: step.highlightVertices || [],
         mutedVertices: step.mutedVertices || [],
@@ -329,6 +329,14 @@
       edgeColors: options.edgeColors || {},
       edgeLabels: options.edgeLabels || {},
       dimUnhighlighted: Boolean(options.highlightEdges && options.highlightEdges.length)
+    });
+    return wrap;
+  }
+
+  function renderPromptGraphs(graphs=[]){
+    const wrap = el('div', {class:'prompt-graph-grid'});
+    graphs.forEach(item => {
+      wrap.append(renderStaticExerciseGraph(item.graph, item.title || 'Grafo fornecido', item.options || {}));
     });
     return wrap;
   }
@@ -383,8 +391,9 @@
         const questions = el('ol', {class:'question-list'});
         exercise.questions.forEach(question => questions.append(el('li', {}, [question])));
         prompt.append(questions);
+        if(exercise.promptGraphs) prompt.append(renderPromptGraphs(exercise.promptGraphs));
         if(exercise.matrix) prompt.append(renderMatrix(exercise.matrix));
-        if(!exercise.matrix && exercise.graph){
+        if(!exercise.promptGraphs && !exercise.matrix && exercise.graph){
           const promptMatching = exercise.promptMatching || [];
           const promptGraphTitle = promptMatching.length ? 'Grafo fornecido (M destacado)' : 'Grafo fornecido';
           prompt.append(renderStaticExerciseGraph(exercise.graph, promptGraphTitle, {

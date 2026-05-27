@@ -3243,50 +3243,1324 @@ window.GRAPH_SITE_DATA = {
         "Para os planares, contar n, m e r.",
         "Verificar n-m+r=2."
       ],
-      "graph": {
-        "vertices": [
+      "matrix": {
+        "headers": [
+          "0",
           "1",
           "2",
           "3",
-          "4",
-          "5"
+          "4"
         ],
-        "edges": [
+        "rows": [
           [
-            "1",
-            "2"
+            0,
+            1,
+            1,
+            0,
+            1
           ],
           [
-            "2",
-            "3"
+            1,
+            0,
+            1,
+            0,
+            1
           ],
           [
-            "3",
-            "4"
+            1,
+            1,
+            0,
+            1,
+            1
           ],
           [
-            "4",
-            "1"
+            0,
+            0,
+            1,
+            0,
+            1
           ],
           [
-            "1",
-            "5"
-          ],
-          [
-            "2",
-            "5"
-          ],
-          [
-            "3",
-            "5"
-          ],
-          [
-            "4",
-            "5"
+            1,
+            1,
+            1,
+            1,
+            0
           ]
         ]
       },
-      "solution": "Para cada grafo, o procedimento correto é tentar uma representação sem cruzamentos e só depois aplicar Euler. No modelo visual usado aqui, n=5, m=8 e r=5, contando a região externa. Logo 5-8+5=2, então a contagem é compatível com planaridade. Se um dos grafos da página não puder ser redesenhado sem cruzamentos ou violar os limites de planaridade, ele deve ser classificado como não planar."
+      "graph": {
+        "vertices": [
+          {
+            "id": "0",
+            "x": 160,
+            "y": 332
+          },
+          {
+            "id": "1",
+            "x": 314,
+            "y": 255
+          },
+          {
+            "id": "2",
+            "x": 314,
+            "y": 179
+          },
+          {
+            "id": "3",
+            "x": 391,
+            "y": 102
+          },
+          {
+            "id": "4",
+            "x": 620,
+            "y": 332
+          }
+        ],
+        "edges": [
+          {
+            "id": "e01",
+            "u": "0",
+            "v": "1"
+          },
+          {
+            "id": "e02",
+            "u": "0",
+            "v": "2"
+          },
+          {
+            "id": "e04",
+            "u": "0",
+            "v": "4"
+          },
+          {
+            "id": "e12",
+            "u": "1",
+            "v": "2"
+          },
+          {
+            "id": "e14",
+            "u": "1",
+            "v": "4"
+          },
+          {
+            "id": "e23",
+            "u": "2",
+            "v": "3"
+          },
+          {
+            "id": "e24",
+            "u": "2",
+            "v": "4"
+          },
+          {
+            "id": "e34",
+            "u": "3",
+            "v": "4"
+          }
+        ]
+      },
+      "promptGraphs": [
+        {
+          "key": "I",
+          "title": "Grafo I",
+          "graph": {
+            "vertices": [
+              {
+                "id": "a",
+                "x": 360,
+                "y": 58
+              },
+              {
+                "id": "b",
+                "x": 562,
+                "y": 204
+              },
+              {
+                "id": "c",
+                "x": 485,
+                "y": 440
+              },
+              {
+                "id": "d",
+                "x": 235,
+                "y": 440
+              },
+              {
+                "id": "e",
+                "x": 158,
+                "y": 204
+              }
+            ],
+            "edges": [
+              {
+                "id": "ab",
+                "u": "a",
+                "v": "b"
+              },
+              {
+                "id": "ac",
+                "u": "a",
+                "v": "c"
+              },
+              {
+                "id": "ad",
+                "u": "a",
+                "v": "d"
+              },
+              {
+                "id": "ae",
+                "u": "a",
+                "v": "e"
+              },
+              {
+                "id": "bc",
+                "u": "b",
+                "v": "c"
+              },
+              {
+                "id": "bd",
+                "u": "b",
+                "v": "d"
+              },
+              {
+                "id": "be",
+                "u": "b",
+                "v": "e"
+              },
+              {
+                "id": "cd",
+                "u": "c",
+                "v": "d"
+              },
+              {
+                "id": "ce",
+                "u": "c",
+                "v": "e"
+              },
+              {
+                "id": "de",
+                "u": "d",
+                "v": "e"
+              }
+            ]
+          }
+        },
+        {
+          "key": "II",
+          "title": "Grafo II",
+          "graph": {
+            "vertices": [
+              {
+                "id": "0",
+                "x": 160,
+                "y": 332
+              },
+              {
+                "id": "1",
+                "x": 314,
+                "y": 255
+              },
+              {
+                "id": "2",
+                "x": 314,
+                "y": 179
+              },
+              {
+                "id": "3",
+                "x": 391,
+                "y": 102
+              },
+              {
+                "id": "4",
+                "x": 620,
+                "y": 332
+              }
+            ],
+            "edges": [
+              {
+                "id": "e01",
+                "u": "0",
+                "v": "1"
+              },
+              {
+                "id": "e02",
+                "u": "0",
+                "v": "2"
+              },
+              {
+                "id": "e04",
+                "u": "0",
+                "v": "4"
+              },
+              {
+                "id": "e12",
+                "u": "1",
+                "v": "2"
+              },
+              {
+                "id": "e14",
+                "u": "1",
+                "v": "4"
+              },
+              {
+                "id": "e23",
+                "u": "2",
+                "v": "3"
+              },
+              {
+                "id": "e24",
+                "u": "2",
+                "v": "4"
+              },
+              {
+                "id": "e34",
+                "u": "3",
+                "v": "4"
+              }
+            ]
+          }
+        },
+        {
+          "key": "III",
+          "title": "Grafo III",
+          "graph": {
+            "vertices": [
+              {
+                "id": "1",
+                "x": 96,
+                "y": 70
+              },
+              {
+                "id": "2",
+                "x": 624,
+                "y": 70
+              },
+              {
+                "id": "3",
+                "x": 624,
+                "y": 360
+              },
+              {
+                "id": "4",
+                "x": 96,
+                "y": 360
+              },
+              {
+                "id": "5",
+                "x": 250,
+                "y": 160
+              },
+              {
+                "id": "6",
+                "x": 470,
+                "y": 160
+              },
+              {
+                "id": "7",
+                "x": 470,
+                "y": 270
+              },
+              {
+                "id": "8",
+                "x": 250,
+                "y": 270
+              }
+            ],
+            "edges": [
+              {
+                "id": "e12",
+                "u": "1",
+                "v": "2"
+              },
+              {
+                "id": "e23",
+                "u": "2",
+                "v": "3"
+              },
+              {
+                "id": "e34",
+                "u": "3",
+                "v": "4"
+              },
+              {
+                "id": "e41",
+                "u": "4",
+                "v": "1"
+              },
+              {
+                "id": "e56",
+                "u": "5",
+                "v": "6"
+              },
+              {
+                "id": "e67",
+                "u": "6",
+                "v": "7"
+              },
+              {
+                "id": "e78",
+                "u": "7",
+                "v": "8"
+              },
+              {
+                "id": "e85",
+                "u": "8",
+                "v": "5"
+              },
+              {
+                "id": "e15",
+                "u": "1",
+                "v": "5"
+              },
+              {
+                "id": "e26",
+                "u": "2",
+                "v": "6"
+              },
+              {
+                "id": "e37",
+                "u": "3",
+                "v": "7"
+              },
+              {
+                "id": "e48",
+                "u": "4",
+                "v": "8"
+              }
+            ]
+          }
+        },
+        {
+          "key": "IV",
+          "title": "Grafo IV",
+          "graph": {
+            "vertices": [
+              {
+                "id": "1",
+                "x": 100,
+                "y": 332
+              },
+              {
+                "id": "2",
+                "x": 560,
+                "y": 332
+              },
+              {
+                "id": "3",
+                "x": 482,
+                "y": 255
+              },
+              {
+                "id": "4",
+                "x": 329,
+                "y": 179
+              },
+              {
+                "id": "5",
+                "x": 329,
+                "y": 102
+              }
+            ],
+            "edges": [
+              {
+                "id": "e12",
+                "u": "1",
+                "v": "2"
+              },
+              {
+                "id": "e23",
+                "u": "2",
+                "v": "3"
+              },
+              {
+                "id": "e13",
+                "u": "1",
+                "v": "3"
+              },
+              {
+                "id": "e14",
+                "u": "1",
+                "v": "4"
+              },
+              {
+                "id": "e34",
+                "u": "3",
+                "v": "4"
+              },
+              {
+                "id": "e35",
+                "u": "3",
+                "v": "5"
+              },
+              {
+                "id": "e15",
+                "u": "1",
+                "v": "5"
+              }
+            ]
+          }
+        }
+      ],
+      "planarityResults": {
+        "I": {
+          "planar": false,
+          "n": 5,
+          "m": 10
+        },
+        "II": {
+          "planar": true,
+          "n": 5,
+          "m": 8,
+          "r": 5
+        },
+        "III": {
+          "planar": true,
+          "n": 8,
+          "m": 12,
+          "r": 6
+        },
+        "IV": {
+          "planar": true,
+          "n": 5,
+          "m": 7,
+          "r": 4
+        }
+      },
+      "solution": "O grafo I é K5: tem n=5 e m=10. Todo grafo planar simples com n>=3 satisfaz m<=3n-6; para n=5, o limite seria 9, mas K5 tem 10 arestas, então o grafo I não é planar. O grafo II, dado pela matriz, é planar; pela matriz há n=5 e m=8, então r=2-n+m=2-5+8=5 e 5-8+5=2. O grafo III é o grafo do cubo em desenho planar, com n=8, m=12 e r=6; logo 8-12+6=2. O grafo IV também é planar, com n=5, m=7 e r=4; logo 5-7+4=2. Em todos os planares, a região externa entra na contagem de r.",
+      "solutionSteps": [
+        {
+          "title": "Grafo I: reconhecer K5",
+          "text": "O grafo I possui 5 vértices e todas as 10 arestas possíveis entre pares de vértices. Portanto ele é K5.",
+          "graph": {
+            "vertices": [
+              {
+                "id": "a",
+                "x": 360,
+                "y": 58
+              },
+              {
+                "id": "b",
+                "x": 562,
+                "y": 204
+              },
+              {
+                "id": "c",
+                "x": 485,
+                "y": 440
+              },
+              {
+                "id": "d",
+                "x": 235,
+                "y": 440
+              },
+              {
+                "id": "e",
+                "x": 158,
+                "y": 204
+              }
+            ],
+            "edges": [
+              {
+                "id": "ab",
+                "u": "a",
+                "v": "b"
+              },
+              {
+                "id": "ac",
+                "u": "a",
+                "v": "c"
+              },
+              {
+                "id": "ad",
+                "u": "a",
+                "v": "d"
+              },
+              {
+                "id": "ae",
+                "u": "a",
+                "v": "e"
+              },
+              {
+                "id": "bc",
+                "u": "b",
+                "v": "c"
+              },
+              {
+                "id": "bd",
+                "u": "b",
+                "v": "d"
+              },
+              {
+                "id": "be",
+                "u": "b",
+                "v": "e"
+              },
+              {
+                "id": "cd",
+                "u": "c",
+                "v": "d"
+              },
+              {
+                "id": "ce",
+                "u": "c",
+                "v": "e"
+              },
+              {
+                "id": "de",
+                "u": "d",
+                "v": "e"
+              }
+            ]
+          },
+          "highlightEdges": [
+            "ab",
+            "ac",
+            "ad",
+            "ae",
+            "bc",
+            "bd",
+            "be",
+            "cd",
+            "ce",
+            "de"
+          ]
+        },
+        {
+          "title": "Grafo I: teste de não planaridade",
+          "text": "Para grafo planar simples com n>=3, vale m<=3n-6. Aqui n=5 e m=10; mas 3n-6=9. Como 10>9, o grafo I não é planar.",
+          "graph": {
+            "vertices": [
+              {
+                "id": "a",
+                "x": 360,
+                "y": 58
+              },
+              {
+                "id": "b",
+                "x": 562,
+                "y": 204
+              },
+              {
+                "id": "c",
+                "x": 485,
+                "y": 440
+              },
+              {
+                "id": "d",
+                "x": 235,
+                "y": 440
+              },
+              {
+                "id": "e",
+                "x": 158,
+                "y": 204
+              }
+            ],
+            "edges": [
+              {
+                "id": "ab",
+                "u": "a",
+                "v": "b"
+              },
+              {
+                "id": "ac",
+                "u": "a",
+                "v": "c"
+              },
+              {
+                "id": "ad",
+                "u": "a",
+                "v": "d"
+              },
+              {
+                "id": "ae",
+                "u": "a",
+                "v": "e"
+              },
+              {
+                "id": "bc",
+                "u": "b",
+                "v": "c"
+              },
+              {
+                "id": "bd",
+                "u": "b",
+                "v": "d"
+              },
+              {
+                "id": "be",
+                "u": "b",
+                "v": "e"
+              },
+              {
+                "id": "cd",
+                "u": "c",
+                "v": "d"
+              },
+              {
+                "id": "ce",
+                "u": "c",
+                "v": "e"
+              },
+              {
+                "id": "de",
+                "u": "d",
+                "v": "e"
+              }
+            ]
+          },
+          "highlightVertices": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e"
+          ]
+        },
+        {
+          "title": "Grafo II: ler a matriz",
+          "text": "No grafo II, a matriz tem cinco vértices: 0,1,2,3,4. Contando os valores 1 acima da diagonal, obtemos 8 arestas.",
+          "graph": {
+            "vertices": [
+              {
+                "id": "0",
+                "x": 160,
+                "y": 332
+              },
+              {
+                "id": "1",
+                "x": 314,
+                "y": 255
+              },
+              {
+                "id": "2",
+                "x": 314,
+                "y": 179
+              },
+              {
+                "id": "3",
+                "x": 391,
+                "y": 102
+              },
+              {
+                "id": "4",
+                "x": 620,
+                "y": 332
+              }
+            ],
+            "edges": [
+              {
+                "id": "e01",
+                "u": "0",
+                "v": "1"
+              },
+              {
+                "id": "e02",
+                "u": "0",
+                "v": "2"
+              },
+              {
+                "id": "e04",
+                "u": "0",
+                "v": "4"
+              },
+              {
+                "id": "e12",
+                "u": "1",
+                "v": "2"
+              },
+              {
+                "id": "e14",
+                "u": "1",
+                "v": "4"
+              },
+              {
+                "id": "e23",
+                "u": "2",
+                "v": "3"
+              },
+              {
+                "id": "e24",
+                "u": "2",
+                "v": "4"
+              },
+              {
+                "id": "e34",
+                "u": "3",
+                "v": "4"
+              }
+            ]
+          },
+          "highlightEdges": [
+            "e01",
+            "e02",
+            "e04",
+            "e12",
+            "e14",
+            "e23",
+            "e24",
+            "e34"
+          ]
+        },
+        {
+          "title": "Grafo II: fórmula de Euler",
+          "text": "Como o desenho planar tem n=5 e m=8, a quantidade de regiões é r=2-n+m=2-5+8=5. Verificação: 5-8+5=2, contando a região externa.",
+          "graph": {
+            "vertices": [
+              {
+                "id": "0",
+                "x": 160,
+                "y": 332
+              },
+              {
+                "id": "1",
+                "x": 314,
+                "y": 255
+              },
+              {
+                "id": "2",
+                "x": 314,
+                "y": 179
+              },
+              {
+                "id": "3",
+                "x": 391,
+                "y": 102
+              },
+              {
+                "id": "4",
+                "x": 620,
+                "y": 332
+              }
+            ],
+            "edges": [
+              {
+                "id": "e01",
+                "u": "0",
+                "v": "1"
+              },
+              {
+                "id": "e02",
+                "u": "0",
+                "v": "2"
+              },
+              {
+                "id": "e04",
+                "u": "0",
+                "v": "4"
+              },
+              {
+                "id": "e12",
+                "u": "1",
+                "v": "2"
+              },
+              {
+                "id": "e14",
+                "u": "1",
+                "v": "4"
+              },
+              {
+                "id": "e23",
+                "u": "2",
+                "v": "3"
+              },
+              {
+                "id": "e24",
+                "u": "2",
+                "v": "4"
+              },
+              {
+                "id": "e34",
+                "u": "3",
+                "v": "4"
+              }
+            ]
+          },
+          "highlightVertices": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        {
+          "title": "Grafo III: grafo do cubo",
+          "text": "O grafo III é planar: ele pode ser redesenhado como um quadrado externo ligado a um quadrado interno, sem cruzamentos. A contagem é n=8 e m=12.",
+          "graph": {
+            "vertices": [
+              {
+                "id": "1",
+                "x": 96,
+                "y": 70
+              },
+              {
+                "id": "2",
+                "x": 624,
+                "y": 70
+              },
+              {
+                "id": "3",
+                "x": 624,
+                "y": 360
+              },
+              {
+                "id": "4",
+                "x": 96,
+                "y": 360
+              },
+              {
+                "id": "5",
+                "x": 250,
+                "y": 160
+              },
+              {
+                "id": "6",
+                "x": 470,
+                "y": 160
+              },
+              {
+                "id": "7",
+                "x": 470,
+                "y": 270
+              },
+              {
+                "id": "8",
+                "x": 250,
+                "y": 270
+              }
+            ],
+            "edges": [
+              {
+                "id": "e12",
+                "u": "1",
+                "v": "2"
+              },
+              {
+                "id": "e23",
+                "u": "2",
+                "v": "3"
+              },
+              {
+                "id": "e34",
+                "u": "3",
+                "v": "4"
+              },
+              {
+                "id": "e41",
+                "u": "4",
+                "v": "1"
+              },
+              {
+                "id": "e56",
+                "u": "5",
+                "v": "6"
+              },
+              {
+                "id": "e67",
+                "u": "6",
+                "v": "7"
+              },
+              {
+                "id": "e78",
+                "u": "7",
+                "v": "8"
+              },
+              {
+                "id": "e85",
+                "u": "8",
+                "v": "5"
+              },
+              {
+                "id": "e15",
+                "u": "1",
+                "v": "5"
+              },
+              {
+                "id": "e26",
+                "u": "2",
+                "v": "6"
+              },
+              {
+                "id": "e37",
+                "u": "3",
+                "v": "7"
+              },
+              {
+                "id": "e48",
+                "u": "4",
+                "v": "8"
+              }
+            ]
+          },
+          "highlightEdges": [
+            "e12",
+            "e23",
+            "e34",
+            "e41",
+            "e56",
+            "e67",
+            "e78",
+            "e85",
+            "e15",
+            "e26",
+            "e37",
+            "e48"
+          ]
+        },
+        {
+          "title": "Grafo III: fórmula de Euler",
+          "text": "No cubo planar, r=2-n+m=2-8+12=6. A conferência fica 8-12+6=2, novamente incluindo a região externa.",
+          "graph": {
+            "vertices": [
+              {
+                "id": "1",
+                "x": 96,
+                "y": 70
+              },
+              {
+                "id": "2",
+                "x": 624,
+                "y": 70
+              },
+              {
+                "id": "3",
+                "x": 624,
+                "y": 360
+              },
+              {
+                "id": "4",
+                "x": 96,
+                "y": 360
+              },
+              {
+                "id": "5",
+                "x": 250,
+                "y": 160
+              },
+              {
+                "id": "6",
+                "x": 470,
+                "y": 160
+              },
+              {
+                "id": "7",
+                "x": 470,
+                "y": 270
+              },
+              {
+                "id": "8",
+                "x": 250,
+                "y": 270
+              }
+            ],
+            "edges": [
+              {
+                "id": "e12",
+                "u": "1",
+                "v": "2"
+              },
+              {
+                "id": "e23",
+                "u": "2",
+                "v": "3"
+              },
+              {
+                "id": "e34",
+                "u": "3",
+                "v": "4"
+              },
+              {
+                "id": "e41",
+                "u": "4",
+                "v": "1"
+              },
+              {
+                "id": "e56",
+                "u": "5",
+                "v": "6"
+              },
+              {
+                "id": "e67",
+                "u": "6",
+                "v": "7"
+              },
+              {
+                "id": "e78",
+                "u": "7",
+                "v": "8"
+              },
+              {
+                "id": "e85",
+                "u": "8",
+                "v": "5"
+              },
+              {
+                "id": "e15",
+                "u": "1",
+                "v": "5"
+              },
+              {
+                "id": "e26",
+                "u": "2",
+                "v": "6"
+              },
+              {
+                "id": "e37",
+                "u": "3",
+                "v": "7"
+              },
+              {
+                "id": "e48",
+                "u": "4",
+                "v": "8"
+              }
+            ]
+          },
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8"
+          ]
+        },
+        {
+          "title": "Grafo IV: desenho planar",
+          "text": "O grafo IV também admite desenho sem cruzamentos. Nele, n=5 e m=7.",
+          "graph": {
+            "vertices": [
+              {
+                "id": "1",
+                "x": 100,
+                "y": 332
+              },
+              {
+                "id": "2",
+                "x": 560,
+                "y": 332
+              },
+              {
+                "id": "3",
+                "x": 482,
+                "y": 255
+              },
+              {
+                "id": "4",
+                "x": 329,
+                "y": 179
+              },
+              {
+                "id": "5",
+                "x": 329,
+                "y": 102
+              }
+            ],
+            "edges": [
+              {
+                "id": "e12",
+                "u": "1",
+                "v": "2"
+              },
+              {
+                "id": "e23",
+                "u": "2",
+                "v": "3"
+              },
+              {
+                "id": "e13",
+                "u": "1",
+                "v": "3"
+              },
+              {
+                "id": "e14",
+                "u": "1",
+                "v": "4"
+              },
+              {
+                "id": "e34",
+                "u": "3",
+                "v": "4"
+              },
+              {
+                "id": "e35",
+                "u": "3",
+                "v": "5"
+              },
+              {
+                "id": "e15",
+                "u": "1",
+                "v": "5"
+              }
+            ]
+          },
+          "highlightEdges": [
+            "e12",
+            "e23",
+            "e13",
+            "e14",
+            "e34",
+            "e35",
+            "e15"
+          ]
+        },
+        {
+          "title": "Grafo IV: fórmula de Euler",
+          "text": "Para o grafo IV, r=2-n+m=2-5+7=4. A verificação é 5-7+4=2, portanto ele é planar.",
+          "graph": {
+            "vertices": [
+              {
+                "id": "1",
+                "x": 100,
+                "y": 332
+              },
+              {
+                "id": "2",
+                "x": 560,
+                "y": 332
+              },
+              {
+                "id": "3",
+                "x": 482,
+                "y": 255
+              },
+              {
+                "id": "4",
+                "x": 329,
+                "y": 179
+              },
+              {
+                "id": "5",
+                "x": 329,
+                "y": 102
+              }
+            ],
+            "edges": [
+              {
+                "id": "e12",
+                "u": "1",
+                "v": "2"
+              },
+              {
+                "id": "e23",
+                "u": "2",
+                "v": "3"
+              },
+              {
+                "id": "e13",
+                "u": "1",
+                "v": "3"
+              },
+              {
+                "id": "e14",
+                "u": "1",
+                "v": "4"
+              },
+              {
+                "id": "e34",
+                "u": "3",
+                "v": "4"
+              },
+              {
+                "id": "e35",
+                "u": "3",
+                "v": "5"
+              },
+              {
+                "id": "e15",
+                "u": "1",
+                "v": "5"
+              }
+            ]
+          },
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "title": "Resumo final",
+          "text": "Resposta: I não é planar; II, III e IV são planares. Para os planares, as contas são II: 5-8+5=2, III: 8-12+6=2 e IV: 5-7+4=2.",
+          "graph": {
+            "vertices": [
+              {
+                "id": "0",
+                "x": 160,
+                "y": 332
+              },
+              {
+                "id": "1",
+                "x": 314,
+                "y": 255
+              },
+              {
+                "id": "2",
+                "x": 314,
+                "y": 179
+              },
+              {
+                "id": "3",
+                "x": 391,
+                "y": 102
+              },
+              {
+                "id": "4",
+                "x": 620,
+                "y": 332
+              }
+            ],
+            "edges": [
+              {
+                "id": "e01",
+                "u": "0",
+                "v": "1"
+              },
+              {
+                "id": "e02",
+                "u": "0",
+                "v": "2"
+              },
+              {
+                "id": "e04",
+                "u": "0",
+                "v": "4"
+              },
+              {
+                "id": "e12",
+                "u": "1",
+                "v": "2"
+              },
+              {
+                "id": "e14",
+                "u": "1",
+                "v": "4"
+              },
+              {
+                "id": "e23",
+                "u": "2",
+                "v": "3"
+              },
+              {
+                "id": "e24",
+                "u": "2",
+                "v": "4"
+              },
+              {
+                "id": "e34",
+                "u": "3",
+                "v": "4"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "bipartido-amigos-jogos",

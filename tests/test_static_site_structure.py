@@ -283,7 +283,7 @@ def test_exercise_graphs_are_rendered_in_prompt_when_no_matrix_and_in_solution_a
     assert graph_only_exercises, "At least one exercise must rely on a provided graph instead of a matrix"
     assert "promptGraphTitle" in js
     assert "renderStaticExerciseGraph(exercise.graph, promptGraphTitle" in js
-    assert "if(!exercise.matrix && exercise.graph)" in js
+    assert "if(!exercise.promptGraphs && !exercise.matrix && exercise.graph)" in js
     assert "solution.append(renderExerciseGraph" in js
 
 
