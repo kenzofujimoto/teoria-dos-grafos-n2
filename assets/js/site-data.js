@@ -4291,7 +4291,137 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "Escolha M={{1,2},{4,5},{6,7}} e M'={{2,3},{4,7},{5,6}}. A diferença simétrica contém as arestas que pertencem a exatamente um dos emparelhamentos. O subgrafo resultante se decompõe em caminhos ou ciclos cujas arestas alternam entre M e M'. Essa decomposição verifica o lema: componentes da diferença simétrica de emparelhamentos têm grau máximo 2 e alternância entre os conjuntos."
+      "solution": "Escolha M={{1,2},{4,5},{6,7}} e M'={{2,3},{4,7},{5,6}}. A diferença simétrica contém as arestas que pertencem a exatamente um dos emparelhamentos. Como M e M' não têm arestas comuns nessa escolha, M Δ M'={1-2,2-3,4-5,5-6,6-7,4-7}. O subgrafo resultante se separa no caminho 1-2-3 e no ciclo 4-5-6-7-4, sempre alternando arestas de M e de M'. Isso verifica o lema: componentes da diferença simétrica de emparelhamentos têm grau máximo 2 e são caminhos ou ciclos alternantes.",
+      "solutionSteps": [
+        {
+          "title": "Escolha do emparelhamento M",
+          "text": "Começamos com M={{1,2},{4,5},{6,7}}. As três arestas destacadas não compartilham vértices, então formam um emparelhamento válido.",
+          "highlightEdges": [
+            "e0",
+            "e3",
+            "e5"
+          ],
+          "edgeColors": {
+            "e0": "azul",
+            "e3": "azul",
+            "e5": "azul"
+          },
+          "edgeLabels": {
+            "e0": "M",
+            "e3": "M",
+            "e5": "M"
+          }
+        },
+        {
+          "title": "Escolha do emparelhamento M'",
+          "text": "Agora escolha M'={{2,3},{4,7},{5,6}}. Ele também é válido: cada vértice aparece no máximo uma vez dentro de M'.",
+          "highlightEdges": [
+            "e1",
+            "e4",
+            "e6"
+          ],
+          "edgeColors": {
+            "e0": "azul",
+            "e3": "azul",
+            "e5": "azul",
+            "e1": "verde",
+            "e4": "verde",
+            "e6": "verde"
+          },
+          "edgeLabels": {
+            "e0": "M",
+            "e3": "M",
+            "e5": "M",
+            "e1": "M'",
+            "e4": "M'",
+            "e6": "M'"
+          }
+        },
+        {
+          "title": "Diferença simétrica",
+          "text": "A operação M Δ M' mantém apenas as arestas que pertencem a exatamente um dos conjuntos. Como não há aresta comum, entram as seis arestas coloridas; a aresta 2-4 fica fora.",
+          "highlightEdges": [
+            "e0",
+            "e1",
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "edgeColors": {
+            "e0": "azul",
+            "e3": "azul",
+            "e5": "azul",
+            "e1": "verde",
+            "e4": "verde",
+            "e6": "verde"
+          }
+        },
+        {
+          "title": "Componente caminho",
+          "text": "A primeira componente é o caminho 1-2-3. Ele alterna uma aresta de M, 1-2, com uma aresta de M', 2-3.",
+          "highlightEdges": [
+            "e0",
+            "e1"
+          ],
+          "edgeColors": {
+            "e0": "azul",
+            "e1": "verde",
+            "e3": "azul",
+            "e4": "verde",
+            "e5": "azul",
+            "e6": "verde"
+          },
+          "edgeLabels": {
+            "e0": "M",
+            "e1": "M'"
+          }
+        },
+        {
+          "title": "Componente ciclo",
+          "text": "A segunda componente é o ciclo 4-5-6-7-4. Percorrendo o ciclo, as arestas alternam M, M', M, M'.",
+          "highlightEdges": [
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "edgeColors": {
+            "e0": "azul",
+            "e1": "verde",
+            "e3": "azul",
+            "e4": "verde",
+            "e5": "azul",
+            "e6": "verde"
+          },
+          "edgeLabels": {
+            "e3": "M",
+            "e4": "M'",
+            "e5": "M",
+            "e6": "M'"
+          }
+        },
+        {
+          "title": "Verificação do lema",
+          "text": "No subgrafo M Δ M', nenhum vértice tem grau maior que 2, porque cada matching usa cada vértice no máximo uma vez. Por isso só aparecem caminhos e ciclos alternantes.",
+          "highlightEdges": [
+            "e0",
+            "e1",
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "edgeColors": {
+            "e0": "azul",
+            "e1": "verde",
+            "e3": "azul",
+            "e4": "verde",
+            "e5": "azul",
+            "e6": "verde"
+          }
+        }
+      ]
     },
     {
       "id": "berge-test-drive",
@@ -4361,7 +4491,221 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "No emparelhamento dado, as pessoas 3 e 4 ficam livres, e alguns carros também podem estar livres. Pelo Teorema de Berge, M não é máximo se existe caminho aumentante. Um caminho possível alterna entre arestas fora e dentro de M ligando uma pessoa livre a um carro livre. Ao inverter esse caminho, as arestas fora entram e as de M saem, aumentando |M| de 3 para 4. Assim o vendedor não entregou emparelhamento máximo."
+      "promptMatching": [
+        "e0",
+        "e2",
+        "e8"
+      ],
+      "promptEdgeLabels": {
+        "e0": "M",
+        "e2": "M",
+        "e8": "M"
+      },
+      "solutionMatching": [
+        "e1",
+        "e2",
+        "e5",
+        "e6",
+        "e8"
+      ],
+      "solution": "O emparelhamento fornecido é M={{1,Idea},{2,Punto},{5,Siena}}, com |M|=3. As pessoas 3 e 4 estão livres, e os carros Uno e Bravo também estão livres. Pelo Teorema de Berge, M não é máximo se existir caminho aumentante. Um caminho aumentante é 4-Idea-1-Uno: as arestas 4-Idea e 1-Uno estão fora de M, enquanto 1-Idea está dentro de M. Ao inverter, sai 1-Idea e entram 4-Idea e 1-Uno, obtendo um novo emparelhamento de tamanho 4. Em seguida, a aresta livre 3-Bravo é outro caminho aumentante de uma aresta, levando ao emparelhamento perfeito M*={{1,Uno},{2,Punto},{3,Bravo},{4,Idea},{5,Siena}}, de tamanho 5. Como todos os cinco clientes ficam saturados, esse M* é máximo.",
+      "solutionSteps": [
+        {
+          "title": "M fornecido pelo vendedor",
+          "text": "O enunciado já fornece M={{1,Idea},{2,Punto},{5,Siena}}. Esse emparelhamento tem três arestas disjuntas, então é válido, mas deixa 3, 4, Uno e Bravo livres.",
+          "highlightEdges": [
+            "e0",
+            "e2",
+            "e8"
+          ],
+          "highlightVertices": [
+            "3",
+            "4",
+            "Uno",
+            "Bravo"
+          ],
+          "edgeColors": {
+            "e0": "azul",
+            "e2": "azul",
+            "e8": "azul"
+          },
+          "edgeLabels": {
+            "e0": "M",
+            "e2": "M",
+            "e8": "M"
+          }
+        },
+        {
+          "title": "Primeira aresta fora de M",
+          "text": "Começamos em 4, que está livre. A aresta 4-Idea não pertence ao emparelhamento atual, então ela pode ser a primeira aresta de um caminho aumentante.",
+          "highlightEdges": [
+            "e6"
+          ],
+          "highlightVertices": [
+            "4",
+            "Idea"
+          ],
+          "edgeColors": {
+            "e0": "azul",
+            "e2": "azul",
+            "e8": "azul",
+            "e6": "laranja"
+          },
+          "edgeLabels": {
+            "e6": "fora"
+          }
+        },
+        {
+          "title": "Aresta emparelhada no meio",
+          "text": "Ao chegar em Idea, encontramos a aresta 1-Idea, que pertence a M. O caminho agora alterna corretamente: fora de M, dentro de M.",
+          "highlightEdges": [
+            "e6",
+            "e0"
+          ],
+          "highlightVertices": [
+            "4",
+            "Idea",
+            "1"
+          ],
+          "edgeColors": {
+            "e0": "azul",
+            "e2": "azul",
+            "e8": "azul",
+            "e6": "laranja"
+          },
+          "edgeLabels": {
+            "e6": "fora",
+            "e0": "M"
+          }
+        },
+        {
+          "title": "Caminho aumentante completo",
+          "text": "De 1 seguimos por 1-Uno, que está fora de M, e chegamos ao carro Uno livre. O caminho 4-Idea-1-Uno começa e termina livres, logo é aumentante.",
+          "highlightEdges": [
+            "e6",
+            "e0",
+            "e1"
+          ],
+          "highlightVertices": [
+            "4",
+            "Idea",
+            "1",
+            "Uno"
+          ],
+          "matchingBefore": [
+            "e0",
+            "e2",
+            "e8"
+          ],
+          "augmentingPath": [
+            "e6",
+            "e0",
+            "e1"
+          ],
+          "matchingAfter": [
+            "e1",
+            "e2",
+            "e6",
+            "e8"
+          ],
+          "edgeColors": {
+            "e0": "azul",
+            "e1": "laranja",
+            "e2": "azul",
+            "e6": "laranja",
+            "e8": "azul"
+          },
+          "edgeLabels": {
+            "e6": "entra",
+            "e0": "sai",
+            "e1": "entra"
+          }
+        },
+        {
+          "title": "Inversão do caminho",
+          "text": "Inverter significa trocar o status das arestas do caminho: 1-Idea sai, enquanto 4-Idea e 1-Uno entram. O novo emparelhamento é M1={{1,Uno},{2,Punto},{4,Idea},{5,Siena}}, com |M1|=4.",
+          "highlightEdges": [
+            "e1",
+            "e2",
+            "e6",
+            "e8"
+          ],
+          "edgeColors": {
+            "e1": "verde",
+            "e2": "verde",
+            "e6": "verde",
+            "e8": "verde"
+          },
+          "edgeLabels": {
+            "e1": "M1",
+            "e2": "M1",
+            "e6": "M1",
+            "e8": "M1"
+          }
+        },
+        {
+          "title": "Segunda iteração",
+          "text": "Ainda restam 3 e Bravo livres. A aresta 3-Bravo sozinha é um caminho aumentante de comprimento 1: começa em um vértice livre e termina em outro vértice livre.",
+          "highlightEdges": [
+            "e5"
+          ],
+          "highlightVertices": [
+            "3",
+            "Bravo"
+          ],
+          "matchingBefore": [
+            "e1",
+            "e2",
+            "e6",
+            "e8"
+          ],
+          "augmentingPath": [
+            "e5"
+          ],
+          "matchingAfter": [
+            "e1",
+            "e2",
+            "e5",
+            "e6",
+            "e8"
+          ],
+          "edgeColors": {
+            "e1": "verde",
+            "e2": "verde",
+            "e5": "laranja",
+            "e6": "verde",
+            "e8": "verde"
+          },
+          "edgeLabels": {
+            "e5": "entra"
+          }
+        },
+        {
+          "title": "Novo emparelhamento máximo",
+          "text": "Após adicionar 3-Bravo, obtemos M*={{1,Uno},{2,Punto},{3,Bravo},{4,Idea},{5,Siena}}. Ele satura os cinco clientes e os cinco carros, então é perfeito e, portanto, máximo.",
+          "highlightEdges": [
+            "e1",
+            "e2",
+            "e5",
+            "e6",
+            "e8"
+          ],
+          "edgeColors": {
+            "e1": "verde",
+            "e2": "verde",
+            "e5": "verde",
+            "e6": "verde",
+            "e8": "verde"
+          },
+          "edgeLabels": {
+            "e1": "M*",
+            "e2": "M*",
+            "e5": "M*",
+            "e6": "M*",
+            "e8": "M*"
+          }
+        }
+      ]
     },
     {
       "id": "hall-concessionaria",
@@ -4417,7 +4761,111 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "Use X=clientes e Y=adicionais. Para atender quatro compras, é preciso um emparelhamento que sature X. Verifique Hall: para todo S⊆X, deve valer |N(S)|≥|S|. Se dois adicionais, como RL e VE, aparecem disponíveis apenas para o mesmo cliente D em certa configuração, então algum subconjunto viola Hall e uma venda será perdida. No modelo acima, há emparelhamento A-AC, B-VE, C-DH, D-RL; logo Hall é satisfeito."
+      "solutionMatching": [
+        "e0",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "solution": "Use X=clientes e Y=adicionais. Para atender quatro compras, é preciso um emparelhamento que sature X. Verifique Hall: para todo S⊆X, deve valer |N(S)|≥|S|. No modelo acima, é possível exibir diretamente um emparelhamento saturando todos os clientes: M={A-AC, B-VE, C-DH, D-RL}. Como cada cliente recebe um adicional distinto e todos os quatro clientes são saturados, a condição necessária do problema é atendida; logo as quatro compras podem ser agregadas simultaneamente.",
+      "solutionSteps": [
+        {
+          "title": "Bipartição do problema",
+          "text": "De um lado ficam os clientes A, B, C e D; do outro, os adicionais AC, RL, DH e VE. Procuramos um emparelhamento que sature todos os clientes.",
+          "highlightVertices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "title": "Escolha A-AC",
+          "text": "A primeira aresta escolhida é A-AC. Ela satura o cliente A e ocupa o adicional AC.",
+          "highlightEdges": [
+            "e0"
+          ],
+          "edgeColors": {
+            "e0": "verde"
+          },
+          "edgeLabels": {
+            "e0": "M"
+          }
+        },
+        {
+          "title": "Escolha B-VE",
+          "text": "Para B, usamos B-VE. Essa aresta não compartilha extremidade com A-AC, então o conjunto continua sendo um emparelhamento.",
+          "highlightEdges": [
+            "e0",
+            "e3"
+          ],
+          "edgeColors": {
+            "e0": "verde",
+            "e3": "verde"
+          },
+          "edgeLabels": {
+            "e0": "M",
+            "e3": "M"
+          }
+        },
+        {
+          "title": "Escolha C-DH",
+          "text": "Agora adicionamos C-DH. O cliente C e o adicional DH ainda não tinham sido usados, então a regra do emparelhamento permanece válida.",
+          "highlightEdges": [
+            "e0",
+            "e3",
+            "e4"
+          ],
+          "edgeColors": {
+            "e0": "verde",
+            "e3": "verde",
+            "e4": "verde"
+          },
+          "edgeLabels": {
+            "e0": "M",
+            "e3": "M",
+            "e4": "M"
+          }
+        },
+        {
+          "title": "Escolha D-RL",
+          "text": "Por fim, D-RL usa o único cliente e o único adicional ainda livres nessa construção. Nenhuma aresta escolhida encosta em outra.",
+          "highlightEdges": [
+            "e0",
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "edgeColors": {
+            "e0": "verde",
+            "e3": "verde",
+            "e4": "verde",
+            "e5": "verde"
+          },
+          "edgeLabels": {
+            "e0": "M",
+            "e3": "M",
+            "e4": "M",
+            "e5": "M"
+          }
+        },
+        {
+          "title": "Conclusão por Hall",
+          "text": "Como exibimos M={A-AC, B-VE, C-DH, D-RL}, todos os vértices de X são saturados. Essa exibição certifica que a condição de Hall é satisfeita para o objetivo de atender os quatro clientes.",
+          "highlightEdges": [
+            "e0",
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "edgeColors": {
+            "e0": "verde",
+            "e3": "verde",
+            "e4": "verde",
+            "e5": "verde"
+          }
+        }
+      ]
     },
     {
       "id": "cobertura-basica",

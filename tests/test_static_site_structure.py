@@ -281,7 +281,8 @@ def test_exercise_graphs_are_rendered_in_prompt_when_no_matrix_and_in_solution_a
 
     assert "solution-graph" in js
     assert graph_only_exercises, "At least one exercise must rely on a provided graph instead of a matrix"
-    assert "renderStaticExerciseGraph(exercise.graph, 'Grafo fornecido')" in js
+    assert "promptGraphTitle" in js
+    assert "renderStaticExerciseGraph(exercise.graph, promptGraphTitle" in js
     assert "if(!exercise.matrix && exercise.graph)" in js
     assert "solution.append(renderExerciseGraph" in js
 
@@ -375,8 +376,8 @@ def test_edge_coloring_keeps_original_matching_colors_while_highlighting_steps()
     assert "const stroke = chosen ? '#f5a524'" not in js
     assert "edge-highlight-halo" in js
     assert "solutionColors || {}" in js
-    assert "vertexColors: colorOptions.vertices || {}" in js
-    assert "edgeColors: colorOptions.edges || {}" in js
+    assert "vertexColors: step.vertexColors || colorOptions.vertices || {}" in js
+    assert "edgeColors: step.edgeColors || colorOptions.edges || {}" in js
 
 
 def test_matching_exercises_highlight_given_matching_in_prompt_and_solution():

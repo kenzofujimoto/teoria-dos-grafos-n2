@@ -293,8 +293,8 @@
         highlightEdges: step.highlightEdges || [],
         highlightVertices: step.highlightVertices || [],
         mutedVertices: step.mutedVertices || [],
-        vertexColors: colorOptions.vertices || {},
-        edgeColors: colorOptions.edges || {},
+        vertexColors: step.vertexColors || colorOptions.vertices || {},
+        edgeColors: step.edgeColors || colorOptions.edges || {},
         edgeLabels: step.edgeLabels || {},
         dimUnhighlighted: Boolean(step.highlightEdges && step.highlightEdges.length)
       });
@@ -310,12 +310,26 @@
     return wrap;
   }
 
-  function renderStaticExerciseGraph(graph, title){
+  function matchingEdgeColors(edgeIds, color='azul'){
+    const colors = {};
+    (edgeIds || []).forEach(edgeId => { colors[String(edgeId)] = color; });
+    return colors;
+  }
+
+  function renderStaticExerciseGraph(graph, title, options={}){
     const wrap = el('div', {class:'solution-graph prompt-graph'});
     wrap.append(el('h4', {}, [title]));
     const box = el('div', {class:'graph-box'});
     wrap.append(box);
-    renderGraph(box, graph || {vertices:[], edges:[]});
+    renderGraph(box, graph || {vertices:[], edges:[]}, {
+      highlightEdges: options.highlightEdges || [],
+      highlightVertices: options.highlightVertices || [],
+      mutedVertices: options.mutedVertices || [],
+      vertexColors: options.vertexColors || {},
+      edgeColors: options.edgeColors || {},
+      edgeLabels: options.edgeLabels || {},
+      dimUnhighlighted: Boolean(options.highlightEdges && options.highlightEdges.length)
+    });
     return wrap;
   }
 
@@ -370,7 +384,16 @@
         exercise.questions.forEach(question => questions.append(el('li', {}, [question])));
         prompt.append(questions);
         if(exercise.matrix) prompt.append(renderMatrix(exercise.matrix));
-        if(!exercise.matrix && exercise.graph) prompt.append(renderStaticExerciseGraph(exercise.graph, 'Grafo fornecido'));
+        if(!exercise.matrix && exercise.graph){
+          const promptMatching = exercise.promptMatching || [];
+          const promptGraphTitle = promptMatching.length ? 'Grafo fornecido (M destacado)' : 'Grafo fornecido';
+          prompt.append(renderStaticExerciseGraph(exercise.graph, promptGraphTitle, {
+            highlightEdges: promptMatching,
+            edgeColors: {...matchingEdgeColors(promptMatching, 'azul'), ...(exercise.promptEdgeColors || {})},
+            vertexColors: exercise.promptVertexColors || {},
+            edgeLabels: exercise.promptEdgeLabels || {}
+          }));
+        }
         const solutionId = `solution-${exercise.id}`;
         const solutionToggle = el('button', {
           type:'button',
