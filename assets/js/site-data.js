@@ -963,7 +963,10 @@ window.GRAPH_SITE_DATA = {
           "text": "Para testar bipartição, comece atribuindo uma cor ao vértice 1. Todos os seus vizinhos diretos precisam ficar na cor oposta.",
           "highlightVertices": [
             "1"
-          ]
+          ],
+          "vertexColors": {
+            "1": "azul"
+          }
         },
         {
           "title": "Obrigação dos vizinhos",
@@ -972,7 +975,12 @@ window.GRAPH_SITE_DATA = {
             "1",
             "2",
             "5"
-          ]
+          ],
+          "vertexColors": {
+            "1": "azul",
+            "2": "verde",
+            "5": "verde"
+          }
         },
         {
           "title": "Propagação pelo caminho",
@@ -981,7 +989,14 @@ window.GRAPH_SITE_DATA = {
             "2",
             "3",
             "4"
-          ]
+          ],
+          "vertexColors": {
+            "1": "azul",
+            "2": "verde",
+            "3": "azul",
+            "4": "verde",
+            "5": "verde"
+          }
         },
         {
           "title": "Conflito no triângulo",
@@ -995,7 +1010,14 @@ window.GRAPH_SITE_DATA = {
             "2",
             "3",
             "4"
-          ]
+          ],
+          "vertexColors": {
+            "1": "azul",
+            "2": "verde",
+            "3": "azul",
+            "4": "verde",
+            "5": "verde"
+          }
         },
         {
           "title": "Conclusão estrutural",
@@ -1004,7 +1026,14 @@ window.GRAPH_SITE_DATA = {
             "e23",
             "e34",
             "e24"
-          ]
+          ],
+          "vertexColors": {
+            "1": "azul",
+            "2": "verde",
+            "3": "azul",
+            "4": "verde",
+            "5": "verde"
+          }
         }
       ]
     },
@@ -4051,7 +4080,16 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "Cada enfermidade vira um vértice; cada X da tabela vira uma aresta de conflito. O problema é de coloração de vértices: cada cor representa um quarto. No grafo modelo, E1,E2,E3 formam K3, então pelo menos 3 quartos são necessários. Uma coloração válida é quarto 1: E1,E4; quarto 2: E2,E5; quarto 3: E3. Logo o mínimo é 3 nesse modelo."
+      "solution": "Cada enfermidade vira um vértice; cada X da tabela vira uma aresta de conflito. O problema é de coloração de vértices: cada cor representa um quarto. No grafo modelo, E1,E2,E3 formam K3, então pelo menos 3 quartos são necessários. Uma coloração válida é quarto 1: E1,E4; quarto 2: E2,E5; quarto 3: E3. Logo o mínimo é 3 nesse modelo.",
+      "solutionColors": {
+        "vertices": {
+          "E1": "azul",
+          "E4": "azul",
+          "E2": "verde",
+          "E5": "verde",
+          "E3": "laranja"
+        }
+      }
     },
     {
       "id": "coloracao-produtos-quimicos",
@@ -4122,7 +4160,18 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "Monte a matriz com 1 para cada par marcado por asterisco e 0 caso contrário. Em seguida, aplique coloração de vértices. Uma coloração possível é local 1: Q1,Q3,Q5; local 2: Q2,Q4,Q7; local 3: Q6. Como há triângulos de incompatibilidade em subestruturas do grafo, menos de 3 locais não basta. Portanto o mínimo do modelo é 3 locais."
+      "solution": "Monte a matriz com 1 para cada par marcado por asterisco e 0 caso contrário. Em seguida, aplique coloração de vértices. Uma coloração possível é local 1: Q1,Q3,Q5; local 2: Q2,Q4,Q7; local 3: Q6. Como há triângulos de incompatibilidade em subestruturas do grafo, menos de 3 locais não basta. Portanto o mínimo do modelo é 3 locais.",
+      "solutionColors": {
+        "vertices": {
+          "Q1": "azul",
+          "Q3": "azul",
+          "Q5": "azul",
+          "Q2": "verde",
+          "Q4": "verde",
+          "Q7": "verde",
+          "Q6": "laranja"
+        }
+      }
     },
     {
       "id": "coloracao-arestas-vizing",
@@ -4176,7 +4225,18 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "Como o grafo é bipartido, vale o teorema de König para coloração de arestas: χ'(G)=Δ(G). O maior grau é 3, então bastam 3 cores. Uma coloração válida distribui as arestas em três emparelhamentos, sem duas arestas da mesma cor incidirem no mesmo vértice. Pelo Teorema de Vizing, χ'(G) estaria entre Δ e Δ+1; aqui é exatamente Δ, logo o grafo é classe 1."
+      "solution": "Como o grafo é bipartido, vale o teorema de König para coloração de arestas: χ'(G)=Δ(G). O maior grau é 3, então bastam 3 cores. Uma coloração válida distribui as arestas em três emparelhamentos, sem duas arestas da mesma cor incidirem no mesmo vértice. Pelo Teorema de Vizing, χ'(G) estaria entre Δ e Δ+1; aqui é exatamente Δ, logo o grafo é classe 1.",
+      "solutionColors": {
+        "edges": {
+          "e0": "dia1",
+          "e1": "dia2",
+          "e2": "dia2",
+          "e3": "dia3",
+          "e4": "dia1",
+          "e5": "dia1",
+          "e6": "dia2"
+        }
+      }
     },
     {
       "id": "matching-diferenca-simetrica",
@@ -5074,7 +5134,19 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "O problema é de coloração de vértices: centros adjacentes não podem ficar no mesmo turno. O subgrafo induzido por {1,2,3,4} é K4, pois todos os pares entre esses vértices são adjacentes. Assim, χ(G)≥4. Uma 4-coloração válida é Turno 1: {1,5}; Turno 2: {2,6}; Turno 3: {3,7}; Turno 4: {4,8}. Como existe uma distribuição com 4 turnos e há limite inferior 4 pela clique K4, o mínimo é 4."
+      "solution": "O problema é de coloração de vértices: centros adjacentes não podem ficar no mesmo turno. O subgrafo induzido por {1,2,3,4} é K4, pois todos os pares entre esses vértices são adjacentes. Assim, χ(G)≥4. Uma 4-coloração válida é Turno 1: {1,5}; Turno 2: {2,6}; Turno 3: {3,7}; Turno 4: {4,8}. Como existe uma distribuição com 4 turnos e há limite inferior 4 pela clique K4, o mínimo é 4.",
+      "solutionColors": {
+        "vertices": {
+          "1": "azul",
+          "2": "verde",
+          "3": "laranja",
+          "4": "roxo",
+          "5": "azul",
+          "6": "verde",
+          "7": "laranja",
+          "8": "roxo"
+        }
+      }
     },
     {
       "id": "final-q2-barracas-iluminacao",
@@ -5641,7 +5713,22 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "É coloração de arestas. Os graus são d(1)=3, d(2)=4, d(3)=4, d(4)=4, d(5)=4 e d(6)=3. Como uma seleção com grau 4 precisa jogar 4 partidas e só pode jogar uma por dia, Δ(G)=4 é limite inferior para o número de dias. Um cronograma ótimo é Dia 1: 1-4, 2-3, 5-6; Dia 2: 2-5, 3-4; Dia 3: 1-2, 3-5, 4-6; Dia 4: 1-3, 2-6, 4-5. Como usa exatamente Δ(G)=4 cores/dias, χ'(G)=4 e o grafo é Classe 1."
+      "solution": "É coloração de arestas. Os graus são d(1)=3, d(2)=4, d(3)=4, d(4)=4, d(5)=4 e d(6)=3. Como uma seleção com grau 4 precisa jogar 4 partidas e só pode jogar uma por dia, Δ(G)=4 é limite inferior para o número de dias. Um cronograma ótimo é Dia 1: 1-4, 2-3, 5-6; Dia 2: 2-5, 3-4; Dia 3: 1-2, 3-5, 4-6; Dia 4: 1-3, 2-6, 4-5. Como usa exatamente Δ(G)=4 cores/dias, χ'(G)=4 e o grafo é Classe 1.",
+      "solutionColors": {
+        "edges": {
+          "e0": "dia3",
+          "e1": "dia4",
+          "e2": "dia1",
+          "e3": "dia1",
+          "e4": "dia2",
+          "e5": "dia4",
+          "e6": "dia2",
+          "e7": "dia3",
+          "e8": "dia4",
+          "e9": "dia3",
+          "e10": "dia1"
+        }
+      }
     },
     {
       "id": "mincost-lista-1",

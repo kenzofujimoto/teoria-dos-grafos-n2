@@ -198,8 +198,8 @@
         highlightEdges: step.highlightEdges || [],
         highlightVertices: step.highlightVertices || [],
         mutedVertices: step.mutedVertices || [],
-        vertexColors: animation.colors && animationId === 'vertexColoring' ? animation.colors : {},
-        edgeColors: animation.colors && animationId === 'edgeColoring' ? animation.colors : {},
+        vertexColors: step.vertexColors || (animation.colors && animationId === 'vertexColoring' ? animation.colors : {}),
+        edgeColors: step.edgeColors || (animation.colors && animationId === 'edgeColoring' ? animation.colors : {}),
         edgeLabels: step.edgeLabels || {},
         dimUnhighlighted: Boolean(step.highlightEdges && step.highlightEdges.length)
       });
@@ -271,7 +271,7 @@
     window.addEventListener('hashchange', () => select((location.hash || '').replace('#','')));
   }
 
-  function renderExerciseGraph(graph, steps=[]){
+  function renderExerciseGraph(graph, steps=[], colorOptions={}){
     const wrap = el('div', {class:'solution-graph'});
     wrap.append(el('h4', {}, ['Grafo da resolução']));
     const box = el('div', {class:'graph-box'});
@@ -293,6 +293,8 @@
         highlightEdges: step.highlightEdges || [],
         highlightVertices: step.highlightVertices || [],
         mutedVertices: step.mutedVertices || [],
+        vertexColors: colorOptions.vertices || {},
+        edgeColors: colorOptions.edges || {},
         edgeLabels: step.edgeLabels || {},
         dimUnhighlighted: Boolean(step.highlightEdges && step.highlightEdges.length)
       });
@@ -382,7 +384,7 @@
         solution.hidden = true;
         solution.append(el('h3', {}, ['Resolução']));
         solution.append(el('p', {html:exercise.solution}));
-        if(exercise.graph) solution.append(renderExerciseGraph(exercise.graph, exercise.solutionSteps || []));
+        if(exercise.graph) solution.append(renderExerciseGraph(exercise.graph, exercise.solutionSteps || [], exercise.solutionColors || {}));
         solutionToggle.addEventListener('click', () => {
           const willShow = solutionToggle.getAttribute('aria-expanded') !== 'true';
           solution.hidden = !willShow;
