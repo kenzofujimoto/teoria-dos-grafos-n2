@@ -22,9 +22,12 @@ def graph_edges(graph: dict) -> list[dict]:
     normalized = []
     for index, edge in enumerate(graph["edges"]):
         if isinstance(edge, list):
-            normalized.append({"id": f"e{index}", "u": str(edge[0]), "v": str(edge[1])})
+            item = {"id": f"e{index}", "u": str(edge[0]), "v": str(edge[1])}
+            if len(edge) > 2:
+                item["weight"] = edge[2]
+            normalized.append(item)
         else:
-            normalized.append({"id": str(edge["id"]), "u": str(edge["u"]), "v": str(edge["v"])})
+            normalized.append({**edge, "id": str(edge["id"]), "u": str(edge["u"]), "v": str(edge["v"])})
     return normalized
 
 

@@ -3361,68 +3361,442 @@ window.GRAPH_SITE_DATA = {
       ],
       "graph": {
         "vertices": [
+          {
+            "id": "1",
+            "x": 110,
+            "y": 210
+          },
+          {
+            "id": "2",
+            "x": 250,
+            "y": 95
+          },
+          {
+            "id": "3",
+            "x": 420,
+            "y": 95
+          },
+          {
+            "id": "4",
+            "x": 470,
+            "y": 250
+          },
+          {
+            "id": "5",
+            "x": 620,
+            "y": 140
+          },
+          {
+            "id": "6",
+            "x": 780,
+            "y": 140
+          },
+          {
+            "id": "7",
+            "x": 675,
+            "y": 285
+          },
+          {
+            "id": "8",
+            "x": 235,
+            "y": 300
+          },
+          {
+            "id": "9",
+            "x": 350,
+            "y": 390
+          }
+        ],
+        "edges": [
+          {
+            "id": "e12",
+            "u": "1",
+            "v": "2",
+            "weight": 8
+          },
+          {
+            "id": "e18",
+            "u": "1",
+            "v": "8",
+            "weight": 5
+          },
+          {
+            "id": "e28",
+            "u": "2",
+            "v": "8",
+            "weight": 5
+          },
+          {
+            "id": "e23",
+            "u": "2",
+            "v": "3",
+            "weight": 5
+          },
+          {
+            "id": "e35",
+            "u": "3",
+            "v": "5",
+            "weight": 7
+          },
+          {
+            "id": "e56",
+            "u": "5",
+            "v": "6",
+            "weight": 8
+          },
+          {
+            "id": "e67",
+            "u": "6",
+            "v": "7",
+            "weight": 6
+          },
+          {
+            "id": "e47",
+            "u": "4",
+            "v": "7",
+            "weight": 1
+          },
+          {
+            "id": "e34",
+            "u": "3",
+            "v": "4",
+            "weight": 4
+          },
+          {
+            "id": "e48",
+            "u": "4",
+            "v": "8",
+            "weight": 9
+          },
+          {
+            "id": "e89",
+            "u": "8",
+            "v": "9",
+            "weight": 8
+          },
+          {
+            "id": "e49",
+            "u": "4",
+            "v": "9",
+            "weight": 3
+          },
+          {
+            "id": "e29",
+            "u": "2",
+            "v": "9",
+            "weight": 9
+          },
+          {
+            "id": "e39",
+            "u": "3",
+            "v": "9",
+            "weight": 12
+          }
+        ]
+      },
+      "degreeTable": {
+        "1": 2,
+        "2": 4,
+        "3": 4,
+        "4": 4,
+        "5": 2,
+        "6": 2,
+        "7": 2,
+        "8": 4,
+        "9": 4
+      },
+      "oddVertices": [],
+      "hamiltonianPath": [
+        "1",
+        "2",
+        "3",
+        "5",
+        "6",
+        "7",
+        "4",
+        "9",
+        "8"
+      ],
+      "hamiltonianCycle": [
+        "1",
+        "2",
+        "3",
+        "5",
+        "6",
+        "7",
+        "4",
+        "9",
+        "8",
+        "1"
+      ],
+      "eulerianCircuit": [
+        "e12",
+        "e23",
+        "e35",
+        "e56",
+        "e67",
+        "e47",
+        "e34",
+        "e39",
+        "e29",
+        "e28",
+        "e48",
+        "e49",
+        "e89",
+        "e18"
+      ],
+      "nearestNeighborRun": {
+        "path": [
           "1",
+          "8",
           "2",
           "3",
           "4",
-          "5",
-          "6",
           "7",
-          "8",
-          "9"
+          "6",
+          "5"
         ],
-        "edges": [
-          [
+        "length": 34,
+        "deadEnd": "5",
+        "unvisited": [
+          "9"
+        ]
+      },
+      "solution": "Há caminho hamiltoniano: 1-2-3-5-6-7-4-9-8 visita todos os vértices exatamente uma vez. Há também ciclo hamiltoniano, porque existe a aresta 8-1 para fechar 1-2-3-5-6-7-4-9-8-1; nesse caso o vértice inicial reaparece apenas no final. Para Euler, a análise é por arestas e graus: d(1)=2, d(2)=4, d(3)=4, d(4)=4, d(5)=2, d(6)=2, d(7)=2, d(8)=4, d(9)=4. Todos são graus pares, logo há 0 vértices ímpares; como o grafo é conexo, existe circuito euleriano, então o grafo é Euleriano. Um percurso euleriano fechado possível é 1-2-3-5-6-7-4-3-9-2-8-4-9-8-1, que usa cada aresta uma vez. A diferença central é: caminho/ciclo hamiltoniano controlam vértices; percurso/circuito euleriano controlam arestas. No PCV pela heurística do vizinho mais próximo a partir de 1, a escolha estrita gera 1-8-2-3-4-7-6-5, comprimento 34, mas trava em 5 com o vértice 9 ainda não visitado; portanto a heurística, nessa execução, não consegue completar um ciclo do caixeiro.",
+      "solutionSteps": [
+        {
+          "title": "Leitura do grafo ponderado",
+          "text": "O desenho do PDF é ponderado: cada rótulo na aresta entra apenas no PCV. Para Euler e Hamilton, primeiro olhamos a existência das arestas, não seus pesos.",
+          "highlightEdges": [
+            "e12",
+            "e18",
+            "e28",
+            "e23",
+            "e35",
+            "e56",
+            "e67",
+            "e47",
+            "e34",
+            "e48",
+            "e89",
+            "e49",
+            "e29",
+            "e39"
+          ]
+        },
+        {
+          "title": "Caminho hamiltoniano",
+          "text": "Um caminho hamiltoniano visita cada vértice exatamente uma vez, sem exigir retorno ao início. A sequência 1-2-3-5-6-7-4-9-8 funciona porque todas as ligações consecutivas existem.",
+          "highlightEdges": [
+            "e12",
+            "e23",
+            "e35",
+            "e56",
+            "e67",
+            "e47",
+            "e49",
+            "e89"
+          ],
+          "highlightVertices": [
             "1",
-            "2"
-          ],
-          [
             "2",
-            "3"
-          ],
-          [
             "3",
-            "4"
-          ],
-          [
-            "4",
-            "5"
-          ],
-          [
             "5",
-            "6"
+            "6",
+            "7",
+            "4",
+            "9",
+            "8"
+          ]
+        },
+        {
+          "title": "Ciclo hamiltoniano",
+          "text": "O caminho vira ciclo hamiltoniano quando volta ao ponto inicial pela aresta 8-1. O ciclo 1-2-3-5-6-7-4-9-8-1 repete somente o vértice inicial no fechamento.",
+          "highlightEdges": [
+            "e12",
+            "e23",
+            "e35",
+            "e56",
+            "e67",
+            "e47",
+            "e49",
+            "e89",
+            "e18"
           ],
-          [
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"
+          ]
+        },
+        {
+          "title": "Graus para Euler",
+          "text": "Agora a pergunta muda: Euler não exige visitar vértices uma vez; exige usar arestas uma vez. Os graus são 2,4,4,4,2,2,2,4,4, todos graus pares. Assim há 0 vértices ímpares.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"
+          ]
+        },
+        {
+          "title": "Critério dos vértices ímpares",
+          "text": "Em grafo conexo: 0 vértices ímpares implica circuito euleriano; exatamente 2 vértices ímpares implica apenas caminho euleriano aberto; 4 ou mais vértices ímpares impede caminho euleriano.",
+          "highlightVertices": []
+        },
+        {
+          "title": "Percurso euleriano: início",
+          "text": "Um percurso euleriano é uma sequência de arestas consecutivas que usa todas as arestas uma única vez. Começamos por 1-2-3-5-6-7, sempre sem repetir aresta.",
+          "highlightEdges": [
+            "e12",
+            "e23",
+            "e35",
+            "e56",
+            "e67"
+          ],
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "5",
             "6",
             "7"
+          ]
+        },
+        {
+          "title": "Percurso euleriano: meio",
+          "text": "Continuamos por 7-4-3-9-2-8-4. Vértices como 3, 4, 8 e 9 podem reaparecer; isso é permitido em percurso euleriano. O proibido é repetir aresta.",
+          "highlightEdges": [
+            "e12",
+            "e23",
+            "e35",
+            "e56",
+            "e67",
+            "e47",
+            "e34",
+            "e39",
+            "e29",
+            "e28",
+            "e48"
           ],
-          [
+          "highlightVertices": [
+            "2",
+            "3",
+            "4",
+            "7",
+            "8",
+            "9"
+          ]
+        },
+        {
+          "title": "Circuito euleriano",
+          "text": "Fechamos por 4-9-8-1. A sequência 1-2-3-5-6-7-4-3-9-2-8-4-9-8-1 usa as 14 arestas exatamente uma vez e termina onde começou; portanto é circuito euleriano.",
+          "highlightEdges": [
+            "e12",
+            "e23",
+            "e35",
+            "e56",
+            "e67",
+            "e47",
+            "e34",
+            "e39",
+            "e29",
+            "e28",
+            "e48",
+            "e49",
+            "e89",
+            "e18"
+          ],
+          "highlightVertices": [
+            "1"
+          ]
+        },
+        {
+          "title": "PCV: vizinho mais próximo",
+          "text": "Para o PCV, agora usamos pesos. Saindo de 1, o vizinho mais próximo é 8, com custo 5; de 8, o vizinho não visitado mais barato é 2, com custo 5.",
+          "highlightEdges": [
+            "e18",
+            "e28"
+          ],
+          "highlightVertices": [
+            "1",
+            "8",
+            "2"
+          ],
+          "edgeLabels": {
+            "e18": "5",
+            "e28": "5"
+          }
+        },
+        {
+          "title": "PCV: caminho parcial",
+          "text": "A heurística segue 2-3 com custo 5, depois 3-4 com custo 4, 4-7 com custo 1, 7-6 com custo 6 e 6-5 com custo 8. O comprimento acumulado é 34.",
+          "highlightEdges": [
+            "e18",
+            "e28",
+            "e23",
+            "e34",
+            "e47",
+            "e67",
+            "e56"
+          ],
+          "highlightVertices": [
+            "1",
+            "8",
+            "2",
+            "3",
+            "4",
+            "7",
+            "6",
+            "5"
+          ],
+          "edgeLabels": {
+            "e18": "5",
+            "e28": "5",
+            "e23": "5",
+            "e34": "4",
+            "e47": "1",
+            "e67": "6",
+            "e56": "8"
+          }
+        },
+        {
+          "title": "PCV: travamento",
+          "text": "Ao chegar em 5, seus vizinhos são 3 e 6, ambos já visitados. O vértice 9 ficou fora, então a execução estrita do vizinho mais próximo não completa o ciclo do PCV.",
+          "highlightEdges": [
+            "e35",
+            "e56"
+          ],
+          "highlightVertices": [
+            "5",
+            "9"
+          ],
+          "mutedVertices": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "6",
             "7",
             "8"
           ],
-          [
-            "8",
-            "9"
-          ],
-          [
-            "9",
-            "1"
-          ],
-          [
-            "2",
-            "6"
-          ],
-          [
-            "3",
-            "7"
-          ],
-          [
-            "4",
-            "8"
-          ]
-        ]
-      },
-      "solution": "Para Hamilton, procure uma sequência que visite todos os vértices uma vez; por exemplo, 1-2-3-4-5-6-7-8-9 é caminho hamiltoniano se todas essas arestas existem no grafo desenhado. Para ser hamiltoniano, precisa também haver retorno 9-1, formando ciclo. Para Euler, conte graus: circuito euleriano exige todos os graus pares; caminho euleriano aberto exige exatamente dois ímpares. A heurística do PCV deve escolher o vizinho mais barato ainda não visitado e somar os pesos até retornar ao início se a aresta de retorno existir."
+          "edgeLabels": {
+            "e35": "visitado",
+            "e56": "visitado"
+          }
+        }
+      ]
     },
     {
       "id": "caminho-euleriano-lista",
@@ -3466,7 +3840,87 @@ window.GRAPH_SITE_DATA = {
           ]
         ]
       },
-      "solution": "O critério é objetivo: em grafo conexo, há circuito euleriano se todos os vértices têm grau par; há caminho euleriano aberto se exatamente dois vértices têm grau ímpar; com quatro ou mais ímpares não existe caminho euleriano. Para cada grafo da lista, monte uma tabela de graus. No modelo visual acima, os graus são d(1)=3, d(2)=2, d(3)=3, d(4)=2; existem exatamente dois ímpares, então há caminho euleriano aberto, mas não circuito."
+      "degreeTable": {
+        "1": 3,
+        "2": 2,
+        "3": 3,
+        "4": 2
+      },
+      "oddVertices": [
+        "1",
+        "3"
+      ],
+      "eulerianPath": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "solution": "O critério é objetivo e deve ser aplicado a cada grafo da lista: primeiro confirme que o grafo é conexo na parte que possui arestas; depois conte os graus. Se há 0 vértices ímpares, existe circuito euleriano e o grafo é euleriano. Se há exatamente 2 vértices ímpares, existe caminho euleriano aberto, o grafo é semi-euleriano e o percurso deve começar em um ímpar e terminar no outro. Se há 4 ou mais vértices ímpares, não existe caminho euleriano. No modelo visual desenhado no site, d(1)=3, d(2)=2, d(3)=3, d(4)=2; os ímpares são 1 e 3. Portanto há caminho euleriano aberto, por exemplo 1-2-3-4-1-3, mas não há circuito euleriano, porque o início e o fim precisam ser os dois vértices ímpares.",
+      "solutionSteps": [
+        {
+          "title": "Separar o que precisa ser contado",
+          "text": "Para decidir caminho euleriano, não basta olhar se o desenho parece possível. Conte o grau de cada vértice: grau é a quantidade de arestas incidentes no vértice.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        {
+          "title": "Graus do modelo",
+          "text": "No grafo-modelo, d(1)=3, d(2)=2, d(3)=3 e d(4)=2. Os vértices 1 e 3 têm grau ímpar; 2 e 4 têm grau par.",
+          "highlightVertices": [
+            "1",
+            "3"
+          ]
+        },
+        {
+          "title": "Caso 0 vértices ímpares",
+          "text": "Se um grafo conexo da lista tiver 0 vértices ímpares, então todas as entradas e saídas podem ser pareadas. Existe circuito euleriano: começa e termina no mesmo vértice.",
+          "highlightEdges": []
+        },
+        {
+          "title": "Caso exatamente 2 vértices ímpares",
+          "text": "Se houver exatamente 2 vértices ímpares, como aqui, existe caminho euleriano aberto. Ele é aberto porque deve começar em um ímpar e terminar no outro; por isso o grafo é semi-euleriano.",
+          "highlightVertices": [
+            "1",
+            "3"
+          ]
+        },
+        {
+          "title": "Percurso válido no modelo",
+          "text": "Um percurso euleriano aberto é 1-2-3-4-1-3. Ele usa as cinco arestas uma vez: 1-2, 2-3, 3-4, 4-1 e 1-3.",
+          "highlightEdges": [
+            "e0",
+            "e1",
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "highlightVertices": [
+            "1",
+            "3"
+          ]
+        },
+        {
+          "title": "Caso 4 ou mais vértices ímpares",
+          "text": "Se algum grafo da lista tiver 4 ou mais vértices ímpares, não existe caminho euleriano. Um único percurso aberto só consegue acomodar dois ímpares: um como início e outro como fim.",
+          "highlightEdges": []
+        },
+        {
+          "title": "Resumo de classificação",
+          "text": "Portanto, classifique cada Ga, Gb, ..., Gj assim: 0 ímpares implica euleriano; exatamente 2 ímpares implica semi-euleriano; 4 ou mais ímpares implica não existe caminho euleriano.",
+          "highlightVertices": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        }
+      ]
     },
     {
       "id": "mst-prim-kruskal-visual",
