@@ -60,6 +60,14 @@ def assert_edges_alternate_by_matching(path: list[str], matching: set[str]):
         assert left != right, "Path edges must alternate between matching and non-matching edges"
 
 
+def matching_vertices(edges: dict, matching: set[str]) -> set[str]:
+    vertices = set()
+    for edge_id in matching:
+        edge = edges[edge_id]
+        vertices |= {str(edge["u"]), str(edge["v"])}
+    return vertices
+
+
 def test_eulerian_animation_uses_each_edge_once():
     data = load_site_data()
     animation = data["animations"]["eulerianTrail"]
@@ -222,6 +230,36 @@ def test_augmenting_path_animation_starts_and_ends_free_and_increases_matching()
     assert end not in matched_vertices
     assert len(new_matching) == len(matching) + 1
     assert len(new_matched_vertices) == len(matched_vertices) + 2
+
+
+def test_matching_exercise_augmenting_paths_increase_the_matching():
+    data = load_site_data()
+    exercise = next(item for item in data["exercises"] if item["id"] == "berge-test-drive")
+    edges = {edge["id"]: edge for edge in graph_edges(exercise["graph"])}
+
+    prompt_matching = set(exercise["promptMatching"])
+    final_matching = set(exercise["solutionMatching"])
+    assert_valid_matching(edges, prompt_matching)
+    assert_valid_matching(edges, final_matching)
+    assert len(final_matching) > len(prompt_matching)
+
+    augmenting_steps = [step for step in exercise["solutionSteps"] if step.get("augmentingPath")]
+    assert len(augmenting_steps) >= 2
+
+    for step in augmenting_steps:
+        before = set(step["matchingBefore"])
+        path = [str(edge_id) for edge_id in step["augmentingPath"]]
+        after = set(step["matchingAfter"])
+        start, end = assert_path_is_connected(edges, path)
+        saturated_before = matching_vertices(edges, before)
+
+        assert_valid_matching(edges, before)
+        assert_valid_matching(edges, after)
+        assert_edges_alternate_by_matching(path, before)
+        assert start not in saturated_before
+        assert end not in saturated_before
+        assert after == (before - (set(path) & before)) | (set(path) - before)
+        assert len(after) == len(before) + 1
 
 
 def test_vertex_cover_walkthrough_covers_edges_cumulatively():

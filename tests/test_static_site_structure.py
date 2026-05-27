@@ -379,6 +379,24 @@ def test_edge_coloring_keeps_original_matching_colors_while_highlighting_steps()
     assert "edgeColors: colorOptions.edges || {}" in js
 
 
+def test_matching_exercises_highlight_given_matching_in_prompt_and_solution():
+    data = load_site_data()
+    js = JS_FILE.read_text(encoding="utf-8")
+    exercise = next(item for item in data["exercises"] if item["id"] == "berge-test-drive")
+
+    assert exercise["promptMatching"] == ["e0", "e2", "e8"]
+    assert exercise["solutionMatching"] == ["e1", "e2", "e5", "e6", "e8"]
+    assert "exercise.promptMatching" in js
+    assert "step.edgeColors || colorOptions.edges || {}" in js
+
+    steps = exercise.get("solutionSteps", [])
+    assert len(steps) >= 7
+    assert any(step.get("augmentingPath") == ["e6", "e0", "e1"] for step in steps)
+    assert any(step.get("augmentingPath") == ["e5"] for step in steps)
+    assert any("novo emparelhamento" in step["text"].lower() for step in steps)
+    assert any(step.get("edgeColors") for step in steps), "Matching steps need stable semantic colors"
+
+
 def test_flow_animations_show_bottlenecks_and_updated_residual_capacities():
     data = load_site_data()
 
